@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GM : MonoBehaviour {
+public class GM : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-	
+	public static GM i = null; /* Game manager instance */
+
+	void Awake()
+	{
+		if (i == null) {
+			i = this;
+		} else if (i != this) {
+			Destroy(gameObject);
+		}
+
+		DontDestroyOnLoad(gameObject);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	void Update()
+	{
 	
 	}
 }
