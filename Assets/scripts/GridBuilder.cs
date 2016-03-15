@@ -14,7 +14,7 @@ public class GridBuilder : MonoBehaviour {
 	void Start () {
 		float offsetX = -((GridWidth * CellWidth  / 2) + Middle.x);
 		float offsetZ = -((GridHeight * CellHeight / 2) + Middle.z);
-		GameObject grid = Instantiate(new GameObject("Grid"), Middle, Quaternion.identity) as GameObject;
+		GameObject grid = new GameObject("Grid");
 
 		for (int z = 0; z < GridHeight; z++) {
 			for (int x = 0; x < GridWidth; x++) {
