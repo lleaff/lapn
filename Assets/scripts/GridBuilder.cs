@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[Execu
 public class GridBuilder : MonoBehaviour {
 
 	public GameObject NodePrefab;
@@ -18,7 +19,7 @@ public class GridBuilder : MonoBehaviour {
 
 		for (int z = 0; z < GridHeight; z++) {
 			for (int x = 0; x < GridWidth; x++) {
-				GameObject node = Instantiate (NodePrefab, new Vector3 (x * CellWidth + offsetX, Middle.y, z * CellHeight + offsetZ), Quaternion.identity) as GameObject;
+				GameObject node = Instantiate (NodePrefab, new Vector3 (x * CellWidth + offsetX, Middle.y, z * CellHeight + offsetZ), NodePrefab.gameObject.transform) as GameObject;
 				node.name = string.Format ("GridNode({0}-{1})", x, z);
 				node.transform.parent = grid.transform;
 			}
