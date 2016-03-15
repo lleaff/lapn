@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-//using System.Collections;
 
 public class button : MonoBehaviour {
 	Button myButton;
 	bool clicked = false;
-
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
