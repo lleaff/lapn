@@ -20,7 +20,15 @@ public class button : MonoBehaviour {
 
 	void addCarote()
 	{
-		clicked = true;	
+		if (!clicked)
+			clicked = true;
+		else {
+			if (old) {
+				GameObject.Destroy (old.transform.GetChild (0).gameObject);
+				old = null;
+			}
+			clicked = false;
+		}
 	}
 
 	void FixedUpdate() {
@@ -28,7 +36,7 @@ public class button : MonoBehaviour {
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
 			if (Physics.Raycast (ray, out hit, 100))
-				print (hit.collider.name);
+				old = null;
 			clicked = false;
 		}
 		if (Physics.Raycast (ray, out hit, 100) && clicked) {
