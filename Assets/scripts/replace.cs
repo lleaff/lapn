@@ -2,13 +2,15 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class button : MonoBehaviour {
+public class replace : MonoBehaviour {
 
 	private Button myButton;
 	private bool clicked = false;
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
+	private GameObject ttmp;
+	private string name;
 
 	public GameObject field;
 
@@ -35,8 +37,16 @@ public class button : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100)) {
-				old.transform.GetChild (0).gameObject.GetComponent<AudioSource>().Play();
+			if (Physics.Raycast (ray, out hit, 100) & old) {
+				name = old.name;
+				GameObject.Destroy (old.transform.GetChild (0).gameObject);
+				ttmp = Instantiate (field);
+				ttmp.transform.parent = old.transform.parent;
+				ttmp.transform.localRotation = old.transform.localRotation;
+				ttmp.transform.localPosition = old.transform.localPosition;
+				ttmp.transform.localScale = old.transform.localScale;
+				ttmp.name = name;
+				GameObject.Destroy (old);
 				old = null;
 			}
 			clicked = false;
