@@ -4,12 +4,9 @@ using System.Collections;
 public class ia_bunny : MonoBehaviour {
 
 	private GameObject carot;
-	// Use this for initialization
 	void Start () {
 
 	}
-	
-	// Update is called once per frame
 	void Update () {
 
 		if (carot = GameObject.Find ("FieldOb(Clone)")) {
