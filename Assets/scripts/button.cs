@@ -35,16 +35,18 @@ public class button : MonoBehaviour {
 		}
 		if (Physics.Raycast (ray, out hit, 100)) {
 			h = GameObject.Find (hit.collider.name);
-			tmp = Instantiate (field);
-			tmp.transform.parent = h.transform;
-			tmp.transform.localRotation = Quaternion.identity;
-			tmp.transform.localPosition = Vector3.zero;
-			tmp.transform.localScale = Vector3.one;
-			if (old != h) {
-				if (old) {
-					print ("cc");
+			if (h.transform.childCount == 0) {
+				tmp = Instantiate (field);
+				tmp.transform.parent = h.transform;
+				tmp.transform.localRotation = Quaternion.identity;
+				tmp.transform.localPosition = Vector3.zero;
+				tmp.transform.localScale = Vector3.one;
+				if (old != h) {
+					if (old) {
+						GameObject.Destroy (old.transform.GetChild (0).gameObject);
+					}
+					old = h;
 				}
-				old = h;
 			}
 		}
 	}
