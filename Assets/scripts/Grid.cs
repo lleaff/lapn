@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Gridsdfsdf : MonoBehaviour {
+public class Grid : MonoBehaviour  {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+	public int Width;
+	public int Height;
+	public Vector2 CellDimensions;
+
 }
