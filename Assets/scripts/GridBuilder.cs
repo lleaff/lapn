@@ -44,6 +44,7 @@ public static class GridBuilder {
 		data.Width = width;
 		data.Height = height;
 		data.CellDimensions = cellDimensions;
+		data.Lock();
 		return grid;
 	}
 
