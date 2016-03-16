@@ -20,20 +20,18 @@ public class button : MonoBehaviour {
 
 	void addCarote()
 	{
-		clicked = true;
-		print ("Carrroooottte");		
+		clicked = true;	
 	}
 
 	void FixedUpdate() {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100)) {
+			if (Physics.Raycast (ray, out hit, 100))
 				print (hit.collider.name);
-			}
 			clicked = false;
 		}
-		if (Physics.Raycast (ray, out hit, 100)) {
+		if (Physics.Raycast (ray, out hit, 100) && clicked) {
 			h = GameObject.Find (hit.collider.name);
 			if (h.transform.childCount == 0) {
 				tmp = Instantiate (field);
@@ -42,9 +40,8 @@ public class button : MonoBehaviour {
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = Vector3.one;
 				if (old != h) {
-					if (old) {
+					if (old)
 						GameObject.Destroy (old.transform.GetChild (0).gameObject);
-					}
 					old = h;
 				}
 			}
