@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class button : MonoBehaviour {
+
 	private Button myButton;
 	private bool clicked = false;
 	private GameObject h;
-	private Renderer[] r;
 	private GameObject old = null;
-	public Color highlight = new Color(159,159,159,0.4F);
+	private GameObject tmp;
+
+	public GameObject field;
 
 	void Awake()
 	{
@@ -33,12 +35,14 @@ public class button : MonoBehaviour {
 		}
 		if (Physics.Raycast (ray, out hit, 100)) {
 			h = GameObject.Find (hit.collider.name);
-			r = h.GetComponents<Renderer>();
-			r[0].material.color = highlight;
+			tmp = Instantiate (field);
+			tmp.transform.parent = h.transform;
+			tmp.transform.localRotation = Quaternion.identity;
+			tmp.transform.localPosition = Vector3.zero;
+			tmp.transform.localScale = Vector3.one;
 			if (old != h) {
 				if (old) {
-					r = old.GetComponents<Renderer> ();
-					r [0].material.color = Color.white;
+					print ("cc");
 				}
 				old = h;
 			}
