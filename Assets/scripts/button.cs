@@ -35,8 +35,10 @@ public class button : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100))
+			if (Physics.Raycast (ray, out hit, 100)) {
+				old.transform.GetChild (0).gameObject.GetComponent<AudioSource>().Play();
 				old = null;
+			}
 			clicked = false;
 		}
 		if (Physics.Raycast (ray, out hit, 100) && clicked) {
