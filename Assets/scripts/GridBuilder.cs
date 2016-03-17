@@ -5,6 +5,7 @@ public static class GridBuilder {
 
 	public static GameObject[,] BuildGrid(
 		string gridName = "Grid",
+		string layerName = "Grid",
 		GameObject nodeObject = null,
 		int gridWidth = 20,
 		int gridHeight = 20,
@@ -14,6 +15,7 @@ public static class GridBuilder {
 		if (nodeObject == null) {
 			nodeObject = new GameObject ();
 		}
+		LayerMask nodeLayer = LayerMask.NameToLayer (layerName);
 		Quaternion nodeObjectRotation = nodeObject.gameObject.transform.rotation;
 		float offsetX = -((gridWidth * cellDimensions.x  / 2) + middle.x);
 		float offsetZ = -((gridHeight * cellDimensions.y / 2) + middle.z);
@@ -28,6 +30,7 @@ public static class GridBuilder {
 					new Vector3 (x * cellDimensions.x + offsetX, middle.y, z * cellDimensions.y + offsetZ),
 					nodeObjectRotation) as GameObject;
 				node.name = string.Format ("GridNode({0}-{1})", x, z);
+				node.layer = nodeLayer;
 				node.transform.parent = gridObject.transform;
 				grid [x, z] = node;
 			}
