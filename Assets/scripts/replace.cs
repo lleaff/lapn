@@ -11,7 +11,10 @@ public class replace : MonoBehaviour {
 	private GameObject tmp;
 	private GameObject ttmp;
 	private string name;
-
+	private string[] words;
+	private int timenb;
+	private float lastUpdate = Time.time;
+	public Text time;
 	public GameObject field;
 
 	void Awake()
@@ -33,25 +36,42 @@ public class replace : MonoBehaviour {
 		}
 	}
 
+	public static int IntParseFast(string value)
+	{
+		int result = 0;
+		for (int i = 0; i < value.Length; i++)
+		{
+			char letter = value[i];
+			result = 10 * result + (letter - 48);
+		}
+		return result;
+	}
+
 	void FixedUpdate() {
+		words = time.text.Split (' ');
+		timenb = IntParseFast(words[1]);
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100) & old) {
-				name = old.name;
-				GameObject.Destroy (old.transform.GetChild (0).gameObject);
-				ttmp = Instantiate (field);
-				ttmp.transform.parent = old.transform.parent;
-				ttmp.transform.localRotation = old.transform.localRotation;
-				ttmp.transform.localPosition = old.transform.localPosition;
-				ttmp.transform.localScale = old.transform.localScale;
-				ttmp.name = name;
-				GameObject.Destroy (old);
+			if (Physics.Raycast (ray, out hit, 100) && old) {
+				if (timenb == 0) {
+					name = old.name;
+					GameObject.Destroy (old.transform.GetChild (0).gameObject);
+					ttmp = Instantiate (field);
+					ttmp.transform.parent = old.transform.parent;
+					ttmp.transform.localRotation = old.transform.localRotation;
+					ttmp.transform.localPosition = old.transform.localPosition;
+					ttmp.transform.localScale = old.transform.localScale;
+					ttmp.name = name;
+					GameObject.Destroy (old);
+					time.text = "Ground: 60 s";
+					timenb = 60;
+				}
 				old = null;
 			}
 			clicked = false;
 		}
-		if (Physics.Raycast (ray, out hit, 100) && clicked) {
+		if (Physics.Raycast (ray, out hit, 100) && clicked && timenb == 0) {
 			h = GameObject.Find (hit.collider.name);
 			if (h.transform.childCount == 0) {
 				tmp = Instantiate (field);
@@ -66,5 +86,10 @@ public class replace : MonoBehaviour {
 				}
 			}
 		}
+		if(Time.time - lastUpdate >= 1f && timenb != 0){
+			timenb -= 1;
+			lastUpdate = Time.time;
+		}
+		time.text = "Ground: " + timenb + " s";
 	}
 }
