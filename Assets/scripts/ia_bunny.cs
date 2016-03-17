@@ -5,11 +5,9 @@ public class ia_bunny : MonoBehaviour {
 
 	private GameObject[] carrot;
 	private GameObject nearest;
+	private GameObject[] bunnys;
 	public float speed;
 
-	void Start () {
-
-	}
 	void Update () {
 		carrot = GameObject.FindGameObjectsWithTag ("Carrot");
 		if (carrot.Length != 0) {
@@ -30,18 +28,68 @@ public class ia_bunny : MonoBehaviour {
 					distance = tmp;
 					nearest = obj;
 				}
-			}					
+			}
+
+
 			if (this.transform.position.x < nearest.transform.position.x)
-				this.transform.Translate (Vector3.right * speed * Time.deltaTime);
+				move_right ();
 			else if (this.transform.position.x > nearest.transform.position.x)
-				this.transform.Translate (Vector3.left * speed * Time.deltaTime);
-			if (this.transform.position.z < nearest.transform.position.z)
-				this.transform.Translate (Vector3.forward * speed * Time.deltaTime);
+				move_left ();
+			 if (this.transform.position.z < nearest.transform.position.z)
+				move_forward ();
 			else if (this.transform.position.z > nearest.transform.position.z)
-				this.transform.Translate (Vector3.back * speed * Time.deltaTime);
+				move_back ();
 		
 			if (this.transform.position.x >= nearest.transform.position.x - 1 && this.transform.position.x <= nearest.transform.position.x + 1 && this.transform.position.z >= nearest.transform.position.z - 1 && this.transform.position.z <= nearest.transform.position.z + 1)
 				GameObject.Destroy (nearest);
 		}
+	}
+
+	void move_right()
+	{
+		Ray ray = new Ray (this.transform.position, this.transform.right);
+		RaycastHit hit;
+		Debug.DrawRay (this.transform.position, this.transform.right * 1, Color.red);
+		bool collision = false;
+		if (Physics.Raycast(this.transform.position, Vector3.right, 1, 1 << LayerMask.NameToLayer("Bunny")))
+				collision = true;
+		if (collision != true)
+			this.transform.Translate (Vector3.right * speed * Time.deltaTime);
+	}
+
+	void move_left()
+	{
+		Ray ray = new Ray (this.transform.position, this.transform.right);
+		RaycastHit hit;
+		Debug.DrawRay (this.transform.position, this.transform.right * -1, Color.red);
+		bool collision = false;
+		if (Physics.Raycast(this.transform.position, Vector3.left, 1, 1 << LayerMask.NameToLayer("Bunny")))
+			collision = true;
+		if (collision != true)
+			this.transform.Translate (Vector3.left * speed * Time.deltaTime);
+	}
+
+	void move_forward()
+	{
+		Ray ray = new Ray (this.transform.position, this.transform.forward);
+		RaycastHit hit;
+		Debug.DrawRay (this.transform.position, this.transform.forward * 1, Color.red);
+		bool collision = false;
+		if (Physics.Raycast(this.transform.position, Vector3.forward, 1, 1 << LayerMask.NameToLayer("Bunny")))
+			collision = true;
+		if (collision != true)
+			this.transform.Translate (Vector3.forward * speed * Time.deltaTime);
+	}
+
+	void move_back()
+	{
+		Ray ray = new Ray (this.transform.position, this.transform.forward);
+		RaycastHit hit;
+		Debug.DrawRay (this.transform.position, this.transform.forward * -1, Color.red);
+		bool collision = false;
+		if (Physics.Raycast(this.transform.position, Vector3.back, 1, 1 << LayerMask.NameToLayer("Bunny")))
+			collision = true;
+		if (collision != true)
+			this.transform.Translate (Vector3.back * speed * Time.deltaTime);
 	}
 }
