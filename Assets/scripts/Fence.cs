@@ -45,6 +45,22 @@ public class Fence : MonoBehaviour {
 		return result;
 	}
 
+	void rotate(Transform obj) {
+		if (rota == 0) {
+			obj.localRotation = Quaternion.Euler (90, 180, 0);
+			obj.localPosition = new Vector3 (0F, -5F, -0.1F);
+		} else if (rota == 1) {
+			obj.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 90, 0);
+			obj.localPosition = new Vector3 (-5F, 0F, -0.1F);
+		} else if (rota == 2) {
+			obj.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 180, 0);
+			obj.localPosition = new Vector3 (0F, 5F, -0.1F);
+		} else if (rota == 3) {
+			obj.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 270, 0);
+			obj.localPosition = new Vector3 (5F, 0F, -0.1F);
+		}
+	}
+
 	void FixedUpdate() {
 		words = money.text.Split (' ');
 		moneynb = IntParseFast(words[1]);
@@ -71,19 +87,7 @@ public class Fence : MonoBehaviour {
 			if (h.transform.childCount == 0) {
 				tmp = Instantiate (field);
 				tmp.transform.parent = h.transform;
-				if (rota == 0) {
-					tmp.transform.localRotation = Quaternion.Euler (90, 180, 0);
-					tmp.transform.localPosition = new Vector3 (0F, -5F, -0.1F);
-				} else if (rota == 1) {
-					tmp.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 90, 0);
-					tmp.transform.localPosition = new Vector3 (-5F, 0F, -0.1F);
-				} else if (rota == 2) {
-					tmp.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 180, 0);
-					tmp.transform.localPosition = new Vector3 (0F, 5F, -0.1F);
-				} else if (rota == 3) {
-					tmp.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 270, 0);
-					tmp.transform.localPosition = new Vector3 (5F, 0F, -0.1F);
-				}
+				rotate (tmp.transform);
 				tmp.transform.localScale = new Vector3 (3F, 0.3F, 3F);
 				if (old != h) {
 					if (old)
@@ -93,19 +97,7 @@ public class Fence : MonoBehaviour {
 			}
 			foreach (Transform child in old.transform) {
 				if (child.tag == "edit") {
-					if (rota == 0) {
-						child.transform.localRotation = Quaternion.Euler (90, 180, 0);
-						child.transform.localPosition = new Vector3 (0F, -5F, -0.1F);
-					} else if (rota == 1) {
-						child.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 90, 0);
-						child.transform.localPosition = new Vector3 (-5F, 0F, -0.1F);
-					} else if (rota == 2) {
-						child.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 180, 0);
-						child.transform.localPosition = new Vector3 (0F, 5F, -0.1F);
-					} else if (rota == 3) {
-						child.transform.localRotation = Quaternion.Euler (90, 180, 0) * Quaternion.Euler (0, 270, 0);
-						child.transform.localPosition = new Vector3 (5F, 0F, -0.1F);
-					}
+					rotate (child.transform);
 				}
 			}
 		}
