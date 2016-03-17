@@ -37,6 +37,7 @@ public class button : MonoBehaviour {
 		if (Input.GetMouseButtonUp (0) && clicked) {
 			if (Physics.Raycast (ray, out hit, 100)) {
 				old.transform.GetChild (0).gameObject.GetComponent<AudioSource>().Play();
+				old.transform.GetChild (0).gameObject.tag = "Carrot";
 				old = null;
 			}
 			clicked = false;
