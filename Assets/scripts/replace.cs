@@ -55,7 +55,7 @@ public class replace : MonoBehaviour {
 		if (Input.GetMouseButtonUp (0) && clicked) {
 			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && old) {
 				if (timenb == 0) {
-					name = old.name;
+					name = "FieldNode" + old.name.Substring (8);
 					GameObject.Destroy (old.transform.GetChild (0).gameObject);
 					ttmp = Instantiate (field);
 					ttmp.transform.parent = old.transform.parent;

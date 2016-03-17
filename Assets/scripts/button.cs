@@ -50,7 +50,7 @@ public class button : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
+			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				if (moneynb >= 10) {
 					money.text = "Money: " + (moneynb-10) + " $";
 					old.transform.GetChild (0).gameObject.GetComponent<AudioSource> ().Play ();
@@ -62,7 +62,7 @@ public class button : MonoBehaviour {
 		}
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && clicked && moneynb >= 10) {
 			h = GameObject.Find (hit.collider.name);
-			if (h.transform.childCount == 0) {
+			if (h.transform.childCount == 0 && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
 				tmp.transform.parent = h.transform;
 				tmp.transform.localRotation = Quaternion.identity;
