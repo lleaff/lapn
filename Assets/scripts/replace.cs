@@ -53,7 +53,7 @@ public class replace : MonoBehaviour {
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100) && old) {
+			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && old) {
 				if (timenb == 0) {
 					name = old.name;
 					GameObject.Destroy (old.transform.GetChild (0).gameObject);
@@ -71,7 +71,7 @@ public class replace : MonoBehaviour {
 			}
 			clicked = false;
 		}
-		if (Physics.Raycast (ray, out hit, 100) && clicked && timenb == 0) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && clicked && timenb == 0) {
 			h = GameObject.Find (hit.collider.name);
 			if (h.transform.childCount == 0) {
 				tmp = Instantiate (field);
