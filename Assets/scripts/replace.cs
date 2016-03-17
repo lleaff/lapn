@@ -13,7 +13,7 @@ public class replace : MonoBehaviour {
 	private string name;
 	private string[] words;
 	private int timenb;
-	private float lastUpdate = Time.time;
+	private float lastUpdate = 16F;
 	public Text time;
 	public GameObject field;
 
@@ -86,6 +86,8 @@ public class replace : MonoBehaviour {
 				}
 			}
 		}
+		if (lastUpdate == 16F)
+			lastUpdate = Time.time;
 		if(Time.time - lastUpdate >= 1f && timenb != 0){
 			timenb -= 1;
 			lastUpdate = Time.time;
