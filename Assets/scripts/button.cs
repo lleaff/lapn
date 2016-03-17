@@ -9,7 +9,6 @@ public class button : MonoBehaviour {
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
-
 	public GameObject field;
 
 	void Awake()
