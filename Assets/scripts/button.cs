@@ -9,7 +9,8 @@ public class button : MonoBehaviour {
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
-	private string stringtmp;
+	private string[] words;
+	private int moneynb;
 	public GameObject field;
 	public Text money;
 
@@ -32,13 +33,26 @@ public class button : MonoBehaviour {
 		}
 	}
 
+	public static int IntParseFast(string value)
+	{
+		int result = 0;
+		for (int i = 0; i < value.Length; i++)
+		{
+			char letter = value[i];
+			result = 10 * result + (letter - 48);
+		}
+		return result;
+	}
+
 	void FixedUpdate() {
-		stringtmp = money.text;
+		words = money.text.Split (' ');
+		moneynb = IntParseFast(words[1]);
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 		if (Input.GetMouseButtonUp (0) && clicked) {
 			if (Physics.Raycast (ray, out hit, 100)) {
-				if (stringtmp != "Money: 0$") {
+				if (moneynb >= 10) {
+					money.text = "Money: " + (moneynb-10) + " $";
 					old.transform.GetChild (0).gameObject.GetComponent<AudioSource> ().Play ();
 					old.transform.GetChild (0).gameObject.tag = "Carrot";
 				}
@@ -46,7 +60,7 @@ public class button : MonoBehaviour {
 			}
 			clicked = false;
 		}
-		if (Physics.Raycast (ray, out hit, 100) && clicked && stringtmp != "Money: 0$") {
+		if (Physics.Raycast (ray, out hit, 100) && clicked && moneynb >= 10) {
 			h = GameObject.Find (hit.collider.name);
 			if (h.transform.childCount == 0) {
 				tmp = Instantiate (field);
