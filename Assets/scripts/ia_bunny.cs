@@ -5,6 +5,7 @@ public class ia_bunny : MonoBehaviour {
 
 	private GameObject[] carrot;
 	private GameObject nearest;
+	public float speed;
 
 	void Start () {
 
@@ -29,16 +30,15 @@ public class ia_bunny : MonoBehaviour {
 					distance = tmp;
 					nearest = obj;
 				}
-			}
-					
+			}					
 			if (this.transform.position.x < nearest.transform.position.x)
-				this.transform.Translate (Vector3.right * 5.0f * Time.deltaTime);
-			else if (this.transform.position.x > carrot[0].transform.position.x)
-				this.transform.Translate (Vector3.left * 5.0f * Time.deltaTime);
+				this.transform.Translate (Vector3.right * speed * Time.deltaTime);
+			else if (this.transform.position.x > nearest.transform.position.x)
+				this.transform.Translate (Vector3.left * speed * Time.deltaTime);
 			if (this.transform.position.z < nearest.transform.position.z)
-				this.transform.Translate (Vector3.forward * 5.0f * Time.deltaTime);
+				this.transform.Translate (Vector3.forward * speed * Time.deltaTime);
 			else if (this.transform.position.z > nearest.transform.position.z)
-				this.transform.Translate (Vector3.back * 5.0f * Time.deltaTime);
+				this.transform.Translate (Vector3.back * speed * Time.deltaTime);
 		
 			if (this.transform.position.x >= nearest.transform.position.x - 1 && this.transform.position.x <= nearest.transform.position.x + 1 && this.transform.position.z >= nearest.transform.position.z - 1 && this.transform.position.z <= nearest.transform.position.z + 1)
 				GameObject.Destroy (nearest);
