@@ -6,7 +6,8 @@ public class globalValue : MonoBehaviour {
 
 	private int carrots = 10;
 	private int money = 0;
-	private List<int>list_value	= new  List<int>();	
+	private List<int>list_value	= new  List<int>();
+	private bool canAdd = true;
 
 	public int get_carrots()
 	{
@@ -52,6 +53,13 @@ public class globalValue : MonoBehaviour {
 			carrots -= n;
 	}
 
+	private IEnumerator add_value()
+	{
+		yield return new WaitForSeconds (120);
+		list_value.Add (Random.Range (10, 50));
+		canAdd = true;
+	}
+
 	// Use this for initialization
 	void Start () {
 		list_value.Add (Random.Range (10, 50));
@@ -63,6 +71,9 @@ public class globalValue : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (canAdd) {
+			canAdd = false;
+			StartCoroutine (add_value ());
+		}
 	}
 }

@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using System.Collections.Generic;
 
 
 public class sell_carrot : MonoBehaviour {
 
 	private Button my_button;
 	private GameObject globalValue;
+	private List<int>list_value = new List<int>();
 
 	void Awake ()
 	{
@@ -19,7 +20,8 @@ public class sell_carrot : MonoBehaviour {
 	{
 		globalValue = GameObject.Find ("GlobalValue");
 		globalValue.GetComponent<globalValue>().remove_carrots (1);
-		globalValue.GetComponent<globalValue> ().add_money (10);
+		list_value = globalValue.GetComponent<globalValue> ().get_list ();
+		globalValue.GetComponent<globalValue> ().add_money (list_value[list_value.Count - 1]);
 	}
 
 	
