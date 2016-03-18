@@ -19,14 +19,11 @@ public class sell_carrot : MonoBehaviour {
 	void sell()
 	{
 		globalValue = GameObject.Find ("GlobalValue");
-		globalValue.GetComponent<globalValue>().remove_carrots (1);
-		list_value = globalValue.GetComponent<globalValue> ().get_list ();
-		globalValue.GetComponent<globalValue> ().add_money (list_value[list_value.Count - 1]);
+		if (globalValue.GetComponent<globalValue> ().get_carrots () > 0) {
+			globalValue.GetComponent<globalValue> ().remove_carrots (1);
+			list_value = globalValue.GetComponent<globalValue> ().get_list ();
+			globalValue.GetComponent<globalValue> ().add_money (list_value [list_value.Count - 1]);
+		}
 	}
 
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

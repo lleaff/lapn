@@ -85,8 +85,8 @@ public class replace : MonoBehaviour {
 
 			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 			GameObject.Destroy (old);
-			time.text = "Ground: 60 s";
-			timenb = 60;
+			time.text = "Ground: 5 s";
+			timenb = 5;
 			old = null;
 			clicked = false;
 		}
