@@ -10,7 +10,7 @@ public class replace : MonoBehaviour {
 	private GameObject old = null;
 	private GameObject tmp;
 	private GameObject ttmp;
-	private string name;
+	private string names;
 	private string[] words;
 	private int timenb;
 	private float lastUpdate = 16F;
@@ -29,7 +29,7 @@ public class replace : MonoBehaviour {
 			clicked = true;
 		else {
 			if (old) {
-				GameObject.Destroy (old.transform.GetChild (0).gameObject);
+				GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 				old = null;
 			}
 			clicked = false;
@@ -48,40 +48,59 @@ public class replace : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		/*Split the money count*/
 		words = time.text.Split (' ');
 		timenb = IntParseFast(words[1]);
+
+		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
-		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && old) {
-				if (timenb == 0) {
-					name = "FieldNode" + old.name.Substring (8);
-					GameObject.Destroy (old.transform.GetChild (0).gameObject);
-					ttmp = Instantiate (field);
-					ttmp.transform.parent = old.transform.parent;
-					ttmp.transform.localRotation = old.transform.localRotation;
-					ttmp.transform.localPosition = old.transform.localPosition;
-					ttmp.transform.localScale = old.transform.localScale;
-					ttmp.name = name;
-					GameObject.Destroy (old);
-					time.text = "Ground: 60 s";
-					timenb = 60;
-				}
-				old = null;
+
+		/*You can place the fieldtile if you leftclick + you have pressed the button + you are on a tile + time is at 0 */
+		if (Input.GetMouseButtonUp (0) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && old && timenb == 0) {
+			names = "FieldNode" + old.name.Substring (8);
+		/*	GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);*/
+			ttmp = Instantiate (field);
+			ttmp.transform.parent = old.transform.parent;
+			ttmp.transform.localRotation = old.transform.localRotation;
+			ttmp.transform.localPosition = old.transform.localPosition;
+			ttmp.transform.localScale = old.transform.localScale;
+			ttmp.name = names;
+
+			/*dafuq c# sucks*/
+			foreach (Transform child in old.transform) {
+				if (child.name != "fieldtile")
+					child.parent = ttmp.transform;
 			}
+			foreach (Transform child in old.transform) {
+				if (child.name != "fieldtile")
+					child.parent = ttmp.transform;
+			}
+			foreach (Transform child in old.transform) {
+				if (child.name != "fieldtile")
+					child.parent = ttmp.transform;
+			}
+			/*Madness end here*/
+
+			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
+			GameObject.Destroy (old);
+			time.text = "Ground: 60 s";
+			timenb = 60;
+			old = null;
 			clicked = false;
 		}
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && clicked && timenb == 0) {
 			h = GameObject.Find (hit.collider.name);
-			if (h.transform.childCount == 0) {
+			if (hit.collider.name.Substring(0,9) != "FieldNode" && h.transform.FindChild ("fieldtile") == null) {
 				tmp = Instantiate (field);
 				tmp.transform.parent = h.transform;
 				tmp.transform.localRotation = Quaternion.identity;
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = Vector3.one;
+				tmp.name = "fieldtile";
 				if (old != h) {
 					if (old)
-						GameObject.Destroy (old.transform.GetChild (0).gameObject);
+						GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 					old = h;
 				}
 			}
