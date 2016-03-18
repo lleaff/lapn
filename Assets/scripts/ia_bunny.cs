@@ -29,8 +29,6 @@ public class ia_bunny : MonoBehaviour {
 					nearest = obj;
 				}
 			}
-
-
 			if (this.transform.position.x < nearest.transform.position.x)
 				move_right ();
 			else if (this.transform.position.x > nearest.transform.position.x)
@@ -39,13 +37,12 @@ public class ia_bunny : MonoBehaviour {
 				move_forward ();
 			else if (this.transform.position.z > nearest.transform.position.z)
 				move_back ();
-		
 			if (this.transform.position.x >= nearest.transform.position.x - 1 && this.transform.position.x <= nearest.transform.position.x + 1 && this.transform.position.z >= nearest.transform.position.z - 1 && this.transform.position.z <= nearest.transform.position.z + 1)
 				GameObject.Destroy (nearest);
 		}
 	}
 
-	void move_right()
+	private void move_right()
 	{
 		Ray ray = new Ray (this.transform.position, this.transform.right);
 		RaycastHit hit;
@@ -57,7 +54,7 @@ public class ia_bunny : MonoBehaviour {
 			this.transform.Translate (Vector3.right * speed * Time.deltaTime);
 	}
 
-	void move_left()
+	private void move_left()
 	{
 		Ray ray = new Ray (this.transform.position, this.transform.right);
 		RaycastHit hit;
@@ -69,7 +66,7 @@ public class ia_bunny : MonoBehaviour {
 			this.transform.Translate (Vector3.left * speed * Time.deltaTime);
 	}
 
-	void move_forward()
+	private void move_forward()
 	{
 		Ray ray = new Ray (this.transform.position, this.transform.forward);
 		RaycastHit hit;
@@ -81,7 +78,7 @@ public class ia_bunny : MonoBehaviour {
 			this.transform.Translate (Vector3.forward * speed * Time.deltaTime);
 	}
 
-	void move_back()
+	private void move_back()
 	{
 		Ray ray = new Ray (this.transform.position, this.transform.forward);
 		RaycastHit hit;
