@@ -61,43 +61,66 @@ public class Fence : MonoBehaviour {
 		}
 	}
 
+	bool check_pos(Transform obj) {
+		string fencerot = "fence " + rota;
+		foreach (Transform child in obj) {
+			if (child.name == fencerot)
+				return (false);
+		}
+		return (true);
+	}
+
 	void FixedUpdate() {
+		/*Split the money count*/
 		words = money.text.Split (' ');
 		moneynb = IntParseFast(words[1]);
+
+		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
-		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
-				if (moneynb >= 20) {
-					money.text = "Money: " + (moneynb-20) + " $";
-					old.transform.GetChild (0).gameObject.tag = "noedit";
-				}
-				old = null;
-			}
+
+		/*You can place the fence if you leftclick + you have pressed the button + you are on a tile + you have the money*/
+		if (Input.GetMouseButtonUp (0) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && moneynb >= 20) {
+			money.text = "Money: " + (moneynb-20) + " $";
+			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
+			old = null;
 			clicked = false;
 		}
-		if (Input.GetMouseButtonUp (1) && clicked) {
+
+		/*Handle the rotation*/
+		if (Input.GetMouseButtonUp (1) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
 			if (rota != 3)
 				rota++;
 			else
 				rota = 0;
 		}
+
+		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("ground")) && clicked && moneynb >= 20) {
 			h = GameObject.Find (hit.collider.name);
-			if (h.transform.childCount == 0) {
+			if (check_pos(h.transform)) {
 				tmp = Instantiate (field);
 				tmp.transform.parent = h.transform;
 				rotate (tmp.transform);
+				tmp.name = "fence " + rota;
+				/*destroy all edit tag */
 				tmp.transform.localScale = new Vector3 (3F, 0.3F, 3F);
 				if (old != h) {
-					if (old)
-						GameObject.Destroy (old.transform.GetChild (0).gameObject);
+					if (old) {
+						foreach (Transform child in old.transform) {
+							if (child.tag == "edit")
+								GameObject.Destroy (child.gameObject);
+						}
+					}
 					old = h;
 				}
 			}
+
+			/*Real time update*/
 			foreach (Transform child in old.transform) {
 				if (child.tag == "edit") {
 					rotate (child.transform);
+					tmp.name = "fence " + rota;
 				}
 			}
 		}
