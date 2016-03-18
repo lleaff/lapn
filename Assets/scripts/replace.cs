@@ -66,6 +66,7 @@ public class replace : MonoBehaviour {
 			ttmp.transform.localPosition = old.transform.localPosition;
 			ttmp.transform.localScale = old.transform.localScale;
 			ttmp.name = names;
+			ttmp.GetComponents<BoxCollider> ()[0].enabled = true;
 
 			/*dafuq c# sucks*/
 			foreach (Transform child in old.transform) {
