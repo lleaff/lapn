@@ -27,7 +27,7 @@ public class Fence : MonoBehaviour {
 			clicked = true;
 		else {
 			if (old) {
-				GameObject.Destroy (old.transform.GetChild (0).gameObject);
+				GameObject.Destroy (old.transform.FindChild ("fence " + rota).gameObject);
 				old = null;
 			}
 			clicked = false;
@@ -103,7 +103,6 @@ public class Fence : MonoBehaviour {
 				tmp.transform.parent = h.transform;
 				rotate (tmp.transform);
 				tmp.name = "fence " + rota;
-				/*destroy all edit tag */
 				tmp.transform.localScale = new Vector3 (3F, 0.3F, 3F);
 				if (old != h) {
 					if (old) {

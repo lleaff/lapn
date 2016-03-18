@@ -26,7 +26,7 @@ public class button : MonoBehaviour {
 			clicked = true;
 		else {
 			if (old) {
-				GameObject.Destroy (old.transform.GetChild (0).gameObject);
+				GameObject.Destroy (old.transform.FindChild ("field").gameObject);
 				old = null;
 			}
 			clicked = false;
@@ -44,33 +44,45 @@ public class button : MonoBehaviour {
 		return result;
 	}
 
+	bool check_pos(Transform obj) {
+		foreach (Transform child in obj) {
+			if (child.name == "field")
+				return (false);
+		}
+		return (true);
+	}
+
 	void FixedUpdate() {
+		/*Split the money count*/
 		words = money.text.Split (' ');
 		moneynb = IntParseFast(words[1]);
+
+		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
-		if (Input.GetMouseButtonUp (0) && clicked) {
-			if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode") {
-				if (moneynb >= 10) {
-					money.text = "Money: " + (moneynb-10) + " $";
-					old.transform.GetChild (0).gameObject.GetComponent<AudioSource> ().Play ();
-					old.transform.GetChild (0).gameObject.tag = "Carrot";
-				}
-				old = null;
-			}
+
+		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
+		if (Input.GetMouseButtonUp (0) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode" && moneynb >= 10) {
+			money.text = "Money: " + (moneynb-10) + " $";
+			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
+			old.transform.FindChild ("field").gameObject.tag = "Carrot";
+			old = null;
 			clicked = false;
 		}
+
+		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && clicked && moneynb >= 10) {
 			h = GameObject.Find (hit.collider.name);
-			if (h.transform.childCount == 0 && hit.collider.name.Substring(0,9) == "FieldNode") {
+			if (check_pos(h.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
 				tmp.transform.parent = h.transform;
 				tmp.transform.localRotation = Quaternion.identity;
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = Vector3.one;
+				tmp.name = "field";
 				if (old != h) {
 					if (old)
-						GameObject.Destroy (old.transform.GetChild (0).gameObject);
+						GameObject.Destroy (old.transform.FindChild ("field").gameObject);
 					old = h;
 				}
 			}

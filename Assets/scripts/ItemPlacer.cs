@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class ItemPlacer : MonoBehaviour {
-	// Config
+/*	// Config
 	public bool autoInstantiate = true;
 	public string ReceivingLayerName = "PlacementGrid";
 
@@ -75,5 +75,5 @@ public class ItemPlacer : MonoBehaviour {
 			}
 		}
 	}
-
+	*/
 }
