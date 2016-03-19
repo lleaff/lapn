@@ -51,7 +51,7 @@ public class sampleagentscript : MonoBehaviour {
 
 	void OnCollisionEnter(Collision col)
 	{
-		if (col.collider.gameObject.name == "FieldOb(Clone)")
+		if (col.collider.gameObject.name == "field")
 		{
 			Destroy(col.collider.gameObject);
 			Destroy (this.gameObject);
