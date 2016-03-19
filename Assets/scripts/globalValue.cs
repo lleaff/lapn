@@ -8,6 +8,8 @@ public class globalValue : MonoBehaviour {
 	private int money = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
+	private bool canLoseLife = true;
+	private int[] family;
 
 	public int get_carrots()
 	{
@@ -22,6 +24,11 @@ public class globalValue : MonoBehaviour {
 	public List<int> get_list()
 	{
 		return (list_value);
+	}
+
+	public int get_life(int n)
+	{
+		return (family [n]);
 	}
 
 	public void set_carrots(int n)
@@ -44,13 +51,28 @@ public class globalValue : MonoBehaviour {
 	{
 		if (n > 0)
 			money += n;
-		print (money);
+	}
+
+	public void add_life(int n, int i)
+	{
+		if (n > 0)
+			family [i] += n;
+		if (family [i] > 100)
+			family [i] = 100;
 	}
 
 	public void remove_carrots(int n)
 	{
 		if (n > 0 && n <= carrots)
 			carrots -= n;
+	}
+
+	public void remove_life(int n, int i)
+	{
+		if (n > 0)
+			family [i] -= n;
+		if (family [i] < 0)
+			family [i] = 0;
 	}
 
 	private IEnumerator add_value()
@@ -60,20 +82,33 @@ public class globalValue : MonoBehaviour {
 		canAdd = true;
 	}
 
-	// Use this for initialization
+	private IEnumerator lose_life()
+	{
+		yield return new WaitForSeconds (2);//30
+		for (int i = 0; i < 4; i++) {
+			remove_life (5, i);
+			print (family [i]);
+		}
+		canLoseLife = true;
+	}
+		
 	void Start () {
 		list_value.Add (Random.Range (10, 50));
 		list_value.Add (Random.Range (10, 50));
 		list_value.Add (Random.Range (10, 50));
-		list_value.Add (42);
-		print (list_value[list_value.Count - 1]);
+		family = new int[4];
+		for (int i = 0; i < 4; i++)
+			family [i] = 100;
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
 		if (canAdd) {
 			canAdd = false;
 			StartCoroutine (add_value ());
+		}
+		if (canLoseLife) {
+			canLoseLife = false;
+			StartCoroutine (lose_life ());
 		}
 	}
 }

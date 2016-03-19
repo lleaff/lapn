@@ -6,7 +6,6 @@ public class show_ui_sell : MonoBehaviour {
 
 	public GameObject ui_sell;
 	private Button myButton;
-	static private bool is_active = false;
 
 	void Awake()
 	{
@@ -15,14 +14,12 @@ public class show_ui_sell : MonoBehaviour {
 		myButton.onClick.AddListener (show);
 	}
 
-	void show()
+	private void show()
 	{
-		if (is_active == true) {
+		if (ui_sell.activeInHierarchy) {
 			ui_sell.SetActive (false);
-			is_active = false;
 		} else {
-			ui_sell.SetActive (true);
-			is_active = true;	
+			ui_sell.SetActive (true);	
 		}
 	}
 }
