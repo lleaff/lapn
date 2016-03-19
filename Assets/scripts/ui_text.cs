@@ -23,7 +23,7 @@ public class ui_text : MonoBehaviour {
 		m_time += Time.deltaTime;
 		if (m_time >= 1) {
 			m_time = 0;
-			sec += 10;
+			sec += 1;
 		}
 		carrot.text = globalValue.GetComponent<globalValue> ().Carrots.ToString ();
 		if (sec / 60 < 10)
