@@ -11,7 +11,7 @@ public class Fence : MonoBehaviour {
 	private GameObject tmp;
 	private string[] words;
 	private int moneynb;
-	private int rota = 0;
+	private static int rota = 0;
 	public GameObject field;
 	public Text money;
 
@@ -90,6 +90,12 @@ public class Fence : MonoBehaviour {
 
 		/*Handle the rotation*/
 		if (Input.GetMouseButtonUp (1) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
+			if (old) {
+				foreach (Transform child in old.transform) {
+					if (child.tag == "edit")
+						GameObject.Destroy (child.gameObject);
+				}
+			}
 			if (rota != 3)
 				rota++;
 			else
