@@ -53,7 +53,7 @@ public class ItemPlacer : MonoBehaviour {
 		}
 		return previewItem;
 	}
-		
+
 	public static GameObject Init(GameObject itemObj, PlacementCondition placeCondition, Outcome outcomeValid, Outcome outcomeInvalid = null) {
 		GameObject container = GameObject.Find (ItemPlacerContainerObjectName);
 		if (!container) {
@@ -66,6 +66,7 @@ public class ItemPlacer : MonoBehaviour {
 		iPlacer.__Init(itemObj, placeCondition, outcomeValid, outcomeInvalid);
 		return instance;
 	}
+
 	public void __Init(GameObject itemObj, PlacementCondition placeCondition, Outcome outcomeValid, Outcome outcomeInvalid = null) {
 		ItemObj = itemObj;
 		PlaceCondition = placeCondition;
