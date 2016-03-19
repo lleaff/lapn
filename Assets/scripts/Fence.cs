@@ -83,6 +83,7 @@ public class Fence : MonoBehaviour {
 		if (Input.GetMouseButtonUp (0) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && moneynb >= 20) {
 			money.text = "Money: " + (moneynb-20) + " $";
 			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
+			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<NavMeshObstacle>()[0].enabled = true;
 			old = null;
 			clicked = false;
 		}
