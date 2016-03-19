@@ -35,15 +35,13 @@ public class sampleagentscript : MonoBehaviour {
 			agent.SetDestination (nearest.transform.position);
 			NavMeshPath path = new NavMeshPath ();
 			bool hasFoundPath = agent.CalculatePath (nearest.transform.position, path);
-
-		if (path.status == NavMeshPathStatus.PathComplete) {
-			print ("The agent can reach the destionation");
-		} else if (path.status == NavMeshPathStatus.PathPartial) {
-			print ("The agent can only get close to the destination");
-		} else if (path.status == NavMeshPathStatus.PathInvalid) {
-			print ("The agent cannot reach the destination");
-			print ("hasFoundPath will be false");
-		}
+			/*destroy fence*/
+			if (path.status == NavMeshPathStatus.PathPartial)
+				agent.SetDestination (Vector3.zero);
+			else if (path.status == NavMeshPathStatus.PathInvalid) {
+				print ("The agent cannot reach the destination");
+				print ("hasFoundPath will be false");
+			}
 		}
 
 
