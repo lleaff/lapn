@@ -39,7 +39,6 @@ public class ui_text : MonoBehaviour {
 			day = 0.5F + (((sec/60)%12)/10F);
 		else
 			day = 1.7F - (((sec/60)%12)/10F);
-		print (day);
 		dayint.intensity = day;
 		money.text = globalValue.GetComponent<globalValue> ().Money.ToString();
 	}
