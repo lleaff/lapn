@@ -11,36 +11,35 @@ public class globalValue : MonoBehaviour {
 	private bool canLoseLife = true;
 	private int[] family;
 
-	public int get_carrots()
-	{
-		return (carrots);
+	public int Money {
+		get {
+			return (money);
+		}
+		set {
+			money = value;
+		}
 	}
 
-	public int get_money()
-	{
-		return (money);
+	public int Carrots {
+		get {
+			return (carrots);
+		}
+		set {
+			carrots = value;
+		}
 	}
 
-	public List<int> get_list()
-	{
-		return (list_value);
+	public List<int> List {
+		get {
+			return (list_value);
+		}
 	}
 
 	public int get_life(int n)
 	{
 		return (family [n]);
 	}
-
-	public void set_carrots(int n)
-	{
-		carrots = n;
-	}
-
-	public void set_money(int n)
-	{
-		money = n;
-	}
-
+		
 	public void add_carrots(int n)
 	{
 		if (n > 0)

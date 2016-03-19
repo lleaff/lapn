@@ -31,7 +31,7 @@ public class ui_life : MonoBehaviour {
 
 	void eat()
 	{
-		if (globalValue.GetComponent<globalValue> ().get_carrots () >= 5) {
+		if (globalValue.GetComponent<globalValue> ().Carrots >= 5) {
 			globalValue.GetComponent<globalValue> ().remove_carrots (5);
 			globalValue.GetComponent<globalValue> ().add_life (5, index);
 		}

@@ -19,9 +19,9 @@ public class sell_carrot : MonoBehaviour {
 	void sell()
 	{
 		globalValue = GameObject.Find ("GlobalValue");
-		if (globalValue.GetComponent<globalValue> ().get_carrots () > 0) {
+		if (globalValue.GetComponent<globalValue> ().Carrots > 0) {
 			globalValue.GetComponent<globalValue> ().remove_carrots (1);
-			list_value = globalValue.GetComponent<globalValue> ().get_list ();
+			list_value = globalValue.GetComponent<globalValue> ().List;
 			globalValue.GetComponent<globalValue> ().add_money (list_value [list_value.Count - 1]);
 		}
 	}
