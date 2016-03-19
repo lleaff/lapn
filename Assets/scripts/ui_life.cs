@@ -19,14 +19,13 @@ public class ui_life : MonoBehaviour {
 		keys [0] = KeyCode.Alpha1;
 		keys [1] = KeyCode.Alpha2;
 		keys [2] = KeyCode.Alpha3;
-		keys [3] = KeyCode.Alpha4;
-	    
+		keys [3] = KeyCode.Alpha4;    
 	}
 
 	void Update () {
 		image = this.transform.GetChild (0);
 		image.localScale = new Vector3 (1, globalValue.GetComponent<globalValue> ().get_life (index) * 0.01F, 1);
-		if (Input.GetKey(keys	[index]))
+		if (Input.GetKey(keys[index]))
 			eat();
 	}
 
