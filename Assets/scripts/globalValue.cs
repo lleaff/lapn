@@ -84,10 +84,8 @@ public class globalValue : MonoBehaviour {
 	private IEnumerator lose_life()
 	{
 		yield return new WaitForSeconds (2);//30
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++)
 			remove_life (5, i);
-			print (family [i]);
-		}
 		canLoseLife = true;
 	}
 		

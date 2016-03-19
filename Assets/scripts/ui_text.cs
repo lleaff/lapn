@@ -15,6 +15,7 @@ public class ui_text : MonoBehaviour {
 	}
 		
 	void Update () {
+		
 		m_time += Time.deltaTime;
 		carrot.text = globalValue.GetComponent<globalValue> ().Carrots.ToString ();
 		time.text = m_time.ToString ();
