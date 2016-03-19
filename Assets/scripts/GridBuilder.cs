@@ -32,6 +32,12 @@ public static class GridBuilder {
 				node.name = string.Format ("GridNode({0}-{1})", x, z);
 				node.layer = nodeLayer;
 				node.transform.parent = gridObject.transform;
+
+				node.AddComponent<Cell> ();
+				node.GetComponent<Cell> ().Init (
+					position: new Vector2 (x, z)
+				);
+
 				grid [x, z] = node;
 			}
 		}
