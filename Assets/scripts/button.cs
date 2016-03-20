@@ -5,7 +5,7 @@ using System.Collections;
 public class button : MonoBehaviour {
 
 	private Button myButton;
-	private bool clicked = false;
+	private GameObject global;
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
@@ -17,19 +17,20 @@ public class button : MonoBehaviour {
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
+		global = GameObject.Find ("GlobalValue");
 		myButton.onClick.AddListener (addCarote);
 	}
 
 	void addCarote()
 	{
-		if (!clicked)
-			clicked = true;
+		if (global.GetComponent<globalValue> ().Button != 1)
+			global.GetComponent<globalValue> ().Button = 1;
 		else {
 			if (old) {
 				GameObject.Destroy (old.transform.FindChild ("field").gameObject);
 				old = null;
 			}
-			clicked = false;
+			global.GetComponent<globalValue> ().Button = 0;
 		}
 	}
 
@@ -62,16 +63,16 @@ public class button : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
-		if (Input.GetMouseButtonUp (0) && clicked && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode" && moneynb >= 10) {
+		if (Input.GetMouseButtonUp (0) && global.GetComponent<globalValue> ().Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode" && moneynb >= 10) {
 			money.text = "Money: " + (moneynb-10) + " $";
 			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
 			old.transform.FindChild ("field").gameObject.tag = "Carrot";
 			old = null;
-			clicked = false;
+			global.GetComponent<globalValue> ().Button = 0;
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && clicked && moneynb >= 10) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && global.GetComponent<globalValue> ().Button == 1 && moneynb >= 10) {
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
