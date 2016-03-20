@@ -83,6 +83,7 @@ public class Fence : MonoBehaviour {
 			money.text = "Money: " + (moneynb-20) + " $";
 			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<NavMeshObstacle>()[0].enabled = true;
+			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<BoxCollider>()[0].enabled = true;
 			old = null;
 			Globals.i.Button = 0;
 		}
