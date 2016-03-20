@@ -10,6 +10,7 @@ public class sell_carrot : MonoBehaviour {
 	private GameObject globalValue;
 	private List<int>list_value = new List<int>();
 	public Texture line;
+	public Text carrot_value;
 
 	void Awake ()
 	{
@@ -45,5 +46,9 @@ public class sell_carrot : MonoBehaviour {
 			globalValue.GetComponent<globalValue> ().add_money (list_value [list_value.Count - 1]);
 		}
 	}
-
+		
+	void Update()
+	{
+		carrot_value.text = "Valeur de la carotte: " + list_value [list_value.Count - 1].ToString ();
+	}
 }
