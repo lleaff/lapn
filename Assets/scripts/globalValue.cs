@@ -10,6 +10,7 @@ public class globalValue : MonoBehaviour {
 	private bool canAdd = true;
 	private bool canLoseLife = true;
 	private int[] family;
+	private int button_click;
 
 	public int Money {
 		get {
@@ -32,6 +33,15 @@ public class globalValue : MonoBehaviour {
 	public List<int> List {
 		get {
 			return (list_value);
+		}
+	}
+
+	public int Button{
+		get {
+			return (button_click);
+		}
+		set {
+			button_click = value;
 		}
 	}
 
