@@ -86,7 +86,7 @@ public class globalValue : MonoBehaviour {
 
 	private IEnumerator add_value()
 	{
-		yield return new WaitForSeconds (1);//120
+		yield return new WaitForSeconds (120);
 		if (list_value[list_value.Count - 1] - 10 > 0)
 			list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
 		else
