@@ -90,6 +90,7 @@ public class replace : MonoBehaviour {
 			Globals.i.Button = 0;
 		}
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && Globals.i.Button == 3 && timenb == 0) {
+
 			h = GameObject.Find (hit.collider.name);
 			if (hit.collider.name.Substring(0,9) != "FieldNode" && h.transform.FindChild ("fieldtile") == null) {
 				tmp = Instantiate (field);

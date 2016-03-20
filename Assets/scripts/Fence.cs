@@ -10,7 +10,7 @@ public class Fence : MonoBehaviour {
 	private GameObject tmp;
 	private string[] words;
 	private int moneynb;
-	private static int rota = 0;
+	private int rota = 0;
 	public GameObject field;
 	public Text money;
 
@@ -90,7 +90,7 @@ public class Fence : MonoBehaviour {
 		/*Handle the rotation*/
 		if (Input.GetMouseButtonUp (1) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
 			if (rota != 3)
-				rota++;
+				rota += 1;
 			else
 				rota = 0;
 			if (h) {
@@ -103,6 +103,7 @@ public class Fence : MonoBehaviour {
 
 		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("ground")) && Globals.i.Button == 2 && moneynb >= 20) {
+
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform)) {
 				tmp = Instantiate (field);

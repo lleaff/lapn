@@ -62,6 +62,7 @@ public class button : MonoBehaviour {
 
 		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
 		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && hit.collider.name.Substring(0,9) == "FieldNode" && moneynb >= 10) {
+
 			money.text = "Money: " + (moneynb-10) + " $";
 			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
 			old.transform.FindChild ("field").gameObject.tag = "Carrot";
