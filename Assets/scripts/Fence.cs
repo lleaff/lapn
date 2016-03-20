@@ -101,6 +101,7 @@ public class Fence : MonoBehaviour {
 				rota++;
 			else
 				rota = 0;
+			print (rota);
 		}
 
 		/*Moving object*/
@@ -120,14 +121,6 @@ public class Fence : MonoBehaviour {
 						}
 					}
 					old = h;
-				}
-			}
-
-			/*Real time update*/
-			foreach (Transform child in old.transform) {
-				if (child.tag == "edit") {
-					rotate (child.transform);
-					tmp.name = "fence " + rota;
 				}
 			}
 		}
