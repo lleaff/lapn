@@ -76,23 +76,26 @@ public class globalValue : MonoBehaviour {
 
 	private IEnumerator add_value()
 	{
-		yield return new WaitForSeconds (120);
-		list_value.Add (Random.Range (10, 50));
+		yield return new WaitForSeconds (1);//120
+		if (list_value[list_value.Count - 1] - 10 > 0)
+			list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+		else
+			list_value.Add (Random.Range (5, 20));
 		canAdd = true;
 	}
 
 	private IEnumerator lose_life()
 	{
-		yield return new WaitForSeconds (6);//30
+		yield return new WaitForSeconds (6);
 		for (int i = 0; i < 4; i++)
 			remove_life (1, i);
 		canLoseLife = true;
 	}
 		
 	void Start () {
-		list_value.Add (Random.Range (10, 50));
-		list_value.Add (Random.Range (10, 50));
-		list_value.Add (Random.Range (10, 50));
+		list_value.Add (Random.Range (10, 60));
+		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
 		family = new int[4];
 		for (int i = 0; i < 4; i++)
 			family [i] = 100;
