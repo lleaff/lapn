@@ -4,7 +4,7 @@ using System.Collections;
 
 public class ui_text : MonoBehaviour {
 
-	private GameObject globalValue;
+	
 	public Text carrot;
 	public Text time;
 	public Text money;
@@ -16,7 +16,7 @@ public class ui_text : MonoBehaviour {
 	void Start () {
 		m_time = 0;
 		sec = 0;
-		globalValue = GameObject.Find ("GlobalValue");
+		
 	}
 		
 	void Update () {
@@ -25,7 +25,7 @@ public class ui_text : MonoBehaviour {
 			m_time = 0;
 			sec += 1;
 		}
-		carrot.text = globalValue.GetComponent<globalValue> ().Carrots.ToString ();
+		carrot.text = Globals.i.Carrots.ToString ();
 		if (sec / 60 < 10)
 			time.text = "0" + (sec / 60).ToString ();
 		else
@@ -40,6 +40,6 @@ public class ui_text : MonoBehaviour {
 		else
 			day = 1.7F - (((sec/60)%12)/10F);
 		dayint.intensity = day;
-		money.text = globalValue.GetComponent<globalValue> ().Money.ToString();
+		money.text = Globals.i.Money.ToString();
 	}
 }

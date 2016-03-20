@@ -5,7 +5,7 @@ using System.Collections;
 public class WorldGrid : MonoBehaviour {
 
 	public string GridName = "Grid";
-	public string LayerName = "PlacementGrid";
+	public string LayerName = "ground";
 	public GameObject NodePrefab = null;
 	public int GridHeight = 20;
 	public int GridWidth = 20;

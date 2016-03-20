@@ -5,7 +5,6 @@ using System.Collections;
 public class Fence : MonoBehaviour {
 
 	private Button myButton;
-	private GameObject global;
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
@@ -18,20 +17,19 @@ public class Fence : MonoBehaviour {
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
-		global = GameObject.Find ("GlobalValue");
 		myButton.onClick.AddListener (addCarote);
 	}
 
 	void addCarote()
 	{
-		if (global.GetComponent<globalValue> ().Button != 2)
-			global.GetComponent<globalValue> ().Button = 2;
+		if (Globals.i.Button != 2)
+			Globals.i.Button = 2;
 		else {
 			if (old) {
 				GameObject.Destroy (old.transform.FindChild ("fence " + rota).gameObject);
 				old = null;
 			}
-			global.GetComponent<globalValue> ().Button = 0;
+			Globals.i.Button = 0;
 		}
 	}
 
@@ -81,16 +79,16 @@ public class Fence : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the fence if you leftclick + you have pressed the button + you are on a tile + you have the money*/
-		if (Input.GetMouseButtonUp (0) && global.GetComponent<globalValue> ().Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && moneynb >= 20) {
+		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && moneynb >= 20) {
 			money.text = "Money: " + (moneynb-20) + " $";
 			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<NavMeshObstacle>()[0].enabled = true;
 			old = null;
-			global.GetComponent<globalValue> ().Button = 0;
+			Globals.i.Button = 0;
 		}
 
 		/*Handle the rotation*/
-		if (Input.GetMouseButtonUp (1) && global.GetComponent<globalValue> ().Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
+		if (Input.GetMouseButtonUp (1) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground"))) {
 			if (rota != 3)
 				rota++;
 			else
@@ -104,7 +102,7 @@ public class Fence : MonoBehaviour {
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("ground")) && global.GetComponent<globalValue> ().Button == 2 && moneynb >= 20) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("ground")) && Globals.i.Button == 2 && moneynb >= 20) {
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform)) {
 				tmp = Instantiate (field);

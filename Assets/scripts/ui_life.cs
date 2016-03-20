@@ -6,13 +6,13 @@ public class ui_life : MonoBehaviour {
 
 	private Button myButton;
 	public int index;
-	private GameObject globalValue;
+	
 	private Transform image;
 	private KeyCode[] keys;
 
 	void Awake()
 	{
-		globalValue = GameObject.Find ("GlobalValue");
+		
 		myButton = GetComponent<Button> ();
 		myButton.onClick.AddListener (eat);
 		keys = new KeyCode[4];
@@ -24,16 +24,16 @@ public class ui_life : MonoBehaviour {
 
 	void Update () {
 		image = this.transform.GetChild (0);
-		image.localScale = new Vector3 (1, globalValue.GetComponent<globalValue> ().get_life (index) * 0.01F, 1);
+		image.localScale = new Vector3 (1, Globals.i.get_life (index) * 0.01F, 1);
 		if (Input.GetKey(keys[index]))
 			eat();
 	}
 
 	void eat()
 	{
-		if (globalValue.GetComponent<globalValue> ().Carrots >= 5) {
-			globalValue.GetComponent<globalValue> ().remove_carrots (5);
-			globalValue.GetComponent<globalValue> ().add_life (5, index);
+		if (Globals.i.Carrots >= 5) {
+			Globals.i.remove_carrots (5);
+			Globals.i.add_life (5, index);
 		}
 	}
 }

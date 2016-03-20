@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class globalValue : MonoBehaviour {
+public class Globals : MonoBehaviour {
+
+	public static Globals i = null; /* Globals instance */
 
 	private int carrots = 10;
 	private int money = 0;
@@ -101,14 +103,26 @@ public class globalValue : MonoBehaviour {
 			remove_life (1, i);
 		canLoseLife = true;
 	}
-		
-	void Start () {
+
+
+	// Monobehaviour
+	//------------------------------------------------------------
+
+	void Awake()
+	{
+		if (i == null) {
+			i = this;
+		} else if (i != this) {
+			Destroy(gameObject);
+		}
+		DontDestroyOnLoad(gameObject);
+
+
 		list_value.Add (Random.Range (10, 60));
 		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
 		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
 		family = new int[4];
-		for (int i = 0; i < 4; i++)
-			family [i] = 100;
+		family.Fill (100);
 	}
 
 	void Update () {

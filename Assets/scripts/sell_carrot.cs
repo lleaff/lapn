@@ -7,15 +7,15 @@ using System.Collections.Generic;
 public class sell_carrot : MonoBehaviour {
 
 	private Button my_button;
-	private GameObject globalValue;
+	
 	private List<int>list_value = new List<int>();
 	public Texture line;
 	public Text carrot_value;
 
 	void Awake ()
 	{
-		globalValue = GameObject.Find ("GlobalValue");
-		list_value = globalValue.GetComponent<globalValue> ().List;
+		
+		list_value = Globals.i.List;
 		my_button = GetComponent<Button>();
 		my_button.onClick.AddListener (sell);
 	}
@@ -41,9 +41,9 @@ public class sell_carrot : MonoBehaviour {
 
 	void sell()
 	{
-		if (globalValue.GetComponent<globalValue> ().Carrots > 0) {
-			globalValue.GetComponent<globalValue> ().remove_carrots (1);
-			globalValue.GetComponent<globalValue> ().add_money (list_value [list_value.Count - 1]);
+		if (Globals.i.Carrots > 0) {
+			Globals.i.remove_carrots (1);
+			Globals.i.add_money (list_value [list_value.Count - 1]);
 		}
 	}
 		
