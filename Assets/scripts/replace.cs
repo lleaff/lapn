@@ -58,7 +58,7 @@ public class replace : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the fieldtile if you leftclick + you have pressed the button + you are on a tile + time is at 0 */
-		if (Input.GetMouseButtonUp (0) && global.GetComponent<globalValue> ().Button == 3 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && old && timenb == 0) {
+		if (Input.GetMouseButtonUp (0) && global.GetComponent<globalValue> ().Button == 3 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && old && timenb == 0) {
 			names = "FieldNode" + old.name.Substring (8);
 		/*	GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);*/
 			ttmp = Instantiate (field);
@@ -91,7 +91,7 @@ public class replace : MonoBehaviour {
 			old = null;
 			global.GetComponent<globalValue> ().Button = 0;
 		}
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("ground")) && global.GetComponent<globalValue> ().Button == 3 && timenb == 0) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && global.GetComponent<globalValue> ().Button == 3 && timenb == 0) {
 			h = GameObject.Find (hit.collider.name);
 			if (hit.collider.name.Substring(0,9) != "FieldNode" && h.transform.FindChild ("fieldtile") == null) {
 				tmp = Instantiate (field);
