@@ -8,6 +8,8 @@ public class button : MonoBehaviour {
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
+
+	public Material[] mat;
 	public GameObject field;
 
 	void Awake()
@@ -18,14 +20,14 @@ public class button : MonoBehaviour {
 
 	void addCarote()
 	{
-		if (Globals.i.Button != 1)
-			Globals.i.Button = 1;
+		if (globals.i.Button != 1 && globals.i.Money >= 10)
+			globals.i.Button = 1;
 		else {
 			if (old) {
 				GameObject.Destroy (old.transform.FindChild ("field").gameObject);
 				old = null;
 			}
-			Globals.i.Button = 0;
+			globals.i.Button = 0;
 		}
 	}
 
@@ -48,22 +50,30 @@ public class button : MonoBehaviour {
 		return (true);
 	}
 
+	void set_mat(GameObject obj) {
+		foreach (Transform child in obj.transform) {
+			child.GetChild (0).gameObject.GetComponent<MeshRenderer> ().material = mat [0];
+			child.GetChild (1).gameObject.GetComponent<MeshRenderer> ().material = mat [1];
+		}
+	}
+
 	void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 
 		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
-		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode" && Globals.i.Money >= 10) {
-			Globals.i.Money -= 10;
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode") {
+			globals.i.Money -= 10;
+			set_mat (old.transform.FindChild ("field").gameObject);
 			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
 			old.transform.FindChild ("field").gameObject.tag = "Carrot";
 			old = null;
-			Globals.i.Button = 0;
+			globals.i.Button = 0;
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && Globals.i.Button == 1 && Globals.i.Money >= 10) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 1) {
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
