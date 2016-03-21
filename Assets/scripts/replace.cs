@@ -66,22 +66,14 @@ public class replace : MonoBehaviour {
 			ttmp.transform.localScale = old.transform.localScale;
 			ttmp.name = names;
 			ttmp.GetComponents<BoxCollider> ()[0].enabled = true;
-
-			/*dafuq c# sucks*/
-			foreach (Transform child in old.transform) {
-				if (child.name != "fieldtile")
-					child.parent = ttmp.transform;
+			int count = old.transform.childCount;
+			int off = 0;
+			for (int i = 0; i < count; i++) {
+				if (old.transform.GetChild (off).name != "fieldtile")
+					old.transform.GetChild (off).parent = ttmp.transform;
+				else
+					off++;
 			}
-			foreach (Transform child in old.transform) {
-				if (child.name != "fieldtile")
-					child.parent = ttmp.transform;
-			}
-			foreach (Transform child in old.transform) {
-				if (child.name != "fieldtile")
-					child.parent = ttmp.transform;
-			}
-			/*Madness end here*/
-
 			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 			GameObject.Destroy (old);
 			time.text = "Ground: 5 s";
