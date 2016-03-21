@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Globals : MonoBehaviour {
+public class globals : MonoBehaviour {
 
-	public static Globals i = null; /* Globals instance */
+	public static globals i = null; /* globals instance */
 
 	private int carrots = 10;
 	private int money = 0;

@@ -25,7 +25,7 @@ public class ui_text : MonoBehaviour {
 			m_time = 0;
 			sec += 1;
 		}
-		carrot.text = Globals.i.Carrots.ToString ();
+		carrot.text = globals.i.Carrots.ToString ();
 		if (sec / 60 < 10)
 			time.text = "0" + (sec / 60).ToString ();
 		else
@@ -40,6 +40,6 @@ public class ui_text : MonoBehaviour {
 		else
 			day = 0.5F + (((sec/60)%12)/10F);
 		dayint.intensity = day;
-		money.text = Globals.i.Money.ToString();
+		money.text = globals.i.Money.ToString();
 	}
 }

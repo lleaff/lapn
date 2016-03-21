@@ -15,7 +15,7 @@ public class sell_carrot : MonoBehaviour {
 	void Awake ()
 	{
 		
-		list_value = Globals.i.List;
+		list_value = globals.i.List;
 		my_button = GetComponent<Button>();
 		my_button.onClick.AddListener (sell);
 	}
@@ -40,9 +40,9 @@ public class sell_carrot : MonoBehaviour {
 
 	void sell()
 	{
-		if (Globals.i.Carrots > 0) {
-			Globals.i.remove_carrots (1);
-			Globals.i.add_money (list_value [list_value.Count - 1]);
+		if (globals.i.Carrots > 0) {
+			globals.i.remove_carrots (1);
+			globals.i.add_money (list_value [list_value.Count - 1]);
 			this.GetComponent<AudioSource> ().Play ();
 		}
 	}

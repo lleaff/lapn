@@ -21,14 +21,14 @@ public class Fence : MonoBehaviour {
 
 	void addCarote()
 	{
-		if (Globals.i.Button != 2 && Globals.i.Money >= 20)
-			Globals.i.Button = 2;
+		if (globals.i.Button != 2 && globals.i.Money >= 20)
+			globals.i.Button = 2;
 		else {
 			if (old) {
 				GameObject.Destroy (old.transform.FindChild ("fence " + rota).gameObject);
 				old = null;
 			}
-			Globals.i.Button = 0;
+			globals.i.Button = 0;
 		}
 	}
 
@@ -74,18 +74,18 @@ public class Fence : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the fence if you leftclick + you have pressed the button + you are on a tile*/
-		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
-			Globals.i.Money -= 20;
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
+			globals.i.Money -= 20;
 			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<NavMeshObstacle>()[0].enabled = true;
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<BoxCollider>()[0].enabled = true;
 			old = null;
-			Globals.i.Button = 0;
+			globals.i.Button = 0;
 		}
 
 		/*Handle the rotation*/
-		if (Input.GetMouseButtonUp (1) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
+		if (Input.GetMouseButtonUp (1) && globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
 			if (rota != 3)
 				rota += 1;
 			else
@@ -99,7 +99,7 @@ public class Fence : MonoBehaviour {
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && Globals.i.Button == 2) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 2) {
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform)) {
 				tmp = Instantiate (field);

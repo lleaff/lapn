@@ -24,16 +24,16 @@ public class ui_life : MonoBehaviour {
 
 	void Update () {
 		image = this.transform.GetChild (0);
-		image.localScale = new Vector3 (1, Globals.i.get_life (index) * 0.01F, 1);
+		image.localScale = new Vector3 (1, globals.i.get_life (index) * 0.01F, 1);
 		if (Input.GetKey(keys[index]))
 			eat();
 	}
 
 	void eat()
 	{
-		if (Globals.i.Carrots >= 5) {
-			Globals.i.remove_carrots (5);
-			Globals.i.add_life (5, index);
+		if (globals.i.Carrots >= 5) {
+			globals.i.remove_carrots (5);
+			globals.i.add_life (5, index);
 		}
 	}
 }
