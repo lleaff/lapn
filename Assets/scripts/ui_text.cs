@@ -36,9 +36,9 @@ public class ui_text : MonoBehaviour {
 		else
 			time .text+= (sec % 60).ToString ();
 		if ((sec/60)%24 < 12)
-			day = 0.5F + (((sec/60)%12)/10F);
+			day = 1.5F - (((sec/60)%12)/10F);
 		else
-			day = 1.7F - (((sec/60)%12)/10F);
+			day = 0.5F + (((sec/60)%12)/10F);
 		dayint.intensity = day;
 		money.text = Globals.i.Money.ToString();
 	}
