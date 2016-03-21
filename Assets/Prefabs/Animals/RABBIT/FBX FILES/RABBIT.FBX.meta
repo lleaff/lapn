@@ -1,0 +1,127 @@
+fileFormatVersion: 2
+guid: 807496c96dd155f4f9cfdf14e022a354
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: RABBIT
+    100002: //RootNode
+    100004: RABBIT_
+    100006: RABBIT_ Head
+    100008: RABBIT_ L Calf
+    100010: RABBIT_ L Clavicle
+    100012: RABBIT_ L Foot
+    100014: RABBIT_ L Forearm
+    100016: RABBIT_ L Hand
+    100018: RABBIT_ L Thigh
+    100020: RABBIT_ L Toe0
+    100022: RABBIT_ L UpperArm
+    100024: RABBIT_ Neck
+    100026: RABBIT_ Neck1
+    100028: RABBIT_ Pelvis
+    100030: RABBIT_ Queue de cheval 1
+    100032: RABBIT_ Queue de cheval 2
+    100034: RABBIT_ R Calf
+    100036: RABBIT_ R Clavicle
+    100038: RABBIT_ R Foot
+    100040: RABBIT_ R Forearm
+    100042: RABBIT_ R Hand
+    100044: RABBIT_ R Thigh
+    100046: RABBIT_ R Toe0
+    100048: RABBIT_ R UpperArm
+    100050: RABBIT_ Spine
+    100052: RABBIT_ Spine1
+    400000: RABBIT
+    400002: //RootNode
+    400004: RABBIT_
+    400006: RABBIT_ Head
+    400008: RABBIT_ L Calf
+    400010: RABBIT_ L Clavicle
+    400012: RABBIT_ L Foot
+    400014: RABBIT_ L Forearm
+    400016: RABBIT_ L Hand
+    400018: RABBIT_ L Thigh
+    400020: RABBIT_ L Toe0
+    400022: RABBIT_ L UpperArm
+    400024: RABBIT_ Neck
+    400026: RABBIT_ Neck1
+    400028: RABBIT_ Pelvis
+    400030: RABBIT_ Queue de cheval 1
+    400032: RABBIT_ Queue de cheval 2
+    400034: RABBIT_ R Calf
+    400036: RABBIT_ R Clavicle
+    400038: RABBIT_ R Foot
+    400040: RABBIT_ R Forearm
+    400042: RABBIT_ R Hand
+    400044: RABBIT_ R Thigh
+    400046: RABBIT_ R Toe0
+    400048: RABBIT_ R UpperArm
+    400050: RABBIT_ Spine
+    400052: RABBIT_ Spine1
+    4300000: RABBIT
+    7400000: Take 001
+    11100000: //RootNode
+    13700000: RABBIT
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.01
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

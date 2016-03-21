@@ -5,11 +5,15 @@ public class ia : MonoBehaviour
 {
 	NavMeshAgent agent;
 	GameObject destination;
+	bool retreat = true;
+	GameObject[] spawn_positions = new GameObject[5];
 
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
-	}
+		for (int i = 0; i < GameObject.Find ("Rabbit generator").transform.childCount; i++)
+			spawn_positions [i] = GameObject.Find ("Rabbit generator").transform.GetChild (i).gameObject;
+		}	
 
 	void Update ()
 	{
@@ -19,9 +23,15 @@ public class ia : MonoBehaviour
 		if (carrots.Length != 0) {
 			destination = get_nearest (carrots);
 			agent.SetDestination (destination.transform.position);
+			retreat = false;
 		}
-		if (destination == null) {
-			agent.ResetPath();	
+
+		if (destination == null && retreat == false) {
+			agent.ResetPath();
+			GameObject ret_dest = get_nearest (spawn_positions);
+			agent.SetDestination (ret_dest.transform.position);
+			/*agent.SetDestination (Vector3.zero);*/
+			retreat = true;
 		}
 
 	}
