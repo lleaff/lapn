@@ -18,7 +18,7 @@ public class button : MonoBehaviour {
 
 	void addCarote()
 	{
-		if (Globals.i.Button != 1)
+		if (Globals.i.Button != 1 && Globals.i.Money >= 10)
 			Globals.i.Button = 1;
 		else {
 			if (old) {
@@ -54,7 +54,7 @@ public class button : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
-		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode" && Globals.i.Money >= 10) {
+		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode") {
 			Globals.i.Money -= 10;
 			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
 			old.transform.FindChild ("field").gameObject.tag = "Carrot";
@@ -63,7 +63,7 @@ public class button : MonoBehaviour {
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && Globals.i.Button == 1 && Globals.i.Money >= 10) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && Globals.i.Button == 1) {
 			h = GameObject.Find (hit.collider.name);
 			if (check_pos(h.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
