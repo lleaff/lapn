@@ -4,13 +4,16 @@ using System.Collections;
 public class ia : MonoBehaviour
 {
 	NavMeshAgent agent;
+	Animation anim;
 	GameObject destination;
 	bool retreat = true;
 	GameObject[] spawn_positions = new GameObject[5];
+	bool eat = false;
 
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
+		anim = GetComponent<Animation> ();
 		for (int i = 0; i < GameObject.Find ("Rabbit generator").transform.childCount; i++)
 			spawn_positions [i] = GameObject.Find ("Rabbit generator").transform.GetChild (i).gameObject;
 		}	
@@ -20,17 +23,17 @@ public class ia : MonoBehaviour
 		GameObject[] carrots;
 
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
-		if (carrots.Length != 0) {
+		if (carrots.Length != 0 && !eat) {
 			destination = get_nearest (carrots);
 			agent.SetDestination (destination.transform.position);
+			anim.Play ("hop");
 			retreat = false;
 		}
 
-		if (destination == null && retreat == false) {
+		if (destination == null && retreat == false && !eat) {
 			agent.ResetPath();
 			GameObject ret_dest = get_nearest (spawn_positions);
 			agent.SetDestination (ret_dest.transform.position);
-			/*agent.SetDestination (Vector3.zero);*/
 			retreat = true;
 		}
 
@@ -63,6 +66,33 @@ public class ia : MonoBehaviour
 			nearest.transform.position = Vector3.zero;
 		}
 		return (nearest);
+	}
+
+	IEnumerator OnCollisionEnter(Collision col)
+	{
+		if (col.collider.gameObject.name == "field")
+		{
+			col.collider.gameObject.tag = "eated";
+			agent.ResetPath();	
+			eat = true;
+			anim.Play ("idle1");
+			StartCoroutine(removeCarrots(col.collider.gameObject));
+			yield return new WaitForSeconds(6);
+			eat = false;
+			Destroy(col.collider.gameObject);
+			Destroy (this.gameObject);
+		}
+	}
+
+
+	IEnumerator removeCarrots (GameObject fieldnode)
+	{
+		int count = fieldnode.transform.childCount;
+		for (int i = 0; i < count; i++)
+		{
+			yield return new WaitForSeconds(0.5f);
+			Destroy (fieldnode.transform.GetChild(0).gameObject);
+		}
 	}
 }
 
