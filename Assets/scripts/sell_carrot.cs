@@ -51,6 +51,5 @@ public class sell_carrot : MonoBehaviour {
 	void Update()
 	{
 		carrot_value.text = "Valeur de la carotte: " + list_value [list_value.Count - 1].ToString ();
-		print (Screen.width);
 	}
 }
