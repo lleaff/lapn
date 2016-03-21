@@ -119,8 +119,12 @@ public class Globals : MonoBehaviour {
 
 
 		list_value.Add (Random.Range (10, 60));
-		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
-		list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+		for (int j = 0; j < 20; j++) {
+			if (list_value[list_value.Count - 1] - 10 > 0)
+				list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+			else
+				list_value.Add (Random.Range (5, 20));	
+		}
 		family = new int[4];
 		family.Fill (100);
 	}

@@ -33,8 +33,7 @@ public class sell_carrot : MonoBehaviour {
 	void OnGUI(){
 		int i = 0;
 		foreach (int price in list_value) {
-			GUI.DrawTexture (new Rect (255 + ((450F / list_value.Count) * i), 431F - price * (300 / get_max()), 450F / list_value.Count, price * (300 / get_max())), line);
-
+			GUI.DrawTexture (new Rect ((255F - (960F - Screen.width) / 2F) + ((450F / list_value.Count) * i), (431F - (600 - Screen.height) / 2)- price * (300 / get_max()), 450F / list_value.Count, price * (300 / get_max())), line);
 			i++;
 		}
 	}
@@ -44,12 +43,13 @@ public class sell_carrot : MonoBehaviour {
 		if (Globals.i.Carrots > 0) {
 			Globals.i.remove_carrots (1);
 			Globals.i.add_money (list_value [list_value.Count - 1]);
+			this.GetComponent<AudioSource> ().Play ();
 		}
-		this.GetComponent<AudioSource> ().Play ();
 	}
 		
 	void Update()
 	{
 		carrot_value.text = "Valeur de la carotte: " + list_value [list_value.Count - 1].ToString ();
+		print (Screen.width);
 	}
 }
