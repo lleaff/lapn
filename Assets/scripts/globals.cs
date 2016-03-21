@@ -104,7 +104,6 @@ public class Globals : MonoBehaviour {
 		canLoseLife = true;
 	}
 
-
 	// Monobehaviour
 	//------------------------------------------------------------
 
@@ -116,7 +115,6 @@ public class Globals : MonoBehaviour {
 			Destroy(gameObject);
 		}
 		DontDestroyOnLoad(gameObject);
-
 
 		list_value.Add (Random.Range (10, 60));
 		for (int j = 0; j < 20; j++) {
