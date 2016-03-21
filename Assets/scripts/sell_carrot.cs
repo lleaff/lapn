@@ -44,7 +44,8 @@ public class sell_carrot : MonoBehaviour {
 			globals.i.remove_carrots (1);
 			globals.i.add_money (list_value [list_value.Count - 1]);
 			this.GetComponent<AudioSource> ().Play ();
-		}
+		} else
+			this.transform.parent.GetComponent<AudioSource> ().Play ();
 	}
 		
 	void Update()
