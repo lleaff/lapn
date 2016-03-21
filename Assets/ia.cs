@@ -9,7 +9,7 @@ public class ia : MonoBehaviour
 	bool retreat = true;
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
-
+	public GameObject gridnode;
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
@@ -30,7 +30,7 @@ public class ia : MonoBehaviour
 			retreat = false;
 		}
 
-		if (destination == null && retreat == false && !eat) {
+		if ((destination == null || destination.transform.CompareTag("eated")) && retreat == false && !eat) {
 			agent.ResetPath();
 			GameObject ret_dest = get_nearest (spawn_positions);
 			agent.SetDestination (ret_dest.transform.position);
@@ -70,7 +70,7 @@ public class ia : MonoBehaviour
 
 	IEnumerator OnCollisionEnter(Collision col)
 	{
-		if (col.collider.gameObject.name == "field")
+		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
 			col.collider.gameObject.tag = "eated";
 			agent.ResetPath();	
@@ -79,8 +79,10 @@ public class ia : MonoBehaviour
 			StartCoroutine(removeCarrots(col.collider.gameObject));
 			yield return new WaitForSeconds(6);
 			eat = false;
+			GameObject parent = col.collider.transform.parent.gameObject;
 			Destroy(col.collider.gameObject);
 			Destroy (this.gameObject);
+			removefield (parent);
 		}
 	}
 
@@ -93,6 +95,22 @@ public class ia : MonoBehaviour
 			yield return new WaitForSeconds(0.5f);
 			Destroy (fieldnode.transform.GetChild(0).gameObject);
 		}
+	}
+
+	void removefield(GameObject fieldnode){
+		int count = fieldnode.transform.childCount;
+		GameObject new_tile = Instantiate (gridnode);
+		new_tile.transform.parent = fieldnode.transform.parent;
+		new_tile.transform.localRotation = fieldnode.transform.localRotation;
+		new_tile.transform.localPosition = fieldnode.transform.localPosition;
+		new_tile.transform.localScale = fieldnode.transform.localScale;
+		new_tile.name = "GridNode" + fieldnode.name.Substring (9);
+		new_tile.layer = fieldnode.layer;
+		for (int i = 0; i < count; i++)
+		{
+			fieldnode.transform.GetChild(0).parent = new_tile.transform;
+		}
+		Destroy (fieldnode);
 	}
 }
 
