@@ -3,12 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Fence : MonoBehaviour {
-
+	
 	private Button myButton;
 	private GameObject h;
 	private GameObject old = null;
 	private GameObject tmp;
 	private int rota = 0;
+
+	public Material mat;
 	public GameObject field;
 
 	void Awake()
@@ -75,6 +77,7 @@ public class Fence : MonoBehaviour {
 		if (Input.GetMouseButtonUp (0) && Globals.i.Button == 2 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
 			Globals.i.Money -= 20;
 			old.transform.FindChild ("fence " + rota).gameObject.tag = "noedit";
+			old.transform.FindChild ("fence " + rota).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<NavMeshObstacle>()[0].enabled = true;
 			old.transform.FindChild ("fence " + rota).gameObject.GetComponents<BoxCollider>()[0].enabled = true;
 			old = null;
