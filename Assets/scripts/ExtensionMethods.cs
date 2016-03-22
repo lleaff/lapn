@@ -9,5 +9,7 @@ public static class ExtensionMethods {
 		}
 	}
 
-
+	public static bool BeginsWith(this string str, string substr) {
+		return (str.Substring (0, substr.Length) == substr);
+	}
 }
