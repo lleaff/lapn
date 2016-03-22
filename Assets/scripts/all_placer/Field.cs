@@ -2,10 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class button : MonoBehaviour {
+public class Field : MonoBehaviour {
 
 	private Button myButton;
-	private GameObject h;
+	private GameObject cur;
 	private GameObject old = null;
 	private GameObject tmp;
 
@@ -15,10 +15,10 @@ public class button : MonoBehaviour {
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
-		myButton.onClick.AddListener (addCarote);
+		myButton.onClick.AddListener (add);
 	}
 
-	void addCarote()
+	void add()
 	{
 		if (globals.i.Button != 1 && globals.i.Money >= 10)
 			globals.i.Button = 1;
@@ -63,18 +63,18 @@ public class button : MonoBehaviour {
 
 		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 1) {
-			h = GameObject.Find (hit.collider.name);
-			if (check_pos(h.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
+			cur = GameObject.Find (hit.collider.name);
+			if (check_pos(cur.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
 				tmp = Instantiate (field);
-				tmp.transform.parent = h.transform;
+				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.identity;
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = Vector3.one;
 				tmp.name = "field";
-				if (old != h) {
+				if (old != cur) {
 					if (old)
 						GameObject.Destroy (old.transform.FindChild ("field").gameObject);
-					old = h;
+					old = cur;
 				}
 			}
 		}

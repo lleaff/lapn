@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class death_trap : MonoBehaviour {
+public class Death_trap : MonoBehaviour {
 
 	private Button myButton;
 	private GameObject h;

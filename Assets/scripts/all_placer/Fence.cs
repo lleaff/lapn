@@ -5,21 +5,21 @@ using System.Collections;
 public class Fence : MonoBehaviour {
 	
 	private Button myButton;
-	private GameObject h;
+	private GameObject cur;
 	private GameObject old = null;
 	private GameObject tmp;
 	private int rota = 0;
 
 	public Material mat;
-	public GameObject field;
+	public GameObject fence;
 
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
-		myButton.onClick.AddListener (addCarote);
+		myButton.onClick.AddListener (add);
 	}
 
-	void addCarote()
+	void add()
 	{
 		if (globals.i.Button != 2 && globals.i.Money >= 20)
 			globals.i.Button = 2;
@@ -31,18 +31,7 @@ public class Fence : MonoBehaviour {
 			globals.i.Button = 0;
 		}
 	}
-
-	public static int IntParseFast(string value)
-	{
-		int result = 0;
-		for (int i = 0; i < value.Length; i++)
-		{
-			char letter = value[i];
-			result = 10 * result + (letter - 48);
-		}
-		return result;
-	}
-
+	
 	void rotate(Transform obj) {
 		if (rota == 0) {
 			obj.localRotation = Quaternion.Euler (90, 180, 0);
@@ -90,8 +79,8 @@ public class Fence : MonoBehaviour {
 				rota += 1;
 			else
 				rota = 0;
-			if (h) {
-				foreach (Transform child in h.transform) {
+			if (cur) {
+				foreach (Transform child in cur.transform) {
 					if (child.tag == "edit")
 						GameObject.Destroy (child.gameObject);
 				}
@@ -100,21 +89,21 @@ public class Fence : MonoBehaviour {
 
 		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 2) {
-			h = GameObject.Find (hit.collider.name);
-			if (check_pos(h.transform)) {
-				tmp = Instantiate (field);
-				tmp.transform.parent = h.transform;
+			cur = GameObject.Find (hit.collider.name);
+			if (check_pos(cur.transform)) {
+				tmp = Instantiate (fence);
+				tmp.transform.parent = cur.transform;
 				rotate (tmp.transform);
 				tmp.name = "fence " + rota;
 				tmp.transform.localScale = new Vector3 (3F, 0.3F, 3F);
-				if (old != h) {
+				if (old != cur) {
 					if (old) {
 						foreach (Transform child in old.transform) {
 							if (child.tag == "edit")
 								GameObject.Destroy (child.gameObject);
 						}
 					}
-					old = h;
+					old = cur;
 				}
 			}
 		}
