@@ -10,7 +10,10 @@ public class ia : MonoBehaviour
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
 	public GameObject gridnode;
-
+	//needed for Atendofpath
+	public float pathEndThreshold = 0.1f;
+	private bool hasPath = false;
+	//
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
@@ -22,8 +25,16 @@ public class ia : MonoBehaviour
 	void Update ()
 	{
 		GameObject[] carrots;
+		GameObject[] unattainable;
 		NavMeshPath path = new NavMeshPath();
 
+		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
+		unattainable = GameObject.FindGameObjectsWithTag ("unattainable");
+
+		if (AtEndOfPath () && !eat) {
+			agent.ResetPath ();
+			anim.Play ("Take 001");
+		}
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		if (carrots.Length != 0 && !eat) {
 			if (!agent.hasPath) {
@@ -32,28 +43,43 @@ public class ia : MonoBehaviour
 				anim.Play ("hop");
 				retreat = false;
 			}
-			bool hasFoundPath = agent.CalculatePath (destination.transform.position, path);
-			if(path.status == NavMeshPathStatus.PathComplete)
-			{
-				print("The agent can reach the destionation");
-			}
-			else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
-			{
-				agent.ResetPath();
-				anim.Play ("idle2");
-				print("||||||||The agent can't reach the destionation");
-				agent.SetDestination (get_next_nearest(carrots, destination).transform.position);
-				anim.Play ("hop");
-				retreat = false;
-			}
 		}
-
-		if ((destination == null || destination.transform.CompareTag("eated")) && retreat == false && !eat) {
-			agent.ResetPath();
+		if ((destination == null || destination.transform.CompareTag ("eated")) && retreat == false && !eat) {
+			/*agent.ResetPath ();
 			GameObject ret_dest = get_nearest (spawn_positions);
 			agent.SetDestination (ret_dest.transform.position);
-			retreat = true;
+			retreat = true;*/
+			bunny_retreat ();
+		} 
+		else if (destination != null && !destination.transform.CompareTag ("eated")){
+			agent.CalculatePath (destination.transform.position, path);
+			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
+				agent.ResetPath ();
+				anim.Play ("idle2");
+				destination.transform.tag = "unattainable";
+			}
 		}
+	}
+
+	void bunny_retreat()
+	{
+		agent.ResetPath ();
+		GameObject ret_dest = get_nearest (spawn_positions);
+		agent.SetDestination (ret_dest.transform.position);
+		retreat = true; 
+	}
+
+	bool AtEndOfPath()
+	{
+		hasPath |= agent.hasPath;
+		if (hasPath && agent.remainingDistance <= agent.stoppingDistance + pathEndThreshold )
+		{
+			// Arrived
+			hasPath = false;
+			return true;
+		}
+
+		return false;
 	}
 
 	float get_distance(GameObject obj)
@@ -115,21 +141,21 @@ public class ia : MonoBehaviour
 
 	GameObject get_next_nearest(GameObject[] tab, GameObject current)
 	{
-		float current_dist;
 		float tmp_dist;
 		GameObject next;
-		float next_dist;
+		float next_dist = 2000;
 
-		next_dist = get_distance (tab [0]);
-		next = tab [0];
-		current_dist = get_distance (current);
-
+		next = null;
 		foreach (GameObject obj in tab) {
 			tmp_dist = get_distance (obj);
-			if (tmp_dist < next_dist && current_dist > tmp_dist) {
+			if (tmp_dist < next_dist && obj.GetInstanceID() != current.GetInstanceID()) {
 				next_dist = tmp_dist;
 				next = obj;
 			}
+		}
+		if (next == null) {
+			next = new GameObject ();
+			next.transform.position = Vector3.zero;
 		}
 		return (next);
 	}
