@@ -70,7 +70,7 @@ public class ia : MonoBehaviour
 		return (tmp);
 	}
 
-	GameObject get_nearest(GameObject[] objects, int index)
+	/*GameObject get_nearest(GameObject[] objects, int index)
 	{
 		GameObject nearest = null;
 		bool sorted = false;
@@ -92,18 +92,43 @@ public class ia : MonoBehaviour
 			nearest.transform.position = Vector3.zero;
 		}
 		return (nearest);
+	}*/
+
+	GameObject get_nearest(GameObject[] objects)
+	{
+		float distance = get_distance(objects[0]);
+		float tmp;
+		GameObject nearest = objects[0];
+
+		foreach (GameObject obj in objects) {
+			tmp = get_distance(obj);
+			if (tmp < distance) {
+				distance = tmp;
+				nearest = obj;
+			}
+		}
+		return (nearest);
 	}
 
 	GameObject get_next_nearest(GameObject[] tab, GameObject current)
 	{
 		float current_dist;
 		float tmp_dist;
+		GameObject next;
+		float next_dist;
 
-		tmp_dist = get_distance (tab [0]);
-		foreach (GameObject obj in tab)
-			if (tmp_dist > get_distance(obj))
-				get_distance(obj)
+		next_dist = get_distance (tab [0]);
+		next = tab [0];
+		current_dist = get_distance (current);
 
+		foreach (GameObject obj in tab) {
+			tmp_dist = get_distance (obj);
+			if (tmp_dist < next_dist && current_dist > tmp_dist) {
+				next_dist = tmp_dist;
+				next = obj;
+			}
+		}
+		return (next);
 	}
 
 	IEnumerator OnCollisionEnter(Collision col)
