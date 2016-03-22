@@ -26,20 +26,24 @@ public class ia : MonoBehaviour
 
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		if (carrots.Length != 0 && !eat) {
-			destination = get_nearest (carrots);
-			agent.SetDestination (destination.transform.position);
-			anim.Play ("hop");
-			retreat = false;
-			bool hasFoundPath = agent.CalculatePath(destination.transform.position, path);
+			if (!agent.hasPath) {
+				destination = get_nearest (carrots);
+				agent.SetDestination (destination.transform.position);
+				anim.Play ("hop");
+				retreat = false;
+			}
+			bool hasFoundPath = agent.CalculatePath (destination.transform.position, path);
 			if(path.status == NavMeshPathStatus.PathComplete)
 			{
 				print("The agent can reach the destionation");
 			}
 			else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
 			{
-				print("||||||||The agent can't reach the destionation");
 				agent.ResetPath();
 				anim.Play ("idle2");
+				print("||||||||The agent can't reach the destionation");
+				agent.SetDestination (get_next_nearest(carrots, destination).transform.position);
+				anim.Play ("hop");
 				retreat = false;
 			}
 		}
@@ -50,7 +54,6 @@ public class ia : MonoBehaviour
 			agent.SetDestination (ret_dest.transform.position);
 			retreat = true;
 		}
-			
 	}
 
 	float get_distance(GameObject obj)
