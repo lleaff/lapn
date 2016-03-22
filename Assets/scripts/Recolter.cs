@@ -42,8 +42,12 @@ public class Recolter : MonoBehaviour
 		if (!field) {
 			return false;
 		}
-		if (!CellUtils.RemoveCarrot (field))
+		if (field.CompareTag("eated")) {
 			return false;
+		}
+		if (!CellUtils.RemoveCarrot (field)) {
+			return false;
+		}
 		globals.i.add_carrots (1);
 		return true;
 	}
