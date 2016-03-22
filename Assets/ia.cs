@@ -10,6 +10,8 @@ public class ia : MonoBehaviour
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
 	public GameObject gridnode;
+	//used for destroying fences
+	bool aggressive = false;
 	//needed for Atendofpath
 	public float pathEndThreshold = 0.1f;
 	private bool hasPath = false;
@@ -27,36 +29,49 @@ public class ia : MonoBehaviour
 		GameObject[] carrots;
 		GameObject[] unattainable;
 		NavMeshPath path = new NavMeshPath();
-
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		unattainable = GameObject.FindGameObjectsWithTag ("unattainable");
+		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 
+		//stop anim if at destination
 		if (AtEndOfPath () && !eat) {
 			agent.ResetPath ();
 			anim.Play ("Take 001");
 		}
-		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
-		if (carrots.Length != 0 && !eat) {
+
+		//retreat if there's nothing to eat for rabbits
+		if (carrots.Length == 0 && unattainable.Length <= 3 && !eat) {
+			bunny_retreat ();
+		}
+
+		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
+		if (carrots.Length != 0 && !eat && !aggressive) {
 			if (!agent.hasPath) {
 				destination = get_nearest (carrots);
 				agent.SetDestination (destination.transform.position);
 				anim.Play ("hop");
 				retreat = false;
 			}
+		} //else if there's no carrots but there's a hidden carrot, get aggressive to destroy fences
+		else if (unattainable.Length >= 3) {
+			destination = get_nearest (unattainable);
+			anim.Play ("hop");
+			agent.SetDestination (destination.transform.position);
+			aggressive = true;
 		}
-		if ((destination == null || destination.transform.CompareTag ("eated")) && retreat == false && !eat) {
-			/*agent.ResetPath ();
-			GameObject ret_dest = get_nearest (spawn_positions);
-			agent.SetDestination (ret_dest.transform.position);
-			retreat = true;*/
+
+		if ((destination == null || destination.transform.CompareTag ("eaten")) && retreat == false && !eat && !aggressive) {
 			bunny_retreat ();
 		} 
-		else if (destination != null && !destination.transform.CompareTag ("eated")){
+		else if (destination != null && !destination.transform.CompareTag ("eaten") && !aggressive){
 			agent.CalculatePath (destination.transform.position, path);
 			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
 				agent.ResetPath ();
-				anim.Play ("idle2");
 				destination.transform.tag = "unattainable";
+				if (unattainable.Length < 2)
+					anim.Play ("idle2");
+				else
+					bunny_retreat ();
 			}
 		}
 	}
@@ -99,30 +114,6 @@ public class ia : MonoBehaviour
 		return (tmp);
 	}
 
-	/*GameObject get_nearest(GameObject[] objects, int index)
-	{
-		GameObject nearest = null;
-		bool sorted = false;
-		int size = objects.Length;
-			
-		while (!sorted)
-		{
-			sorted = true;
-			for (int i = 0; i < objects.Length; i++)
-			{
-				if (get_distance (objects [i]) > get_distance (objects [i + 1])) {
-					swap (objects [i], objects [i + 1]);
-					sorted = false;
-				}
-			}
-		}
-		if (nearest == null) {
-			nearest = new GameObject ();
-			nearest.transform.position = Vector3.zero;
-		}
-		return (nearest);  
-	}*/
-
 	GameObject get_nearest(GameObject[] objects)
 	{
 		float distance = get_distance(objects[0]);
@@ -164,7 +155,8 @@ public class ia : MonoBehaviour
 	{
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
-			col.collider.gameObject.tag = "eated";
+			aggressive = false;
+			col.collider.gameObject.tag = "eaten";
 			agent.ResetPath();	
 			eat = true;
 			anim.Play ("idle1");
@@ -176,6 +168,7 @@ public class ia : MonoBehaviour
 			Destroy (this.gameObject);
 			removefield (parent);
 		}
+	
 	}
 
 
@@ -204,5 +197,29 @@ public class ia : MonoBehaviour
 		}
 		Destroy (fieldnode);
 	}
+
+	/*GameObject get_nearest(GameObject[] objects, int index)
+	{
+		GameObject nearest = null;
+		bool sorted = false;
+		int size = objects.Length;
+			
+		while (!sorted)
+		{
+			sorted = true;
+			for (int i = 0; i < objects.Length; i++)
+			{
+				if (get_distance (objects [i]) > get_distance (objects [i + 1])) {
+					swap (objects [i], objects [i + 1]);
+					sorted = false;
+				}
+			}
+		}
+		if (nearest == null) {
+			nearest = new GameObject ();
+			nearest.transform.position = Vector3.zero;
+		}
+		return (nearest);  
+	}*/
 }
 
