@@ -23,23 +23,40 @@ public static class CellUtils {
 	}
 
 	public static bool IsFieldNode(Transform n) {
-		return n.name.BeginsWith (globals.fieldName);
+		return n.name.BeginsWith (globals.fieldNodeName);
 	}
 	public static bool IsFieldNode(GameObject n) {
+		return IsFieldNode(n.transform);
+	}
+	public static bool IsField(Transform n) {
 		return n.name.BeginsWith (globals.fieldName);
 	}
-
+	public static bool IsField(GameObject n) {
+		return IsFieldNode(n.transform);
+	}
 	public static bool IsCarrot(Transform n) {
 		return n.name.BeginsWith (globals.carrotName);
 	}
 	public static bool IsCarrot(GameObject n) {
-		return n.name.BeginsWith (globals.carrotName);
+		return IsCarrot(n.transform);
 	}
 
 	public static GameObject FindObjectWithNameBeginsWith(GameObject cell, string name) {
 		foreach (Transform child in cell.transform) {
 			if (child.name.BeginsWith (name)) {
 				return child.gameObject;
+			}
+		}
+		return null;
+	}
+
+	public static GameObject GetCarrotObj(Transform field) {
+		return GetCarrotObj (field.gameObject);
+	}
+	public static GameObject GetCarrotObj(GameObject field) {
+		foreach (Transform child in field.transform) {
+			if (IsField (child)) {
+				return (child.gameObject);
 			}
 		}
 		return null;
