@@ -6,7 +6,11 @@ public class ia_carrots : MonoBehaviour {
 
 	public int Growth = 0;
 	public int MaxGrowth;
-	public int CarrotGrowthIntervalSeconds;
+	public int DecayGrowth;
+	public int CarrotGrowthIntervalSeconds {
+		get { return (int)(AgricultureManager.i.CarrotGrowthIntervalSeconds * GrowthRate); }
+	}
+	public float GrowthRate = 1;
 
 	public List<GameObject> Carrots;
 
@@ -16,8 +20,8 @@ public class ia_carrots : MonoBehaviour {
 
 	void Start () {
 		Carrots = CellUtils.GetCarrots (gameObject);
-		CarrotGrowthIntervalSeconds = AgricultureManager.i.CarrotGrowthIntervalSeconds;
 		MaxGrowth = AgricultureManager.i.CarrotMaxGrowth;
+		DecayGrowth = AgricultureManager.i.CarrotDecayGrowth;
 		StartCoroutine (CarrotGrowth ());
 	}
 
@@ -29,13 +33,37 @@ public class ia_carrots : MonoBehaviour {
 		}
 	}
 
+	public void Decay() {
+		Set_mat (AgricultureManager.i.DecayMaterial);
+		tag = globals.decayedTag;
+		StartCoroutine (DecayBioDegradation ());
+	}
+
+	IEnumerator DecayBioDegradation() {
+		yield return new WaitForSeconds (AgricultureManager.i.BiodegradationDelaySeconds);
+		foreach (var carrot in Carrots) {
+			if (carrot == null) {
+				continue;
+			}
+			Destroy (carrot.gameObject);
+		}
+		Destroy (this);
+	}
+
 
 	public bool Grow() {
 		Growth++;
 		if (Growth >= MaxGrowth) {
-			return false;
+			if (Growth >= DecayGrowth) {
+				Decay ();
+				return false;
+			}
+			return true;
 		}
 		foreach (var carrot in Carrots) {
+			if (carrot == null) {
+				continue;
+			}
 			Vector3 pos = carrot.transform.localPosition;
 			pos -= AgricultureManager.i.CarrotGrowthVector;
 			carrot.transform.localPosition = pos;
@@ -46,4 +74,13 @@ public class ia_carrots : MonoBehaviour {
 
 		return true;
 	}
+
+	void Set_mat(Material material) {
+		foreach (Transform child in transform) {
+			child.GetChild (0).gameObject.GetComponent<MeshRenderer> ().material = material;
+			child.GetChild (1).gameObject.GetComponent<MeshRenderer> ().material = material;
+		}
+	}
+
+
 }
