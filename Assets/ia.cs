@@ -31,6 +31,17 @@ public class ia : MonoBehaviour
 			anim.Play ("hop");
 			retreat = false;
 			bool hasFoundPath = agent.CalculatePath(destination.transform.position, path);
+			if(path.status == NavMeshPathStatus.PathComplete)
+			{
+				print("The agent can reach the destionation");
+			}
+			else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
+			{
+				print("||||||||The agent can't reach the destionation");
+				agent.ResetPath();
+				anim.Play ("idle2");
+				retreat = false;
+			}
 		}
 
 		if ((destination == null || destination.transform.CompareTag("eated")) && retreat == false && !eat) {
@@ -39,18 +50,7 @@ public class ia : MonoBehaviour
 			agent.SetDestination (ret_dest.transform.position);
 			retreat = true;
 		}
-
-		if(path.status == NavMeshPathStatus.PathComplete)
-		{
-			//print("The agent can reach the destionation");
-		}
-		else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
-		{
-			print("||||||||The agent can't reach the destionation");
-			agent.ResetPath();
-			anim.Play ("idle2");
-			retreat = false;
-		}
+			
 	}
 
 	float get_distance(GameObject obj)
@@ -91,7 +91,7 @@ public class ia : MonoBehaviour
 			nearest = new GameObject ();
 			nearest.transform.position = Vector3.zero;
 		}
-		return (nearest);
+		return (nearest);  
 	}*/
 
 	GameObject get_nearest(GameObject[] objects)
