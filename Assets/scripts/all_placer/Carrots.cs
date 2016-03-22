@@ -50,7 +50,6 @@ public class Carrots : MonoBehaviour {
 		GameObject field = old.transform.FindChild ("field").gameObject;
 		set_mat (field);
 		field.GetComponent<AudioSource> ().Play ();
-		field.tag = "Carrot";
 		field.GetComponent<ia_carrots> ().enabled = true;
 		old = null;
 	}

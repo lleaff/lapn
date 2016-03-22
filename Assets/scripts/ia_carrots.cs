@@ -5,7 +5,12 @@ using System.Collections.Generic;
 public class ia_carrots : MonoBehaviour {
 
 	public int Growth = 0;
-	public int MaxGrowth = 3;
+	public int MaxGrowth;
+	public int DecayGrowth;
+	public int CarrotGrowthIntervalSeconds {
+		get { return (int)(AgricultureManager.i.CarrotGrowthIntervalSeconds * GrowthRate); }
+	}
+	public float GrowthRate = 1;
 
 	public List<GameObject> Carrots;
 
@@ -15,25 +20,67 @@ public class ia_carrots : MonoBehaviour {
 
 	void Start () {
 		Carrots = CellUtils.GetCarrots (gameObject);
+		MaxGrowth = AgricultureManager.i.CarrotMaxGrowth;
+		DecayGrowth = AgricultureManager.i.CarrotDecayGrowth;
+		StartCoroutine (CarrotGrowth ());
 	}
 
-	int i = 0;
-	void Update() {
-		i++;
-		if ((i % 100) == 0)
-			Grow ();
+	IEnumerator CarrotGrowth() {
+		while (true) {
+			yield return new WaitForSeconds (CarrotGrowthIntervalSeconds);
+			if (!Grow ())
+				break;
+		}
 	}
+
+	public void Decay() {
+		Set_mat (AgricultureManager.i.DecayMaterial);
+		tag = globals.decayedTag;
+		StartCoroutine (DecayBioDegradation ());
+	}
+
+	IEnumerator DecayBioDegradation() {
+		yield return new WaitForSeconds (AgricultureManager.i.BiodegradationDelaySeconds);
+		foreach (var carrot in Carrots) {
+			if (carrot == null) {
+				continue;
+			}
+			Destroy (carrot.gameObject);
+		}
+		Destroy (this);
+	}
+
 
 	public bool Grow() {
 		Growth++;
 		if (Growth >= MaxGrowth) {
-			return false;
+			if (Growth >= DecayGrowth) {
+				Decay ();
+				return false;
+			}
+			return true;
 		}
 		foreach (var carrot in Carrots) {
+			if (carrot == null) {
+				continue;
+			}
 			Vector3 pos = carrot.transform.localPosition;
-			pos -= AgricultureManager.i.CarrotGrowDistance;
+			pos -= AgricultureManager.i.CarrotGrowthVector;
 			carrot.transform.localPosition = pos;
 		}
+		if (Growth == AgricultureManager.i.CarrotMaturityGrowth) {
+			tag = globals.carrotTag;
+		}
+
 		return true;
 	}
+
+	void Set_mat(Material material) {
+		foreach (Transform child in transform) {
+			child.GetChild (0).gameObject.GetComponent<MeshRenderer> ().material = material;
+			child.GetChild (1).gameObject.GetComponent<MeshRenderer> ().material = material;
+		}
+	}
+
+
 }

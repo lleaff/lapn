@@ -7,6 +7,9 @@ public class globals : MonoBehaviour {
 	public static globals i = null; /* globals instance */
 
 	public const string carrotName = "Carrot";
+	public const string carrotTag = "Carrot";
+	public const string decayedTag = "decayed";
+	public const string fieldNodeName = "FieldNode";
 	public const string fieldName = "field";
 
 	private int carrots = 10;
