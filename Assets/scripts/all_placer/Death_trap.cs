@@ -53,7 +53,7 @@ public class Death_trap : MonoBehaviour {
 		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 5) {
 			cur = GameObject.Find (hit.collider.name);
-			if (check_pos(cur.transform)) {
+			if (hit.collider.name.Substring(0,9) != "FieldNode" && check_pos(cur.transform)) {
 				tmp = Instantiate (trap);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);

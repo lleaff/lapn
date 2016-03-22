@@ -20,10 +20,10 @@ public class Replace : MonoBehaviour {
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
-		myButton.onClick.AddListener (addCarote);
+		myButton.onClick.AddListener (add);
 	}
 
-	void addCarote()
+	void add()
 	{
 		if (globals.i.Button != 3)
 			globals.i.Button = 3;
@@ -35,6 +35,8 @@ public class Replace : MonoBehaviour {
 			globals.i.Button = 0;
 		}
 	}
+
+
 
 	public static int IntParseFast(string value)
 	{
@@ -85,7 +87,7 @@ public class Replace : MonoBehaviour {
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 3 && timenb == 0) {
 
 			cur = GameObject.Find (hit.collider.name);
-			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("fieldtile") == null) {
+			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("fieldtile") == null && cur.transform.FindChild ("trap") == null) {
 				tmp = Instantiate (ground);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.identity;
