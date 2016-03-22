@@ -11,12 +11,12 @@ public class gridline : MonoBehaviour {
 
 	private Material lineMaterial;
 
-	private Color mainColor = new Color(0f,0f,0f,1f);
+	public Color gridColor = new Color(0f,0f,0f,1f);
 
 	void OnPostRender() 
 	{        
 		GL.Begin( GL.LINES );
-		GL.Color(mainColor);
+		GL.Color(gridColor);
 
 		for(float i = 0; i <= gridSizeZ; i++) {
 			GL.Vertex3( startX, 0.1F, startZ + i);
