@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Field : MonoBehaviour {
+public class Carrots : MonoBehaviour {
 
 	private Button myButton;
 	private GameObject cur;
@@ -46,18 +46,24 @@ public class Field : MonoBehaviour {
 		}
 	}
 
+	void PlantCarrots() {
+		GameObject field = old.transform.FindChild ("field").gameObject;
+		set_mat (field);
+		field.GetComponent<AudioSource> ().Play ();
+		field.tag = "Carrot";
+		field.GetComponent<ia_carrots> ().enabled = true;
+		old = null;
+	}
+		
 	void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
 
-		/*You can place the field if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
+		/*You can place the carrots if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode") {
 			globals.i.Money -= 10;
-			set_mat (old.transform.FindChild ("field").gameObject);
-			old.transform.FindChild ("field").gameObject.GetComponent<AudioSource> ().Play ();
-			old.transform.FindChild ("field").gameObject.tag = "Carrot";
-			old = null;
+			PlantCarrots ();
 			globals.i.Button = 0;
 		}
 
