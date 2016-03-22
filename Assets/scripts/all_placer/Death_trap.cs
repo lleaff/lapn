@@ -5,7 +5,7 @@ using System.Collections;
 public class Death_trap : MonoBehaviour {
 
 	private Button myButton;
-	private GameObject h;
+	private GameObject cur;
 	private GameObject old = null;
 	private GameObject tmp;
 
@@ -14,10 +14,10 @@ public class Death_trap : MonoBehaviour {
 	void Awake()
 	{
 		myButton = GetComponent<Button>();
-		myButton.onClick.AddListener (addCarote);
+		myButton.onClick.AddListener (add);
 	}
 
-	void addCarote()
+	void add()
 	{
 		if (globals.i.Button != 5 && globals.i.Money >= 30)
 			globals.i.Button = 5;
@@ -52,18 +52,18 @@ public class Death_trap : MonoBehaviour {
 
 		/*Moving object*/
 		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 5) {
-			h = GameObject.Find (hit.collider.name);
-			if (check_pos(h.transform)) {
+			cur = GameObject.Find (hit.collider.name);
+			if (check_pos(cur.transform)) {
 				tmp = Instantiate (trap);
-				tmp.transform.parent = h.transform;
+				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);
-				tmp.transform.localPosition = new Vector3(-2.5F,2.5F,0.6F);
+				tmp.transform.localPosition = new Vector3(-3F,3F,0.7F);
 				tmp.transform.localScale = new Vector3(15F,1F,15F);
 				tmp.name = "trap";
-				if (old != h) {
+				if (old != cur) {
 					if (old)
 						GameObject.Destroy (old.transform.FindChild ("trap").gameObject);
-					old = h;
+					old = cur;
 				}
 			}
 		}
