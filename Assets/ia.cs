@@ -40,7 +40,7 @@ public class ia : MonoBehaviour
 		}
 
 		//retreat if there's nothing to eat for rabbits
-		if (carrots.Length == 0 && unattainable.Length <= 3) {
+		if (carrots.Length == 0 && unattainable.Length <= 3 && !eat) {
 			bunny_retreat ();
 		}
 
@@ -50,7 +50,7 @@ public class ia : MonoBehaviour
 				destination = get_nearest (carrots);
 				agent.SetDestination (destination.transform.position);
 				anim.Play ("hop");
-				retreat = true;
+				retreat = false;
 			}
 		} //else if there's no carrots but there's a hidden carrot, get aggressive to destroy fences
 		else if (unattainable.Length >= 3) {
