@@ -42,7 +42,7 @@ public class Recolter : MonoBehaviour
 		if (!field) {
 			return false;
 		}
-		if (field.CompareTag("eated")) {
+		if (field.CompareTag("eaten")) {
 			return false;
 		}
 		if (!carrots.GetComponent<ia_carrots>().RemoveCarrot ()) {
