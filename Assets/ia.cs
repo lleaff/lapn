@@ -42,7 +42,7 @@ public class ia : MonoBehaviour
 
 		if(path.status == NavMeshPathStatus.PathComplete)
 		{
-			print("The agent can reach the destionation");
+			//print("The agent can reach the destionation");
 		}
 		else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
 		{

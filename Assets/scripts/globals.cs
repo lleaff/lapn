@@ -6,6 +6,9 @@ public class globals : MonoBehaviour {
 
 	public static globals i = null; /* globals instance */
 
+	public const string carrotName = "Carrot";
+	public const string fieldName = "field";
+
 	private int carrots = 10;
 	public int money = 0;
 	private List<int>list_value	= new  List<int>();

@@ -7,7 +7,7 @@ public class Recolter : MonoBehaviour
 	public bool Selected = false;
 
 
-	void Start ()
+	void Awake ()
 	{
 	}
 
@@ -32,9 +32,23 @@ public class Recolter : MonoBehaviour
 		if (clicked) {
 			Harvest (cell, carrots);
 		}
+
+		clicked = false;
 	}
 
-	bool Harvest (GameObject cell, GameObject carrots) {
+	bool Harvest (GameObject cell, GameObject carrots)
+	{
+		GameObject field = CellUtils.FindObjectWithNameBeginsWith (cell, globals.fieldName);
+		if (!field) {
+			return false;
+		}
+		if (field.CompareTag("eated")) {
+			return false;
+		}
+		if (!CellUtils.RemoveCarrot (field)) {
+			return false;
+		}
+		globals.i.add_carrots (1);
 		return true;
 	}
 

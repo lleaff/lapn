@@ -12,14 +12,13 @@ public class ui_life : MonoBehaviour {
 
 	void Awake()
 	{
-		
 		myButton = GetComponent<Button> ();
 		myButton.onClick.AddListener (eat);
 		keys = new KeyCode[4];
 		keys [0] = KeyCode.Alpha1;
 		keys [1] = KeyCode.Alpha2;
 		keys [2] = KeyCode.Alpha3;
-		keys [3] = KeyCode.Alpha4;    
+		keys [3] = KeyCode.Alpha4;
 	}
 
 	void Update () {
