@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour {
 	public int Seconds {
 		get { return seconds; }
 	}
-	private bool isDay;
+	private bool isDay = true;
 	public bool IsDay {
 		get { return isDay; }
 	}
@@ -28,9 +28,18 @@ public class TimeManager : MonoBehaviour {
 	void Update () {
 		CalcSeconds ();
 
+		bool wasNight = !isDay;
 		isDay = (seconds / 60) % 24 < 12;
+		if (isDay && wasNight) {
+			NewDay ();
+		}
 	}
 
+	//------------------------------------------------------------
+
+	void NewDay() {
+		WeatherManager.i.NewDay ();
+	}
 
 	//------------------------------------------------------------
 
