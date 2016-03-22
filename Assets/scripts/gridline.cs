@@ -11,7 +11,7 @@ public class gridline : MonoBehaviour {
 
 	private Material lineMaterial;
 
-	public Color gridColor = new Color(0f,0f,0f,1f);
+	public Color gridColor = new Color(60f,41f,7f,0.8f);
 
 	void OnPostRender() 
 	{        

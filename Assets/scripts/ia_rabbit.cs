@@ -55,7 +55,7 @@ public class ia_rabbit : MonoBehaviour
 			state = RState.idle;
 		}
 
-		if ((destination == null || destination.transform.CompareTag("eated")) && state != RState.retreat && state != RState.eating) {
+		if ((destination == null || destination.transform.CompareTag("eaten")) && state != RState.retreat && state != RState.eating) {
 			state = RState.retreat;
 		}
 	}
@@ -107,7 +107,7 @@ public class ia_rabbit : MonoBehaviour
 	{
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
-			col.collider.gameObject.tag = "eated";
+			col.collider.gameObject.tag = "eaten";
 			agent.ResetPath();	
 			state = RState.eating;
 			anim.Play ("idle1");
