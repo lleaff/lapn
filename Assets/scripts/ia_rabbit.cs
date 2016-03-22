@@ -56,9 +56,6 @@ public class ia_rabbit : MonoBehaviour
 		}
 
 		if ((destination == null || destination.transform.CompareTag("eated")) && state != RState.retreat && state != RState.eating) {
-			agent.ResetPath();
-			GameObject ret_dest = get_nearest (spawn_positions);
-			agent.SetDestination (ret_dest.transform.position);
 			state = RState.retreat;
 		}
 	}
@@ -68,7 +65,9 @@ public class ia_rabbit : MonoBehaviour
 	}
 
 	void Retreat() {
-
+		agent.ResetPath();
+		GameObject ret_dest = get_nearest (spawn_positions);
+		agent.SetDestination (ret_dest.transform.position);
 	}
 
 
