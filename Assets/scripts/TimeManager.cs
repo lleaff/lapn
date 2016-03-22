@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour {
 	public int Seconds {
 		get { return seconds; }
 	}
-	private bool isDay;
+	private bool isDay = true;
 	public bool IsDay {
 		get { return isDay; }
 	}
