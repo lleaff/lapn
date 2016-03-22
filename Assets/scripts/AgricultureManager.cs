@@ -7,7 +7,11 @@ public class AgricultureManager : MonoBehaviour {
 	public static AgricultureManager i = null; /* Scene manager instance */
 
 	public Vector3 CarrotGrowthVector;
-	public int CarrotGrowthIntervalSeconds = 5;
+	public int carrotGrowthBaseIntervalSeconds = 5;
+	public float GlobalGrowthRate = 1;
+	public int CarrotGrowthIntervalSeconds {
+		get { return (int)(carrotGrowthBaseIntervalSeconds * GlobalGrowthRate); }
+	}
 	public int CarrotMaxGrowth = 12;
 	public int CarrotMaturityGrowth;
 	public float CarrotGrowthDistance;

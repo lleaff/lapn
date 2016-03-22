@@ -6,7 +6,10 @@ public class ia_carrots : MonoBehaviour {
 
 	public int Growth = 0;
 	public int MaxGrowth;
-	public int CarrotGrowthIntervalSeconds;
+	public int CarrotGrowthIntervalSeconds {
+		get { return (int)(AgricultureManager.i.CarrotGrowthIntervalSeconds * GrowthRate); }
+	}
+	public float GrowthRate = 1;
 
 	public List<GameObject> Carrots;
 
@@ -16,7 +19,6 @@ public class ia_carrots : MonoBehaviour {
 
 	void Start () {
 		Carrots = CellUtils.GetCarrots (gameObject);
-		CarrotGrowthIntervalSeconds = AgricultureManager.i.CarrotGrowthIntervalSeconds;
 		MaxGrowth = AgricultureManager.i.CarrotMaxGrowth;
 		StartCoroutine (CarrotGrowth ());
 	}
@@ -36,6 +38,9 @@ public class ia_carrots : MonoBehaviour {
 			return false;
 		}
 		foreach (var carrot in Carrots) {
+			if (carrot == null) {
+				continue;
+			}
 			Vector3 pos = carrot.transform.localPosition;
 			pos -= AgricultureManager.i.CarrotGrowthVector;
 			carrot.transform.localPosition = pos;
