@@ -31,17 +31,6 @@ public class button : MonoBehaviour {
 		}
 	}
 
-	public static int IntParseFast(string value)
-	{
-		int result = 0;
-		for (int i = 0; i < value.Length; i++)
-		{
-			char letter = value[i];
-			result = 10 * result + (letter - 48);
-		}
-		return result;
-	}
-
 	bool check_pos(Transform obj) {
 		foreach (Transform child in obj) {
 			if (child.name == "field")
