@@ -22,8 +22,8 @@ public class ui_life : MonoBehaviour {
 	}
 
 	void Update () {
-		image = this.transform.GetChild (0);
-		image.localScale = new Vector3 (1, globals.i.get_life (index) * 0.01F, 1);
+		image = this.transform.GetChild (1);
+		image.localScale = new Vector3 (globals.i.get_life (index) * 0.01F, 1, 1);
 		if (Input.GetKey(keys[index]))
 			eat();
 	}
