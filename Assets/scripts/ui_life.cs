@@ -26,6 +26,13 @@ public class ui_life : MonoBehaviour {
 		image.localScale = new Vector3 (globals.i.get_life (index) * 0.01F, 1, 1);
 		if (Input.GetKey(keys[index]))
 			eat();
+		if (globals.i.get_life (index) >= 50) {
+			this.transform.GetChild (2).gameObject.SetActive (true);
+			this.transform.GetChild (3).gameObject.SetActive (false);
+		} else {
+			this.transform.GetChild (2).gameObject.SetActive (false);
+			this.transform.GetChild (3).gameObject.SetActive (true);
+		}
 	}
 
 	void eat()
