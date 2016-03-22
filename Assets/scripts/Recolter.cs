@@ -1,15 +1,64 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Recolter : MonoBehaviour {
+public class Recolter : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-	
+	public bool Selected = false;
+
+
+	void Awake ()
+	{
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void Update ()
+	{
+		if (!Selected) {
+			return;
+		}
+
+		bool clicked = Input.GetMouseButtonUp (0);
+
+		GameObject cell = getPointedObj ();
+		if (!cell) {
+			return;
+		}
+
+		GameObject carrots = CellUtils.FindObjectWithTag (cell, "Carrot");
+		if (!carrots) {
+			return;
+		}
+
+		if (clicked) {
+			Harvest (cell, carrots);
+		}
+
+		clicked = false;
+	}
+
+	bool Harvest (GameObject cell, GameObject carrots)
+	{
+		GameObject field = CellUtils.FindObjectWithNameBeginsWith (cell, globals.fieldName);
+		if (!field) {
+			return false;
+		}
+		if (field.CompareTag("eated")) {
+			return false;
+		}
+		if (!CellUtils.RemoveCarrot (field)) {
+			return false;
+		}
+		globals.i.add_carrots (1);
+		return true;
+	}
+
+	GameObject getPointedObj ()
+	{
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid"))) {
+			return hit.collider.gameObject;
+		}
+		return null;
 	}
 }

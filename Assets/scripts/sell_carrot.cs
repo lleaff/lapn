@@ -17,7 +17,7 @@ public class sell_carrot : MonoBehaviour {
 		
 		list_value = globals.i.List;
 		my_button = GetComponent<Button>();
-		my_button.onClick.AddListener (sell);
+		my_button.onClick.AddListener (Sell);
 	}
 
 	private int get_max()
@@ -38,7 +38,7 @@ public class sell_carrot : MonoBehaviour {
 		}
 	}
 
-	void sell()
+	public void Sell()
 	{
 		if (globals.i.Carrots > 0) {
 			globals.i.remove_carrots (1);
