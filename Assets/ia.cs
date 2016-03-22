@@ -46,30 +46,45 @@ public class ia : MonoBehaviour
 		}
 		else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
 		{
+			print("||||||||The agent can't reach the destionation");
+			agent.ResetPath();
+			anim.Play ("idle2");
 			retreat = false;
 		}
 	}
 
-	GameObject get_nearest(GameObject[] objects)
+	float get_distance(GameObject obj)
 	{
-		float distance = 1000;
 		float tmp;
 		float distx;
 		float distz;
-		GameObject nearest = null;
 
-		foreach (GameObject obj in objects) {
-			tmp = 0;
-			distx = this.transform.position.x - obj.transform.position.x;
-			if (distx < 0)
-				distx *= -1;
-			distz = this.transform.position.z - obj.transform.position.z;
-			if (distz < 0)
-				distz *= -1;
-			tmp = distx + distz;
-			if (tmp < distance) {
-				distance = tmp;
-				nearest = obj;
+		tmp = 0;
+		distx = this.transform.position.x - obj.transform.position.x;
+		if (distx < 0)
+			distx *= -1;
+		distz = this.transform.position.z - obj.transform.position.z;
+		if (distz < 0)
+			distz *= -1;
+		tmp = distx + distz;
+		return (tmp);
+	}
+
+	/*GameObject get_nearest(GameObject[] objects, int index)
+	{
+		GameObject nearest = null;
+		bool sorted = false;
+		int size = objects.Length;
+			
+		while (!sorted)
+		{
+			sorted = true;
+			for (int i = 0; i < objects.Length; i++)
+			{
+				if (get_distance (objects [i]) > get_distance (objects [i + 1])) {
+					swap (objects [i], objects [i + 1]);
+					sorted = false;
+				}
 			}
 		}
 		if (nearest == null) {
@@ -77,6 +92,43 @@ public class ia : MonoBehaviour
 			nearest.transform.position = Vector3.zero;
 		}
 		return (nearest);
+	}*/
+
+	GameObject get_nearest(GameObject[] objects)
+	{
+		float distance = get_distance(objects[0]);
+		float tmp;
+		GameObject nearest = objects[0];
+
+		foreach (GameObject obj in objects) {
+			tmp = get_distance(obj);
+			if (tmp < distance) {
+				distance = tmp;
+				nearest = obj;
+			}
+		}
+		return (nearest);
+	}
+
+	GameObject get_next_nearest(GameObject[] tab, GameObject current)
+	{
+		float current_dist;
+		float tmp_dist;
+		GameObject next;
+		float next_dist;
+
+		next_dist = get_distance (tab [0]);
+		next = tab [0];
+		current_dist = get_distance (current);
+
+		foreach (GameObject obj in tab) {
+			tmp_dist = get_distance (obj);
+			if (tmp_dist < next_dist && current_dist > tmp_dist) {
+				next_dist = tmp_dist;
+				next = obj;
+			}
+		}
+		return (next);
 	}
 
 	IEnumerator OnCollisionEnter(Collision col)
