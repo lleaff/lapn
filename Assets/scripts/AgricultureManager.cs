@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 public class AgricultureManager : MonoBehaviour {
 
-	public static AgricultureManager i = null; /* Scene manager instance */
+	public static AgricultureManager i = null; /* Agriculture manager instance */
 
 	public Vector3 CarrotGrowthVector;
 	public int carrotGrowthBaseIntervalSeconds = 5;
-	public float GlobalGrowthRate = 1;
 	public int CarrotGrowthIntervalSeconds {
 		get { return (int)(carrotGrowthBaseIntervalSeconds * GlobalGrowthRate); }
 	}
@@ -61,6 +60,35 @@ public class AgricultureManager : MonoBehaviour {
 		GrowCarrots ();
 	}
 	*/
+
+
+	public float GlobalGrowthRate {
+		get {
+			float rate = 1f;
+			float heat = WeatherManager.i.Heat;
+			if (heat <= 0f) {
+				return 0f;
+			} else if (heat <= 25f) {
+				rate *= 1f;
+			} else if (heat <= 35f) {
+				rate *= 1.25f;
+			} else {
+				rate *= 0.8f;
+			}
+			float humidity = WeatherManager.i.Humidity;
+			if (humidity <= 1) {
+				return rate *= humidity;
+			} else if (humidity <= 2f) {
+				rate *= 1f;
+			} else if (humidity <= 3f) {
+				rate *= 1.25f;
+			} else {
+				rate *= 0.8f;
+			}
+			return rate;
+		}
+	}
+
 
 	//------------------------------------------------------------
 

@@ -47,7 +47,7 @@ public class ia_carrots : MonoBehaviour {
 			}
 			Destroy (carrot.gameObject);
 		}
-		Destroy (this);
+		Destroy (gameObject);
 	}
 
 
@@ -72,6 +72,22 @@ public class ia_carrots : MonoBehaviour {
 			tag = globals.carrotTag;
 		}
 
+		return true;
+	}
+
+	public bool RemoveCarrot() {
+		int childCount = transform.childCount;
+		if (childCount <= 0) {
+			return false;
+		}
+		GameObject carrot = transform.GetChild (0).gameObject;
+		if (!carrot || !CellUtils.IsCarrot(carrot)) {
+			return false;
+		}
+		Destroy (carrot);
+		if (childCount == 1) {
+			Destroy (gameObject);
+		}
 		return true;
 	}
 
