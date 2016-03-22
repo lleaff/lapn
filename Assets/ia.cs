@@ -10,17 +10,19 @@ public class ia : MonoBehaviour
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
 	public GameObject gridnode;
+
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
 		anim = GetComponent<Animation> ();
 		for (int i = 0; i < GameObject.Find ("Rabbit generator").transform.childCount; i++)
 			spawn_positions [i] = GameObject.Find ("Rabbit generator").transform.GetChild (i).gameObject;
-		}	
+	}	
 
 	void Update ()
 	{
 		GameObject[] carrots;
+		NavMeshPath path = new NavMeshPath();
 
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		if (carrots.Length != 0 && !eat) {
@@ -28,6 +30,7 @@ public class ia : MonoBehaviour
 			agent.SetDestination (destination.transform.position);
 			anim.Play ("hop");
 			retreat = false;
+			bool hasFoundPath = agent.CalculatePath(destination.transform.position, path);
 		}
 
 		if ((destination == null || destination.transform.CompareTag("eated")) && retreat == false && !eat) {
@@ -37,6 +40,14 @@ public class ia : MonoBehaviour
 			retreat = true;
 		}
 
+		if(path.status == NavMeshPathStatus.PathComplete)
+		{
+			print("The agent can reach the destionation");
+		}
+		else if(path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid)
+		{
+			retreat = false;
+		}
 	}
 
 	GameObject get_nearest(GameObject[] objects)
