@@ -16,6 +16,10 @@ public class ia : MonoBehaviour
 	public float pathEndThreshold = 0.1f;
 	private bool hasPath = false;
 	//
+	//mesh array for fences
+	public Mesh[] meshs;
+
+
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
@@ -45,7 +49,7 @@ public class ia : MonoBehaviour
 		}
 
 		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
-		if (carrots.Length != 0 && !eat && !aggressive) {
+		if (carrots.Length != 0 && !eat) {
 			if (!agent.hasPath) {
 				destination = get_nearest (carrots);
 				agent.SetDestination (destination.transform.position);
@@ -53,7 +57,7 @@ public class ia : MonoBehaviour
 				retreat = false;
 			}
 		} //else if there's no carrots but there's a hidden carrot, get aggressive to destroy fences
-		else if (unattainable.Length >= 3) {
+		else if (unattainable.Length >= 3 && carrots.Length == 0) {
 			destination = get_nearest (unattainable);
 			anim.Play ("hop");
 			agent.SetDestination (destination.transform.position);
@@ -168,9 +172,29 @@ public class ia : MonoBehaviour
 			Destroy (this.gameObject);
 			removefield (parent);
 		}
-	
+		else if (col.collider.gameObject.CompareTag ("noedit") && aggressive) {
+			col.collider.gameObject.CompareTag ("noedit_destroy");
+			anim.Play ("idle2");
+			StartCoroutine(destroy_fence(col.collider.gameObject));
+			yield return new WaitForSeconds(6);
+			Destroy(col.collider.gameObject);
+			aggressive = false;
+		}
+
+		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag ("unattainable")) {
+			col.collider.gameObject.tag = "Carrot";
+		}
 	}
 
+	IEnumerator destroy_fence (GameObject	fence)
+	{
+		if (fence != null) {
+			for (int i = 0; i < 3; i++) {
+				yield return new WaitForSeconds (2);
+				fence.GetComponent<MeshFilter> ().mesh = meshs [i];
+			}
+		}
+	}
 
 	IEnumerator removeCarrots (GameObject fieldnode)
 	{
