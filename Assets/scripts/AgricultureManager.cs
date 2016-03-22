@@ -13,8 +13,11 @@ public class AgricultureManager : MonoBehaviour {
 		get { return (int)(carrotGrowthBaseIntervalSeconds * GlobalGrowthRate); }
 	}
 	public int CarrotMaxGrowth = 12;
+	public int CarrotDecayGrowth;
 	public int CarrotMaturityGrowth;
 	public float CarrotGrowthDistance;
+	public int BiodegradationDelaySeconds;
+	public Material DecayMaterial;
 	private GameObject grid = null;
 
 
@@ -73,6 +76,8 @@ public class AgricultureManager : MonoBehaviour {
 		CarrotMaturityGrowth = CarrotMaxGrowth / 3;
 		CarrotGrowthDistance = 0.6f / CarrotMaxGrowth;
 		CarrotGrowthVector = new Vector3 (0, 0, CarrotGrowthDistance);
+		CarrotDecayGrowth = CarrotMaxGrowth * 2;
+		BiodegradationDelaySeconds = 20;
 	}
 
 	void Start() {
