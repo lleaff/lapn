@@ -6,38 +6,74 @@ public class ia_rabbit : MonoBehaviour
 	NavMeshAgent agent;
 	Animation anim;
 	GameObject destination;
-	bool retreat = true;
 	GameObject[] spawn_positions = new GameObject[5];
-	bool eat = false;
 	public GameObject gridnode;
+
+
+	public enum RState { idle, retreat, eating };
+	public RState state = RState.idle;
+
+
+	void ExecBehaviour() {
+		switch (state) {
+		case RState.idle:
+			Idle ();
+			break;
+		case RState.retreat:
+			Retreat ();
+			break;
+		case RState.eating:
+			Eating ();
+			break;
+		}
+	}
+	
+
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
 		anim = GetComponent<Animation> ();
 		for (int i = 0; i < GameObject.Find ("Rabbit generator").transform.childCount; i++)
 			spawn_positions [i] = GameObject.Find ("Rabbit generator").transform.GetChild (i).gameObject;
-	}	
+	}
 
 	void Update ()
 	{
+		ExecBehaviour ();
+	}
+
+	//------------------------------------------------------------
+
+	void Idle() {
 		GameObject[] carrots;
 
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
-		if (carrots.Length != 0 && !eat) {
+		if (carrots.Length != 0 && state != RState.eating) {
 			destination = get_nearest (carrots);
 			agent.SetDestination (destination.transform.position);
 			anim.Play ("hop");
-			retreat = false;
+			state = RState.idle;
 		}
 
-		if ((destination == null || destination.transform.CompareTag("eated")) && retreat == false && !eat) {
+		if ((destination == null || destination.transform.CompareTag("eated")) && state != RState.retreat && state != RState.eating) {
 			agent.ResetPath();
 			GameObject ret_dest = get_nearest (spawn_positions);
 			agent.SetDestination (ret_dest.transform.position);
-			retreat = true;
+			state = RState.retreat;
 		}
+	}
+
+	void Eating() {
 
 	}
+
+	void Retreat() {
+
+	}
+
+
+
+	//------------------------------------------------------------
 
 	GameObject get_nearest(GameObject[] objects)
 	{
@@ -74,11 +110,11 @@ public class ia_rabbit : MonoBehaviour
 		{
 			col.collider.gameObject.tag = "eated";
 			agent.ResetPath();	
-			eat = true;
+			state = RState.eating;
 			anim.Play ("idle1");
 			StartCoroutine(removeCarrots(col.collider.gameObject));
 			yield return new WaitForSeconds(6);
-			eat = false;
+			state = RState.idle;
 			GameObject parent = col.collider.transform.parent.gameObject;
 			Destroy(col.collider.gameObject);
 			Destroy (this.gameObject);

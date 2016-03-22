@@ -7,7 +7,7 @@ public class globals : MonoBehaviour {
 	public static globals i = null; /* globals instance */
 
 	private int carrots = 10;
-	private int money = 0;
+	public int money = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
 	private bool canLoseLife = true;
