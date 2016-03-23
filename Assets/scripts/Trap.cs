@@ -17,6 +17,7 @@ public class Trap : MonoBehaviour {
 		if ((time - old) >= cooldown)
 			time = cooldown + old;
 	}
+
 	IEnumerator OnTriggerEnter(Collider other) {
 		if ((time - old) >= cooldown) {
 			gameObject.GetComponent<Animation> ().Play ("Up Down");

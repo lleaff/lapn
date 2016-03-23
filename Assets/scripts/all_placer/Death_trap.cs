@@ -9,6 +9,7 @@ public class Death_trap : MonoBehaviour {
 	private GameObject old = null;
 	private GameObject tmp;
 
+	public Material mat;
 	public GameObject trap;
 
 	void Awake()
@@ -46,6 +47,8 @@ public class Death_trap : MonoBehaviour {
 		/*You can place the trap if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a trap tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 5 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
 			globals.i.Money -= 30;
+			old.transform.FindChild ("trap").gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
+			old.transform.FindChild ("trap").gameObject.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old = null;
 			globals.i.Button = 0;
 		}
@@ -57,7 +60,7 @@ public class Death_trap : MonoBehaviour {
 				tmp = Instantiate (trap);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);
-				tmp.transform.localPosition = new Vector3(-3F,3F,0.7F);
+				tmp.transform.localPosition = new Vector3(-3F,3F,0.65F);
 				tmp.transform.localScale = new Vector3(15F,1F,15F);
 				tmp.name = "trap";
 				if (old != cur) {
