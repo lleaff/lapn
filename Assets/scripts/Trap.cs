@@ -8,7 +8,7 @@ public class Trap : MonoBehaviour {
 	private int killed = 0;
 
 	public int cooldown = 10;
-	public int max = 5;
+	public int maxUses = 5;
 	public Material blood;
 	public Material clean;
 
@@ -25,20 +25,20 @@ public class Trap : MonoBehaviour {
 	}
 
 	IEnumerator OnTriggerEnter(Collider other) {
+		if (!other.CompareTag (globals.rabbitTag) && !other.CompareTag(globals.dogTag)) {
+			return null; /* Kill only rabbits and dogs */
+		}
 		if ((time - old) >= cooldown) {
-			other.gameObject.GetComponent<ia> ().enabled = false;
-			other.gameObject.GetComponent<Collider> ().enabled = false;
+			old = TimeManager.i.Seconds;
 			killed++;
 			gameObject.GetComponent<Animation> ().Play ("Up Down");
-			old = TimeManager.i.Seconds;
 			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = blood;
-			other.gameObject.GetComponent<Animation> ().Play ("death");
-			other.gameObject.GetComponent<NavMeshAgent> ().ResetPath ();
-			yield return new WaitForSeconds (1);
-			if (other != null)
-				Destroy (other.gameObject);
-			if (killed == max)
+
+			God.i.Kill(other.gameObject);
+
+			if (killed == maxUses)
 				Destroy (gameObject);
 		}
+		return null;
 	}
 }
