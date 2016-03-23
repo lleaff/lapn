@@ -7,6 +7,7 @@ public class Trap : MonoBehaviour {
 	private int old;
 
 	public int cooldown = 10;
+	public Material mat;
 
 	void Awake () {
 		old = TimeManager.i.Seconds;
@@ -21,6 +22,7 @@ public class Trap : MonoBehaviour {
 	IEnumerator OnTriggerEnter(Collider other) {
 		if ((time - old) >= cooldown) {
 			gameObject.GetComponent<Animation> ().Play ("Up Down");
+			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
 			other.gameObject.GetComponent<Animation> ().Play ("death");
 			other.gameObject.GetComponent<ia> ().enabled = false;
 			other.gameObject.GetComponent<NavMeshAgent> ().ResetPath ();
