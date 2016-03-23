@@ -49,13 +49,11 @@ public class ia : MonoBehaviour
 		}
 			
 		if (AtEndOfPath () && aggressive && carrots.Length == 0 && unattainable.Length == 0 && !destroying) {
-			print ("retreat when aggressive");
 			bunny_retreat ();
 		}
 
 		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
 		if (carrots.Length != 0 && !eat && !destroying) {
-			print ("eat nearest carrot");
 			eat_nearest_carrot ();
 		} //else if there's no carrots but there's more than 2 hidden carrots, get aggressive to destroy fences
 		else if (unattainable.Length >= max_hidden_carrots && carrots.Length == 0 && !aggressive) {
@@ -64,36 +62,28 @@ public class ia : MonoBehaviour
 
 		//retreat if there's nothing to eat for rabbits || carrot has been eaten or destroyed 
 		if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) {
-			print ("First retreat !!");
 			bunny_retreat ();
 		} 
 		//See if destination carrot is attainable and set it unattainable if not so
 		if (destination != null && !destination.transform.CompareTag ("eaten") && !aggressive){
-			print ("Check if attainable !!");
 			agent.CalculatePath (destination.transform.position, path);
 			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
-				print ("Destination is unattainable !!");
 				agent.ResetPath ();
 				destination.transform.tag = "unattainable";
 				carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 				if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !aggressive) {
 					bunny_retreat ();
-					print ("Retreat because no carrots are available !!");
 				} else if (carrots.Length > 0) {
 					eat_nearest_carrot ();
-					print ("New destination !!");
 				} else {
-					print ("Reseted path inside check attainable");
 					focus_unattainable ();
 				}
 			}
-			print ("Destination is attainable !!");
 		}
 	}
 
 	void focus_unattainable()
 	{
-		print ("get aggressive");
 		aggressive = true;
 		anim.Play ("hop");
 		destination = get_nearest (unattainable);
@@ -168,7 +158,6 @@ public class ia : MonoBehaviour
 	{
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
-			print ("collided with carrot");
 			aggressive = false;
 			col.collider.gameObject.tag = "eaten";
 			agent.ResetPath();	
@@ -186,7 +175,6 @@ public class ia : MonoBehaviour
 			destroying = true;
 			col.collider.gameObject.tag = "noedit_destroy";
 			agent.ResetPath ();
-			print ("destroying fence!");
 			anim.Play ("idle2");
 			StartCoroutine(destroy_fence(col.collider.gameObject));
 			yield return new WaitForSeconds (3);

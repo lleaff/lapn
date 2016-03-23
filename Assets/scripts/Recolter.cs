@@ -26,7 +26,10 @@ public class Recolter : MonoBehaviour
 
 		GameObject carrots = CellUtils.FindObjectWithTag (cell, "Carrot");
 		if (!carrots) {
-			return;
+			carrots = CellUtils.FindObjectWithTag (cell, "unattainable");
+			if (!carrots) {
+				return;
+			}
 		}
 
 		if (clicked) {
