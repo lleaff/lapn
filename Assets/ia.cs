@@ -11,14 +11,16 @@ public class ia : MonoBehaviour
 	bool eat = false;
 	public GameObject gridnode;
 	//used for destroying fences
-	bool aggressive = false;
+	public static bool aggressive = false;
 	//needed for Atendofpath
 	public float pathEndThreshold = 0.1f;
 	private bool hasPath = false;
 	//
 	//mesh array for fences
 	public Mesh[] meshs;
-
+	private GameObject[] carrots;
+	private GameObject[] unattainable;
+	public int max_hidden_carrots;
 
 	void Start ()
 	{
@@ -30,54 +32,77 @@ public class ia : MonoBehaviour
 
 	void Update ()
 	{
-		GameObject[] carrots;
-		GameObject[] unattainable;
 		NavMeshPath path = new NavMeshPath();
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		unattainable = GameObject.FindGameObjectsWithTag ("unattainable");
-		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
+
+
+		//Check if unattainable carrots became attainable again (if other bunnys have destroyed fences around them without eating them)
+		foreach(GameObject crt in unattainable)
+		{
+			agent.CalculatePath (crt.transform.position, path);
+			if (path.status == NavMeshPathStatus.PathComplete) {
+				crt.transform.tag = "Carrot";
+			}
+		}
 
 		//stop anim if at destination
-		if (AtEndOfPath () && !eat) {
+		if (AtEndOfPath () && !eat && !aggressive) {
 			agent.ResetPath ();
 			anim.Play ("Take 001");
 		}
 
-		//retreat if there's nothing to eat for rabbits
-		if (carrots.Length == 0 && unattainable.Length <= 3 && !eat) {
-			bunny_retreat ();
-		}
-
 		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
-		if (carrots.Length != 0 && !eat) {
+		if (carrots.Length != 0 && !eat && !aggressive) {
+			print ("eat nearest carrot");
 			if (!agent.hasPath) {
-				destination = get_nearest (carrots);
-				agent.SetDestination (destination.transform.position);
-				anim.Play ("hop");
-				retreat = false;
+				eat_nearest_carrot ();
 			}
-		} //else if there's no carrots but there's a hidden carrot, get aggressive to destroy fences
-		else if (unattainable.Length >= 3 && carrots.Length == 0) {
-			destination = get_nearest (unattainable);
-			anim.Play ("hop");
-			agent.SetDestination (destination.transform.position);
-			aggressive = true;
+		} //else if there's no carrots but there's more than 2 hidden carrots, get aggressive to destroy fences
+		else if (unattainable.Length >= max_hidden_carrots && carrots.Length == 0) {
+			print ("get aggressive if no carrots and more than 2 unattainables");
+			if (!agent.hasPath) {
+				aggressive = true;
+				anim.Play ("hop");
+				destination = get_nearest (unattainable);
+				agent.SetDestination (destination.transform.position);
+			}
 		}
 
-		if ((destination == null || destination.transform.CompareTag ("eaten")) && retreat == false && !eat && !aggressive) {
+		//retreat if there's nothing to eat for rabbits || carrot has been eaten or destroyed 
+		if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) {
+			print ("First retreat !!");
 			bunny_retreat ();
 		} 
-		else if (destination != null && !destination.transform.CompareTag ("eaten") && !aggressive){
+		//See if destination carrot is attainable and set it unattainable if not so
+		if (destination != null && !destination.transform.CompareTag ("eaten") && !aggressive){
+			print ("Check if attainable !!");
 			agent.CalculatePath (destination.transform.position, path);
 			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
+				print ("Destination is unattainable !!");
 				agent.ResetPath ();
 				destination.transform.tag = "unattainable";
-				if (unattainable.Length < 2)
-					anim.Play ("idle2");
-				else
-					bunny_retreat ();
+				carrots = GameObject.FindGameObjectsWithTag ("Carrot");
+				if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots)
+				{	bunny_retreat ();
+					print ("Retreat because no carrots are available !!");
+				}
+				else if (carrots.Length > 0)
+				{	eat_nearest_carrot ();
+					print ("New destination !!");
+				}
 			}
+			print ("Destination is attainable !!");
 		}
+	}
+
+	void eat_nearest_carrot()
+	{
+		destination = get_nearest (carrots);
+		agent.SetDestination (destination.transform.position);
+		anim.Play ("hop");
+		retreat = false;
+		aggressive = false;
 	}
 
 	void bunny_retreat()
@@ -134,7 +159,7 @@ public class ia : MonoBehaviour
 		return (nearest);
 	}
 
-	GameObject get_next_nearest(GameObject[] tab, GameObject current)
+	/*GameObject get_next_nearest(GameObject[] tab, GameObject current)
 	{
 		float tmp_dist;
 		GameObject next;
@@ -153,7 +178,7 @@ public class ia : MonoBehaviour
 			next.transform.position = Vector3.zero;
 		}
 		return (next);
-	}
+	}*/
 
 	IEnumerator OnCollisionEnter(Collision col)
 	{
@@ -173,10 +198,11 @@ public class ia : MonoBehaviour
 			removefield (parent);
 		}
 		else if (col.collider.gameObject.CompareTag ("noedit") && aggressive) {
+			print ("destroying fence!");
 			col.collider.gameObject.CompareTag ("noedit_destroy");
 			anim.Play ("idle2");
 			StartCoroutine(destroy_fence(col.collider.gameObject));
-			yield return new WaitForSeconds(6);
+			yield return new WaitForSeconds (3);
 			Destroy(col.collider.gameObject);
 			aggressive = false;
 		}
@@ -190,7 +216,7 @@ public class ia : MonoBehaviour
 	{
 		if (fence != null) {
 			for (int i = 0; i < 3; i++) {
-				yield return new WaitForSeconds (2);
+				yield return new WaitForSeconds (1);
 				fence.GetComponent<MeshFilter> ().mesh = meshs [i];
 			}
 		}
@@ -221,29 +247,5 @@ public class ia : MonoBehaviour
 		}
 		Destroy (fieldnode);
 	}
-
-	/*GameObject get_nearest(GameObject[] objects, int index)
-	{
-		GameObject nearest = null;
-		bool sorted = false;
-		int size = objects.Length;
-			
-		while (!sorted)
-		{
-			sorted = true;
-			for (int i = 0; i < objects.Length; i++)
-			{
-				if (get_distance (objects [i]) > get_distance (objects [i + 1])) {
-					swap (objects [i], objects [i + 1]);
-					sorted = false;
-				}
-			}
-		}
-		if (nearest == null) {
-			nearest = new GameObject ();
-			nearest.transform.position = Vector3.zero;
-		}
-		return (nearest);  
-	}*/
 }
 
