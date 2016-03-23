@@ -9,7 +9,7 @@ public class AgricultureManager : MonoBehaviour {
 	public Vector3 CarrotGrowthVector;
 	public int carrotGrowthBaseIntervalSeconds = 5;
 	public int CarrotGrowthIntervalSeconds {
-		get { return (int)(carrotGrowthBaseIntervalSeconds * GlobalGrowthRate); }
+		get { return (int)(carrotGrowthBaseIntervalSeconds / GlobalGrowthRate); }
 	}
 	public int CarrotMaxGrowth = 12;
 	public int CarrotDecayGrowth;
@@ -22,6 +22,7 @@ public class AgricultureManager : MonoBehaviour {
 
 	//------------------------------------------------------------
 
+	/*
 	List<GameObject> Carrots;
 
 	List<GameObject> GetCarrots() {
@@ -33,7 +34,6 @@ public class AgricultureManager : MonoBehaviour {
 		var carrots = new List<GameObject>();
 		foreach (Transform node in grid.transform) {
 			if (CellUtils.IsFieldNode (node)) {
-				Debug.Log (node);
 				carrots.Add(CellUtils.GetCarrotObj (node));
 			}
 		}
@@ -44,7 +44,6 @@ public class AgricultureManager : MonoBehaviour {
 		Carrots = GetCarrots ();
 	}
 
-	/*
 	public void GrowCarrots() {
 		UpdateCarrots ();
 		if (Carrots == null)
@@ -67,7 +66,7 @@ public class AgricultureManager : MonoBehaviour {
 			float rate = 1f;
 			float heat = WeatherManager.i.Heat;
 			if (heat <= 0f) {
-				return 0f;
+				rate = 0f;
 			} else if (heat <= 25f) {
 				rate *= 1f;
 			} else if (heat <= 35f) {
@@ -77,7 +76,7 @@ public class AgricultureManager : MonoBehaviour {
 			}
 			float humidity = WeatherManager.i.Humidity;
 			if (humidity <= 1) {
-				return rate *= humidity;
+				rate *= humidity;
 			} else if (humidity <= 2f) {
 				rate *= 1f;
 			} else if (humidity <= 3f) {

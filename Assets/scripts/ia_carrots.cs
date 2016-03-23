@@ -8,7 +8,7 @@ public class ia_carrots : MonoBehaviour {
 	public int MaxGrowth;
 	public int DecayGrowth;
 	public int CarrotGrowthIntervalSeconds {
-		get { return (int)(AgricultureManager.i.CarrotGrowthIntervalSeconds * GrowthRate); }
+		get { return (int)(AgricultureManager.i.CarrotGrowthIntervalSeconds / GrowthRate); }
 	}
 	public float GrowthRate = 1;
 
@@ -27,6 +27,7 @@ public class ia_carrots : MonoBehaviour {
 
 	IEnumerator CarrotGrowth() {
 		while (true) {
+			//Debug.Log ("Growth rate: " + AgricultureManager.i.CarrotGrowthIntervalSeconds.ToString() + "...." + CarrotGrowthIntervalSeconds.ToString ());//DEBUG
 			yield return new WaitForSeconds (CarrotGrowthIntervalSeconds);
 			if (!Grow ())
 				break;

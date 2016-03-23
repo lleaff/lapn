@@ -18,7 +18,7 @@ public class WeatherManager : MonoBehaviour {
 	float RainingLightIntensityFactor = 1;
 
 	private float heat = 20f;
-	public float Heat;
+	public float Heat = 20f;
 	public float DayHeatVariationScale = 1f;
 	public float HeatMin = -10f;
 	public float HeatMax = 35f;
@@ -27,7 +27,7 @@ public class WeatherManager : MonoBehaviour {
 	float HeatDailyGoalIncrease;
 
 	private float humidity = 1f; /* 1 == neutral */
-	public float Humidity;
+	public float Humidity = 20f;
 	public float DayHumidityVariationScale = 0.5f;
 	public float HumidityMin = 0f;
 	public float HumidityMax = 5f;
@@ -44,8 +44,8 @@ public class WeatherManager : MonoBehaviour {
 		}
 		DontDestroyOnLoad (gameObject);
 
-		heat = Heat;
-		Humidity = Humidity;
+		Heat = heat;
+		Humidity = humidity;
 		HeatGoal = Heat;
 		HumidityGoal = Humidity;
 
@@ -73,10 +73,10 @@ public class WeatherManager : MonoBehaviour {
 	public void NewDay() {
 		days++;
 		SetGoals ();
-		Heat = heat + HeatDailyGoalIncrease;
-		Humidity = humidity + HumidityDailyGoalIncrease;
-		Heat += Random.Range(-DayHeatVariationScale / 2f, DayHeatVariationScale / 2f);
-		Humidity += Random.Range(-DayHumidityVariationScale / 2f, DayHumidityVariationScale / 2f);
+		heat = heat + HeatDailyGoalIncrease;
+		humidity = humidity + HumidityDailyGoalIncrease;
+		Heat =  heat + Random.Range(-DayHeatVariationScale / 2f, DayHeatVariationScale / 2f);
+		Humidity = humidity + Random.Range(-DayHumidityVariationScale / 2f, DayHumidityVariationScale / 2f);
 	}
 
 
