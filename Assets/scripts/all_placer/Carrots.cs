@@ -67,9 +67,9 @@ public class Carrots : MonoBehaviour {
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 1) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid")) && globals.i.Button == 1) {
 			cur = GameObject.Find (hit.collider.name);
-			if (check_pos(cur.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
+			if (check_pos (cur.transform) && hit.collider.name.Substring (0, 9) == "FieldNode") {
 				tmp = Instantiate (field);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.identity;
@@ -82,6 +82,9 @@ public class Carrots : MonoBehaviour {
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("field").gameObject);
+			old = null;
 		}
 	}
 }
