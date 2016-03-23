@@ -6,6 +6,7 @@ public class Trap : MonoBehaviour {
 	private int time;
 	private int old;
 
+	public int cooldown = 10;
 
 	void Awake () {
 		old = TimeManager.i.Seconds;
@@ -13,13 +14,11 @@ public class Trap : MonoBehaviour {
 
 	void Update() {
 		time = TimeManager.i.Seconds;
-		/*print (old);
-		print (time);
-		print (time - old);
-		print ("-------------");*/
+		if ((time - old) >= cooldown)
+			time = cooldown + old;
 	}
 	IEnumerator OnTriggerEnter(Collider other) {
-		if ((time - old) >= 10) {
+		if ((time - old) >= cooldown) {
 			gameObject.GetComponent<Animation> ().Play ("Up Down");
 			other.gameObject.GetComponent<Animation> ().Play ("death");
 			other.gameObject.GetComponent<ia> ().enabled = false;
