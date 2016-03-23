@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Bone = UnityEngine.GameObject;
+using Rabbit = UnityEngine.GameObject;
 
 public class ia_dog : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class ia_dog : MonoBehaviour
 	//------------------------------------------------------------
 
 	public float BoneReachedDistance = 1.5f;
+	public int RabbitSpotPersistenceTimeSeconds = 3;
+
+	public float ChasingSpeed = 5f;
+	public float ChasingAcceleration = 10f;
+	public float IdlingSpeed = 0.8f;
+	public float IdlingAcceleration = 5f;
 
 	//------------------------------------------------------------
 
@@ -49,6 +56,8 @@ public class ia_dog : MonoBehaviour
 	{
 		agent = GetComponent<NavMeshAgent> ();
 		agent.autoBraking = false; /* Don't slow down when approaching destination */
+		agent.speed = IdlingSpeed;
+		agent.acceleration = IdlingAcceleration;
 
 
 		anim = GetComponent<Animation> ();
@@ -61,6 +70,9 @@ public class ia_dog : MonoBehaviour
 	{
 		NavMeshPath path = new NavMeshPath();
 
+		if (spottedRabbits.Count != 0) {
+			state = DState.Chasing;
+		}
 
 		switch (state) {
 		case DState.Boning:
@@ -122,6 +134,9 @@ public class ia_dog : MonoBehaviour
 	//------------------------------------------------------------
 
 	void Idle() {
+		agent.speed = IdlingSpeed;
+		agent.acceleration = IdlingAcceleration;
+
 		if (Bones.Count <= 1) {
 			if (IsOnBone ()) {
 				return;
@@ -131,6 +146,9 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void Boning() {
+		agent.speed = IdlingSpeed;
+		agent.acceleration = IdlingAcceleration;
+
 		if (agent.remainingDistance < BoneReachedDistance) {
 			VisitedBones.Add (TargetBone);
 			GotoNextBone ();
@@ -138,6 +156,9 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void Chasing() {
+		agent.speed = ChasingSpeed;
+		agent.acceleration = ChasingAcceleration;
+
 
 	}
 
@@ -153,27 +174,26 @@ public class ia_dog : MonoBehaviour
 			return;
 		}
 		state = DState.Boning;
-
-		Bones.Sort (distComparer);
-		GameObject bone = GetNextBone ();
+		List<Bone> bones = GetSortedByDistance (Bones);
+		Bone bone = GetNextBone (bones);
 		TargetBone = bone;
 		agent.SetDestination(bone.transform.position);
 	}
 	
-	Bone GetNextBone() {
-		GameObject bone = NearestNotVisitedBone ();
+	Bone GetNextBone(List<Bone> bones) {
+		Bone bone = NearestNotVisitedBone (bones);
 		if (bone == null) {
 			Bone PreviousBone = VisitedBones.Last ();
 			VisitedBones = new List<Bone>();
 			VisitedBones.Add (PreviousBone);
-			bone = NearestNotVisitedBone();
+			bone = NearestNotVisitedBone(bones);
 		}
 		return bone;
 	}
 
-	Bone NearestNotVisitedBone() {
-		GameObject bone = null;
-		foreach (Bone b in Bones) {
+	Bone NearestNotVisitedBone(List<Bone> bones) {
+		Bone bone = null;
+		foreach (Bone b in bones) {
 			if (!VisitedBones.Contains (b)) {
 				bone = b;
 				break;
@@ -181,6 +201,7 @@ public class ia_dog : MonoBehaviour
 		}
 		return bone;
 	}
+
 
 	//------------------------------------------------------------
 
@@ -190,6 +211,20 @@ public class ia_dog : MonoBehaviour
 			spottedRabbits.Add(other.gameObject);
 		}
 	}
+
+	void OnTriggerExit(Collider other) {
+		if (other.CompareTag (globals.rabbitTag)) {
+			StartCoroutine (UnspotRabbit(other.gameObject));
+			spottedRabbits.Add(other.gameObject);
+		}
+	}
+
+	public void EatableRabbitEnter(Collider other) {
+		// Eat rabbit
+	}
+
+
+	//------------------------------------------------------------
 
 	void OnCollisionEnter(Collision col) {
 		switch (col.collider.tag) {
@@ -210,6 +245,14 @@ public class ia_dog : MonoBehaviour
 
 	//------------------------------------------------------------
 
+
+	IEnumerator UnspotRabbit(Rabbit rabbit) {
+		yield return new WaitForSeconds (RabbitSpotPersistenceTimeSeconds);
+		spottedRabbits.Remove (rabbit);
+	}
+
+	//------------------------------------------------------------
+
 	bool IsOnBone() {
 		foreach (Bone bone in Bones) {
 			if (gameObject.DistanceTo (bone) <= BoneReachedDistance) {
@@ -226,10 +269,18 @@ public class ia_dog : MonoBehaviour
 		return CanReachBone (TargetBone);
 	}
 	bool CanReachBone(Bone bone) {
-		NavMeshPath path = new NavMeshPath();;
+		NavMeshPath path = new NavMeshPath();
 		if (bone == null || !agent.CalculatePath (bone.transform.position, path))
 			return false;
 		return path.status == NavMeshPathStatus.PathComplete;
+	}
+
+	//------------------------------------------------------------
+
+	List<GameObject> GetSortedByDistance (List<GameObject> objects) {
+		List<GameObject> copied = new List<GameObject> (objects);
+		copied.Sort (distComparer);
+		return copied;
 	}
 
 	//------------------------------------------------------------
