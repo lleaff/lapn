@@ -9,6 +9,7 @@ public class globals : MonoBehaviour {
 	public const string carrotName = "Carrot";
 	public const string carrotTag = "Carrot";
 	public const string rabbitTag = "Bunny";
+	public const string dogTag = "Dog";
 	public const string boneTag = "Bone";
 	public const string decayedTag = "decayed";
 	public const string fieldNodeName = "FieldNode";
@@ -145,4 +146,10 @@ public class globals : MonoBehaviour {
 			StartCoroutine (lose_life ());
 		}
 	}
+
+	/*
+	public Coroutine StartCoroutine(IEnumerator routine) {
+		return StartCoroutine (routine);
+	}
+	*/
 }
