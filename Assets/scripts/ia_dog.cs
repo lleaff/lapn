@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Bone = UnityEngine.GameObject;
+
 public class ia_dog : MonoBehaviour
 {
 	NavMeshAgent agent;
 	Animation anim;
 	GameObject destination;
-
 
 	// =Config
 	//------------------------------------------------------------
@@ -22,20 +23,26 @@ public class ia_dog : MonoBehaviour
 
 	private List<GameObject> spottedRabbits;
 
-	private List<GameObject> Bones {
+	private Bone TargetBone = null;
+	private List<Bone> Bones {
 		get { return BonesManager.i.Bones; }
 	}
-	private GameObject CurrentBone = null;
-
-	private GameObject PreviousBone = null;
+	private List<Bone> VisitedBones;
 	private Utils.DistanceComparer distComparer;
+
+	private NavMeshPath path;
+
+	//------------------------------------------------------------
 
 	public enum DState { Idle, Boning, Chasing };
 	public DState state = DState.Idle;
 
+	//------------------------------------------------------------
+
 	void Awake()
 	{
 		distComparer = new Utils.DistanceComparer (gameObject);
+		VisitedBones = new List<GameObject> ();
 	}
 
 	void Start ()
@@ -115,10 +122,9 @@ public class ia_dog : MonoBehaviour
 	//------------------------------------------------------------
 
 	void Idle() {
-		Debug.Log ("Dog: Idle");
 		if (Bones.Count <= 1) {
-			if (IsOnBone (PreviousBone)) {
-
+			if (IsOnBone ()) {
+				return;
 			}
 		}
 		GotoNextBone ();
@@ -126,7 +132,7 @@ public class ia_dog : MonoBehaviour
 
 	void Boning() {
 		if (agent.remainingDistance < BoneReachedDistance) {
-			Debug.Log ("Dog: Reached bone");
+			VisitedBones.Add (TargetBone);
 			GotoNextBone ();
 		}
 	}
@@ -147,18 +153,36 @@ public class ia_dog : MonoBehaviour
 			return;
 		}
 		state = DState.Boning;
-		Bones.Sort (distComparer);
 
-		GameObject bone = Bones[0];
-		foreach (var b in Bones) {
-			if (b != PreviousBone) {
-				PreviousBone = b;
+		Bones.Sort (distComparer);
+		GameObject bone = GetNextBone ();
+		TargetBone = bone;
+		agent.SetDestination(bone.transform.position);
+	}
+	
+	Bone GetNextBone() {
+		GameObject bone = NearestNotVisitedBone ();
+		if (bone == null) {
+			Bone PreviousBone = VisitedBones.Last ();
+			VisitedBones = new List<Bone>();
+			VisitedBones.Add (PreviousBone);
+			bone = NearestNotVisitedBone();
+		}
+		return bone;
+	}
+
+	Bone NearestNotVisitedBone() {
+		GameObject bone = null;
+		foreach (Bone b in Bones) {
+			if (!VisitedBones.Contains (b)) {
 				bone = b;
 				break;
 			}
 		}
-		agent.SetDestination(bone.transform.position);
+		return bone;
 	}
+
+	//------------------------------------------------------------
 
 
 	void OnTriggerEnter(Collider other) {
@@ -175,21 +199,38 @@ public class ia_dog : MonoBehaviour
 		case globals.boneTag:
 			
 			break;
+		default:
+			if (!CanReachBone ()) {
+				TargetBone = null;
+				agent.ResetPath ();
+			}
+			break;
 		}
 	}
 
+	//------------------------------------------------------------
+
 	bool IsOnBone() {
-		foreach (GameObject bone in Bones) {
+		foreach (Bone bone in Bones) {
 			if (gameObject.DistanceTo (bone) <= BoneReachedDistance) {
 				return true;
 			}
 		}
 		return false;
 	}
-	bool IsOnBone(GameObject bone) {
+	bool IsOnBone(Bone bone) {
 		return (gameObject.DistanceTo (bone) <= BoneReachedDistance);
 	}
 
+	bool CanReachBone() {
+		return CanReachBone (TargetBone);
+	}
+	bool CanReachBone(Bone bone) {
+		NavMeshPath path = new NavMeshPath();;
+		if (bone == null || !agent.CalculatePath (bone.transform.position, path))
+			return false;
+		return path.status == NavMeshPathStatus.PathComplete;
+	}
 
 	//------------------------------------------------------------
 
