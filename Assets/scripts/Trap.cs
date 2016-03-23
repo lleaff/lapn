@@ -5,7 +5,7 @@ public class Trap : MonoBehaviour {
 
 	private int time;
 	private int old;
-	private static int killed = 0;
+	private int killed = 0;
 
 	public int cooldown = 10;
 	public int max = 5;
