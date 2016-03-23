@@ -69,6 +69,9 @@ public class Death_trap : MonoBehaviour {
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("trap").gameObject);
+			old = null;
 		}
 	}
 }

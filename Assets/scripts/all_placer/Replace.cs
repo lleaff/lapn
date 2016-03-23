@@ -100,6 +100,9 @@ public class Replace : MonoBehaviour {
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
+			old = null;
 		}
 		if (lastUpdate == 16F)
 			lastUpdate = Time.time;
