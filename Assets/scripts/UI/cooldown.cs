@@ -27,6 +27,6 @@ public class cooldown : MonoBehaviour {
 	void Update () {
 		words = go_time.text.Split (' ');
 		time = IntParseFast(words[1]);
-		coolDown.transform.localScale = new Vector3(1, 1 - ((5 - time) * 0.2F) ,1);
+		coolDown.transform.localScale = new Vector3(1, 1 - ((5 - time) * 0.2F) 	,1);
 	}
 }
