@@ -26,4 +26,20 @@ public static class ExtensionMethods {
 			}
 		}
 	}
+
+	public static float DistanceTo(this GameObject self, GameObject other) {
+		float tmp;
+		float distx;
+		float distz;
+
+		tmp = 0;
+		distx = self.transform.position.x - other.transform.position.x;
+		if (distx < 0)
+			distx *= -1;
+		distz = self.transform.position.z - other.transform.position.z;
+		if (distz < 0)
+			distz *= -1;
+		tmp = distx + distz;
+		return (tmp);
+	}
 }

@@ -2,7 +2,61 @@ fileFormatVersion: 2
 guid: 77c6586af9125354eb2948ba96d7705c
 ModelImporter:
   serializedVersion: 19
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: RABBIT_
+    100004: RABBIT_ Head
+    100006: RABBIT_ L Calf
+    100008: RABBIT_ L Clavicle
+    100010: RABBIT_ L Foot
+    100012: RABBIT_ L Forearm
+    100014: RABBIT_ L Hand
+    100016: RABBIT_ L Thigh
+    100018: RABBIT_ L Toe0
+    100020: RABBIT_ L UpperArm
+    100022: RABBIT_ Neck
+    100024: RABBIT_ Neck1
+    100026: RABBIT_ Pelvis
+    100028: RABBIT_ Queue de cheval 1
+    100030: RABBIT_ Queue de cheval 2
+    100032: RABBIT_ R Calf
+    100034: RABBIT_ R Clavicle
+    100036: RABBIT_ R Foot
+    100038: RABBIT_ R Forearm
+    100040: RABBIT_ R Hand
+    100042: RABBIT_ R Thigh
+    100044: RABBIT_ R Toe0
+    100046: RABBIT_ R UpperArm
+    100048: RABBIT_ Spine
+    100050: RABBIT_ Spine1
+    400000: //RootNode
+    400002: RABBIT_
+    400004: RABBIT_ Head
+    400006: RABBIT_ L Calf
+    400008: RABBIT_ L Clavicle
+    400010: RABBIT_ L Foot
+    400012: RABBIT_ L Forearm
+    400014: RABBIT_ L Hand
+    400016: RABBIT_ L Thigh
+    400018: RABBIT_ L Toe0
+    400020: RABBIT_ L UpperArm
+    400022: RABBIT_ Neck
+    400024: RABBIT_ Neck1
+    400026: RABBIT_ Pelvis
+    400028: RABBIT_ Queue de cheval 1
+    400030: RABBIT_ Queue de cheval 2
+    400032: RABBIT_ R Calf
+    400034: RABBIT_ R Clavicle
+    400036: RABBIT_ R Foot
+    400038: RABBIT_ R Forearm
+    400040: RABBIT_ R Hand
+    400042: RABBIT_ R Thigh
+    400044: RABBIT_ R Toe0
+    400046: RABBIT_ R UpperArm
+    400048: RABBIT_ Spine
+    400050: RABBIT_ Spine1
+    7400000: Take 001
+    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0

@@ -8,6 +8,8 @@ public class globals : MonoBehaviour {
 
 	public const string carrotName = "Carrot";
 	public const string carrotTag = "Carrot";
+	public const string rabbitTag = "Bunny";
+	public const string boneTag = "Bone";
 	public const string decayedTag = "decayed";
 	public const string fieldNodeName = "FieldNode";
 	public const string fieldName = "field";
