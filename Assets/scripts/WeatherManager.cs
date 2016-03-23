@@ -7,6 +7,14 @@ public class WeatherManager : MonoBehaviour {
 
 	int days = 0;
 
+	public int WeatherUpdateSeconds = 3;
+
+	public Light dayint;
+	private float lightIntensity;
+
+	public bool Raining = false;
+	float RainingLightIntensityFactor = 1;
+
 	private float heat = 20f;
 	public float Heat;
 	public float DayHeatVariationScale = 1f;
@@ -25,7 +33,6 @@ public class WeatherManager : MonoBehaviour {
 	public int HumidityGoalDayscale = 10;
 	float HumidityDailyGoalIncrease;
 
-
 	void Awake()
 	{
 		if (i == null) {
@@ -40,6 +47,12 @@ public class WeatherManager : MonoBehaviour {
 		HeatGoal = Heat;
 		HumidityGoal = Humidity;
 	}
+
+	void Start() {
+		StartCoroutine (WeatherUpdate());
+	}
+
+	//----------------------------------------------------------------------
 
 	void SetGoals() {
 		if (days % HumidityGoalDayscale == 0) {
@@ -59,5 +72,19 @@ public class WeatherManager : MonoBehaviour {
 		Humidity = humidity + HumidityDailyGoalIncrease;
 		Heat += Random.Range(-DayHeatVariationScale / 2f, DayHeatVariationScale / 2f);
 		Humidity += Random.Range(-DayHumidityVariationScale / 2f, DayHumidityVariationScale / 2f);
+	}
+
+
+	IEnumerator WeatherUpdate() {
+		while (true) {
+			lightIntensity = TimeManager.i.IsDay ?
+				1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
+				0.5F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
+			if (Raining) {
+				lightIntensity *= RainingLightIntensityFactor;
+			}
+			dayint.intensity = lightIntensity;
+			yield return new WaitForSeconds (WeatherUpdateSeconds);
+		}
 	}
 }
