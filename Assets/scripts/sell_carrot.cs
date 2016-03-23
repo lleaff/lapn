@@ -7,14 +7,14 @@ using System.Collections.Generic;
 public class sell_carrot : MonoBehaviour {
 
 	private Button my_button;
-	
+		
 	private List<int>list_value = new List<int>();
 	public Texture line;
 	public Text carrot_value;
 
 	void Awake ()
 	{
-		
+
 		list_value = globals.i.List;
 		my_button = GetComponent<Button>();
 		my_button.onClick.AddListener (Sell);
