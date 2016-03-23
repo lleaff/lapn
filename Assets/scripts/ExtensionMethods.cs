@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class ExtensionMethods {
 
@@ -41,5 +42,20 @@ public static class ExtensionMethods {
 			distz *= -1;
 		tmp = distx + distz;
 		return (tmp);
+	}
+
+	public static T Pop<T>(this List<T> list) {
+		if (list.Count == 0) {
+			throw new UnityException ("Can't pop from empty list");
+		}
+		T el = list [list.Count - 1];
+		list.Remove (el);
+		return el;
+	}
+	public static T Last<T>(this List<T> list) {
+		if (list.Count == 0) {
+			throw new UnityException ("Can't get last element from empty list");
+		}
+		return list [list.Count - 1];
 	}
 }

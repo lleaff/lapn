@@ -20,7 +20,7 @@ public class Death_trap : MonoBehaviour {
 
 	void add()
 	{
-		if (globals.i.Button != 5 && globals.i.Money >= 30)
+		if (globals.i.Button != 5 && globals.i.Money >= 100)
 			globals.i.Button = 5;
 		else {
 			if (old) {
@@ -46,7 +46,7 @@ public class Death_trap : MonoBehaviour {
 
 		/*You can place the trap if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a trap tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 5 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
-			globals.i.Money -= 30;
+			globals.i.Money -= 100;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old = null;
@@ -69,6 +69,9 @@ public class Death_trap : MonoBehaviour {
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("trap").gameObject);
+			old = null;
 		}
 	}
 }
