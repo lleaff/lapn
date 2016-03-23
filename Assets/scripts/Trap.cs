@@ -5,9 +5,12 @@ public class Trap : MonoBehaviour {
 
 	private int time;
 	private int old;
+	private static int killed = 0;
 
 	public int cooldown = 10;
-	public Material mat;
+	public int max = 5;
+	public Material blood;
+	public Material clean;
 
 	void Awake () {
 		old = TimeManager.i.Seconds;
@@ -15,21 +18,26 @@ public class Trap : MonoBehaviour {
 
 	void Update() {
 		time = TimeManager.i.Seconds;
-		if ((time - old) >= cooldown)
+		if ((time - old) >= cooldown) {
 			time = cooldown + old;
+			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = clean;
+		}
 	}
 
 	IEnumerator OnTriggerEnter(Collider other) {
 		if ((time - old) >= cooldown) {
+			killed++;
 			gameObject.GetComponent<Animation> ().Play ("Up Down");
-			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
+			old = TimeManager.i.Seconds;
+			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = blood;
 			other.gameObject.GetComponent<Animation> ().Play ("death");
 			other.gameObject.GetComponent<ia> ().enabled = false;
 			other.gameObject.GetComponent<NavMeshAgent> ().ResetPath ();
 			yield return new WaitForSeconds (1);
 			if (other != null)
 				Destroy (other.gameObject);
-			old = TimeManager.i.Seconds;
+			if (killed == max)
+				Destroy (gameObject);
 		}
 	}
 }
