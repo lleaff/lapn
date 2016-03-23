@@ -7,35 +7,16 @@ using System.Collections.Generic;
 public class sell_carrot : MonoBehaviour {
 
 	private Button my_button;
-		
 	private List<int>list_value = new List<int>();
-	public Texture line;
-	public Text carrot_value;
 
 	void Awake ()
 	{
-
-		list_value = globals.i.List;
 		my_button = GetComponent<Button>();
 		my_button.onClick.AddListener (Sell);
 	}
-
-	private int get_max()
+	void Update()
 	{
-		int max = 0;
-		foreach (int price  in list_value) {
-			if (price > max)
-				max = price;
-		}
-		return (max);
-	}
-
-	void OnGUI(){
-		int i = 0;
-		foreach (int price in list_value) {
-			GUI.DrawTexture (new Rect ((255F - (960F - Screen.width) / 2F) + ((450F / list_value.Count) * i), (431F - (600 - Screen.height) / 2)- price * (300 / get_max()), 450F / list_value.Count, price * (300 / get_max())), line);
-			i++;
-		}
+		list_value = globals.i.List;
 	}
 
 	public void Sell()
@@ -44,12 +25,8 @@ public class sell_carrot : MonoBehaviour {
 			globals.i.remove_carrots (1);
 			globals.i.add_money (list_value [list_value.Count - 1]);
 			this.GetComponent<AudioSource> ().Play ();
-		} else
+		} 
+		else
 			this.transform.parent.GetComponent<AudioSource> ().Play ();
-	}
-		
-	void Update()
-	{
-		carrot_value.text = "Valeur de la carotte: " + list_value [list_value.Count - 1].ToString ();
 	}
 }

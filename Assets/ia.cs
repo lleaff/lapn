@@ -70,7 +70,7 @@ public class ia : MonoBehaviour
 		}
 
 		//retreat if there's nothing to eat for rabbits || carrot has been eaten or destroyed 
-		if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) {
+		if ((carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) || !agent.hasPath) {
 			print ("First retreat !!");
 			bunny_retreat ();
 		} 
@@ -198,8 +198,9 @@ public class ia : MonoBehaviour
 			removefield (parent);
 		}
 		else if (col.collider.gameObject.CompareTag ("noedit") && aggressive) {
-			print ("destroying fence!");
 			col.collider.gameObject.CompareTag ("noedit_destroy");
+			agent.ResetPath ();
+			print ("destroying fence!");
 			anim.Play ("idle2");
 			StartCoroutine(destroy_fence(col.collider.gameObject));
 			yield return new WaitForSeconds (3);
