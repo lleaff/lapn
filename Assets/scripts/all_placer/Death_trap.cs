@@ -60,7 +60,7 @@ public class Death_trap : MonoBehaviour {
 				tmp = Instantiate (trap);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);
-				tmp.transform.localPosition = new Vector3(-3F,3F,0.65F);
+				tmp.transform.localPosition = new Vector3(-2.5F,2.5F,0.65F);
 				tmp.transform.localScale = new Vector3(15F,1F,15F);
 				tmp.name = "trap";
 				if (old != cur) {
