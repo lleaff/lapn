@@ -106,6 +106,9 @@ public class Fence : MonoBehaviour {
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("fence " + rota).gameObject);
+			old = null;
 		}
 	}
 }

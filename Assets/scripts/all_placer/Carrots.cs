@@ -49,6 +49,7 @@ public class Carrots : MonoBehaviour {
 	void PlantCarrots() {
 		GameObject field = old.transform.FindChild ("field").gameObject;
 		set_mat (field);
+		field.tag = "Untagged";
 		field.GetComponent<AudioSource> ().Play ();
 		field.GetComponent<ia_carrots> ().enabled = true;
 		old = null;
@@ -60,28 +61,32 @@ public class Carrots : MonoBehaviour {
 		RaycastHit hit;
 
 		/*You can place the carrots if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
-		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode") {
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode" && !hit.collider.gameObject.transform.FindChild ("field").CompareTag("Untagged")) {
 			globals.i.Money -= 10;
 			PlantCarrots ();
 			globals.i.Button = 0;
 		}
 
 		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 1) {
+		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid")) && globals.i.Button == 1) {
 			cur = GameObject.Find (hit.collider.name);
-			if (check_pos(cur.transform) && hit.collider.name.Substring(0,9) == "FieldNode") {
+			if (check_pos (cur.transform) && hit.collider.name.Substring (0, 9) == "FieldNode") {
 				tmp = Instantiate (field);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.identity;
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = Vector3.one;
 				tmp.name = "field";
+				tmp.tag = "edit";
 				if (old != cur) {
 					if (old)
 						GameObject.Destroy (old.transform.FindChild ("field").gameObject);
 					old = cur;
 				}
 			}
+		} else if (old) {
+			GameObject.Destroy (old.transform.FindChild ("field").gameObject);
+			old = null;
 		}
 	}
 }

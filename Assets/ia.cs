@@ -11,13 +11,15 @@ public class ia : MonoBehaviour
 	bool eat = false;
 	public GameObject gridnode;
 	//used for destroying fences
-	public static bool aggressive = false;
+	public bool aggressive = false;
+	public bool destroying = false;
 	//needed for Atendofpath
 	public float pathEndThreshold = 0.1f;
 	private bool hasPath = false;
 	//
 	//mesh array for fences
 	public Mesh[] meshs;
+
 	private GameObject[] carrots;
 	private GameObject[] unattainable;
 	public int max_hidden_carrots;
@@ -45,32 +47,23 @@ public class ia : MonoBehaviour
 				crt.transform.tag = "Carrot";
 			}
 		}
-
-		//stop anim if at destination
-		if (AtEndOfPath () && !eat && !aggressive) {
-			agent.ResetPath ();
-			anim.Play ("Take 001");
+			
+		if (AtEndOfPath () && aggressive && carrots.Length == 0 && unattainable.Length == 0 && !destroying) {
+			print ("retreat when aggressive");
+			bunny_retreat ();
 		}
 
 		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
-		if (carrots.Length != 0 && !eat && !aggressive) {
+		if (carrots.Length != 0 && !eat && !destroying) {
 			print ("eat nearest carrot");
-			if (!agent.hasPath) {
-				eat_nearest_carrot ();
-			}
+			eat_nearest_carrot ();
 		} //else if there's no carrots but there's more than 2 hidden carrots, get aggressive to destroy fences
 		else if (unattainable.Length >= max_hidden_carrots && carrots.Length == 0 && !aggressive) {
-			print ("get aggressive");
-			if (!agent.hasPath) {
-				aggressive = true;
-				anim.Play ("hop");
-				destination = get_nearest (unattainable);
-				agent.SetDestination (destination.transform.position);
-			}
+			focus_unattainable ();
 		}
 
 		//retreat if there's nothing to eat for rabbits || carrot has been eaten or destroyed 
-		if ((carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) || !agent.hasPath) {
+		if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !eat && retreat == false && !aggressive) {
 			print ("First retreat !!");
 			bunny_retreat ();
 		} 
@@ -83,17 +76,28 @@ public class ia : MonoBehaviour
 				agent.ResetPath ();
 				destination.transform.tag = "unattainable";
 				carrots = GameObject.FindGameObjectsWithTag ("Carrot");
-				if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots)
-				{	bunny_retreat ();
+				if (carrots.Length == 0 && unattainable.Length < max_hidden_carrots && !aggressive) {
+					bunny_retreat ();
 					print ("Retreat because no carrots are available !!");
-				}
-				else if (carrots.Length > 0)
-				{	eat_nearest_carrot ();
+				} else if (carrots.Length > 0) {
+					eat_nearest_carrot ();
 					print ("New destination !!");
+				} else {
+					print ("Reseted path inside check attainable");
+					focus_unattainable ();
 				}
 			}
 			print ("Destination is attainable !!");
 		}
+	}
+
+	void focus_unattainable()
+	{
+		print ("get aggressive");
+		aggressive = true;
+		anim.Play ("hop");
+		destination = get_nearest (unattainable);
+		agent.SetDestination (destination.transform.position);
 	}
 
 	void eat_nearest_carrot()
@@ -102,11 +106,11 @@ public class ia : MonoBehaviour
 		agent.SetDestination (destination.transform.position);
 		anim.Play ("hop");
 		retreat = false;
-		aggressive = false;
 	}
 
 	void bunny_retreat()
 	{
+		anim.Play ("hop");
 		agent.ResetPath ();
 		GameObject ret_dest = get_nearest (spawn_positions);
 		agent.SetDestination (ret_dest.transform.position);
@@ -158,32 +162,13 @@ public class ia : MonoBehaviour
 		}
 		return (nearest);
 	}
-
-	/*GameObject get_next_nearest(GameObject[] tab, GameObject current)
-	{
-		float tmp_dist;
-		GameObject next;
-		float next_dist = 2000;
-
-		next = null;
-		foreach (GameObject obj in tab) {
-			tmp_dist = get_distance (obj);
-			if (tmp_dist < next_dist && obj.GetInstanceID() != current.GetInstanceID()) {
-				next_dist = tmp_dist;
-				next = obj;
-			}
-		}
-		if (next == null) {
-			next = new GameObject ();
-			next.transform.position = Vector3.zero;
-		}
-		return (next);
-	}*/
+		
 
 	IEnumerator OnCollisionEnter(Collision col)
 	{
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
+			print ("collided with carrot");
 			aggressive = false;
 			col.collider.gameObject.tag = "eaten";
 			agent.ResetPath();	
@@ -197,17 +182,19 @@ public class ia : MonoBehaviour
 			Destroy (this.gameObject);
 			removefield (parent);
 		}
-		else if (col.collider.gameObject.CompareTag ("noedit") && aggressive) {
-			col.collider.gameObject.CompareTag ("noedit_destroy");
+		else if (aggressive && col.collider.gameObject.CompareTag ("noedit")) {
+			destroying = true;
+			col.collider.gameObject.tag = "noedit_destroy";
 			agent.ResetPath ();
 			print ("destroying fence!");
 			anim.Play ("idle2");
 			StartCoroutine(destroy_fence(col.collider.gameObject));
 			yield return new WaitForSeconds (3);
 			Destroy(col.collider.gameObject);
+			destroying = false;
 			aggressive = false;
+			retreat = false;
 		}
-
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag ("unattainable")) {
 			col.collider.gameObject.tag = "Carrot";
 		}
@@ -215,9 +202,10 @@ public class ia : MonoBehaviour
 
 	IEnumerator destroy_fence (GameObject	fence)
 	{
-		if (fence != null) {
-			for (int i = 0; i < 3; i++) {
-				yield return new WaitForSeconds (1);
+		
+		for (int i = 0; i < 3; i++) {
+			if (fence != null) {
+				yield return new WaitForSeconds (0.5f);
 				fence.GetComponent<MeshFilter> ().mesh = meshs [i];
 			}
 		}
@@ -248,5 +236,26 @@ public class ia : MonoBehaviour
 		}
 		Destroy (fieldnode);
 	}
+
+	/*GameObject get_next_nearest(GameObject[] tab, GameObject current)
+	{
+		float tmp_dist;
+		GameObject next;
+		float next_dist = 2000;
+
+		next = null;
+		foreach (GameObject obj in tab) {
+			tmp_dist = get_distance (obj);
+			if (tmp_dist < next_dist && obj.GetInstanceID() != current.GetInstanceID()) {
+				next_dist = tmp_dist;
+				next = obj;
+			}
+		}
+		if (next == null) {
+			next = new GameObject ();
+			next.transform.position = Vector3.zero;
+		}
+		return (next);
+	}*/
 }
 
