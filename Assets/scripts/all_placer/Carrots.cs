@@ -48,10 +48,12 @@ public class Carrots : MonoBehaviour {
 
 	void PlantCarrots() {
 		GameObject field = old.transform.FindChild ("field").gameObject;
-		set_mat (field);
-		field.tag = "Untagged";
-		field.GetComponent<AudioSource> ().Play ();
-		field.GetComponent<ia_carrots> ().enabled = true;
+		if (field) {
+			set_mat (field);
+			field.tag = "Untagged";
+			field.GetComponent<AudioSource> ().Play ();
+			field.GetComponent<ia_carrots> ().enabled = true;
+		}
 		old = null;
 	}
 		
