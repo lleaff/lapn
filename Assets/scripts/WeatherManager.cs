@@ -10,6 +10,8 @@ public class WeatherManager : MonoBehaviour {
 	public int WeatherUpdateSeconds = 3;
 
 	public Light dayint;
+	public Color LightColorDay;
+	public Color LightColorNight;
 	private float lightIntensity;
 
 	public bool Raining = false;
@@ -46,6 +48,9 @@ public class WeatherManager : MonoBehaviour {
 		Humidity = Humidity;
 		HeatGoal = Heat;
 		HumidityGoal = Humidity;
+
+		LightColorDay   = new Color (255f / 255f, 203f / 255f, 176f / 255f);
+		LightColorNight = new Color (176f / 255f, 203f / 255f, 255f / 255f);
 	}
 
 	void Start() {
@@ -77,14 +82,21 @@ public class WeatherManager : MonoBehaviour {
 
 	IEnumerator WeatherUpdate() {
 		while (true) {
-			lightIntensity = TimeManager.i.IsDay ?
-				1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
-				0.5F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
-			if (Raining) {
-				lightIntensity *= RainingLightIntensityFactor;
-			}
-			dayint.intensity = lightIntensity;
+			LightUpdate ();
 			yield return new WaitForSeconds (WeatherUpdateSeconds);
 		}
+	}
+
+	void LightUpdate() {
+		lightIntensity = TimeManager.i.IsDay ?
+			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
+			0.5F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
+		if (Raining) {
+			lightIntensity *= RainingLightIntensityFactor;
+		}
+		dayint.intensity = lightIntensity;
+
+		dayint.color = TimeManager.i.IsDay ?
+			LightColorDay : LightColorNight;
 	}
 }
