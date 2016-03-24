@@ -9,7 +9,6 @@ public class Dog_placer : MonoBehaviour
 	private GameObject cur;
 	private GameObject old = null;
 	private GameObject tmp;
-	private Vector3 tmppos;
 
 	private Vector3 DogSpawnPosition;
 
@@ -48,10 +47,8 @@ public class Dog_placer : MonoBehaviour
 		/*if left click + button selected + cursor on tile + not field tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 7 && raycast && hit.collider.name.Substring(0,9) != "FieldNode") {
 			globals.i.Money -= 800;
-			tmppos = tmp.transform.position;
 			Destroy (tmp.gameObject);
 			tmp = Instantiate (Dog);
-			/*tmp.transform.localPosition = tmppos;*/
 			tmp.transform.localPosition = DogSpawnPosition;
 			Bones_placer.InstantiateBoneIn (cur, Bone);
 			tmp.name = "Dog";

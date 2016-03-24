@@ -17,12 +17,12 @@ public class AgricultureManager : MonoBehaviour {
 	public float CarrotGrowthDistance;
 	public int BiodegradationDelaySeconds;
 	public Material DecayMaterial;
-	/*private GameObject grid = null;*/
+
+	private GameObject grid = null;
 
 
 	//------------------------------------------------------------
 
-	/*
 	List<GameObject> Carrots;
 
 	List<GameObject> GetCarrots() {
@@ -44,6 +44,21 @@ public class AgricultureManager : MonoBehaviour {
 		Carrots = GetCarrots ();
 	}
 
+	void CleanCarrots() {
+		UpdateCarrots ();
+		foreach (GameObject carrot in Carrots) {
+			if (carrot.transform.childCount == 0) {
+				Destroy (carrot);
+			}
+		}
+	}
+
+	IEnumerator CarrotCleaning() {
+		yield return new WaitForSeconds (7);
+		CleanCarrots ();
+	}
+
+	/*
 	public void GrowCarrots() {
 		UpdateCarrots ();
 		if (Carrots == null)
@@ -108,10 +123,9 @@ public class AgricultureManager : MonoBehaviour {
 	}
 
 	void Start() {
-		/*
-		StartCoroutine (CarrotGrowth ());
+		/*StartCoroutine (CarrotGrowth ());*/
+		StartCoroutine (CarrotCleaning ());
 
 		grid = GameObject.Find ("Grid");
-		*/
 	}
 }
