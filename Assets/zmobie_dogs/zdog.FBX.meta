@@ -3,7 +3,100 @@ guid: 270cec60a2822744abbf2f33f7ac8b8f
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
+    100000: Bip01
+    100002: Bip01 Head
+    100004: Bip01 L Calf
+    100006: Bip01 L Clavicle
+    100008: Bip01 L Finger0
+    100010: Bip01 L Foot
+    100012: Bip01 L Forearm
+    100014: Bip01 L Hand
+    100016: Bip01 L HorseLink
+    100018: Bip01 L Thigh
+    100020: Bip01 L Toe0
+    100022: Bip01 L UpperArm
+    100024: Bip01 Neck
+    100026: Bip01 Pelvis
+    100028: Bip01 Ponytail1
+    100030: Bip01 Ponytail2
+    100032: Bip01 R Calf
+    100034: Bip01 R Clavicle
+    100036: Bip01 R Finger0
+    100038: Bip01 R Foot
+    100040: Bip01 R Forearm
+    100042: Bip01 R Hand
+    100044: Bip01 R HorseLink
+    100046: Bip01 R Thigh
+    100048: Bip01 R Toe0
+    100050: Bip01 R UpperArm
+    100052: Bip01 Spine
+    100054: Bip01 Spine1
+    100056: //RootNode
+    100058: zombie_dog01
+    400000: Bip01
+    400002: Bip01 Head
+    400004: Bip01 L Calf
+    400006: Bip01 L Clavicle
+    400008: Bip01 L Finger0
+    400010: Bip01 L Foot
+    400012: Bip01 L Forearm
+    400014: Bip01 L Hand
+    400016: Bip01 L HorseLink
+    400018: Bip01 L Thigh
+    400020: Bip01 L Toe0
+    400022: Bip01 L UpperArm
+    400024: Bip01 Neck
+    400026: Bip01 Pelvis
+    400028: Bip01 Ponytail1
+    400030: Bip01 Ponytail2
+    400032: Bip01 R Calf
+    400034: Bip01 R Clavicle
+    400036: Bip01 R Finger0
+    400038: Bip01 R Foot
+    400040: Bip01 R Forearm
+    400042: Bip01 R Hand
+    400044: Bip01 R HorseLink
+    400046: Bip01 R Thigh
+    400048: Bip01 R Toe0
+    400050: Bip01 R UpperArm
+    400052: Bip01 Spine
+    400054: Bip01 Spine1
+    400056: //RootNode
+    400058: zombie_dog01
     4300000: zombie_dog01
+    7400000: stand_pose
+    7400002: idle_01
+    7400004: idle_02
+    7400006: idle_03
+    7400008: idle_04
+    7400010: idle_05
+    7400012: walk_injured
+    7400014: walk_silent
+    7400016: walk
+    7400018: walk_back
+    7400020: run
+    7400022: run_fast
+    7400024: jump
+    7400026: turn_right
+    7400028: turn_left
+    7400030: death_01
+    7400032: hit_01
+    7400034: hit_02
+    7400036: death_05
+    7400038: attack_01
+    7400040: attack_02
+    7400042: attack_03
+    7400044: attack_04
+    7400046: attack_05
+    7400048: bark
+    7400050: digging
+    7400052: eat
+    7400054: death_02
+    7400056: death_03
+    7400058: death_04
+    7400060: attack_03_zero_pos
+    11100000: //RootNode
+    13700000: zombie_dog01
   materials:
     importMaterials: 1
     materialName: 0
@@ -22,7 +115,7 @@ ModelImporter:
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
-    animationWrapMode: 0
+    animationWrapMode: 2
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
@@ -86,7 +179,7 @@ ModelImporter:
       takeName: 
       firstFrame: 170
       lastFrame: 300
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -310,7 +403,7 @@ ModelImporter:
       takeName: 
       firstFrame: 980
       lastFrame: 1000
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -338,7 +431,7 @@ ModelImporter:
       takeName: 
       firstFrame: 1015
       lastFrame: 1030
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -590,7 +683,7 @@ ModelImporter:
       takeName: 
       firstFrame: 1360
       lastFrame: 1420
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
