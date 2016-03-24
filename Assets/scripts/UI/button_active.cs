@@ -9,6 +9,7 @@ public class button_active : MonoBehaviour {
 	public GameObject fence;
 	public GameObject Sell;
 	public GameObject bull;
+	public GameObject bone;
 
 	void Update () {
 		if (globals.i.Money < 10)     /*Carrot: 10*/
@@ -26,7 +27,7 @@ public class button_active : MonoBehaviour {
 		else
 			trap.SetActive (true);
 		
-		if (globals.i.Money < 110)    /*dog: 110*/
+		if (globals.i.Money < 800)    /*dog: 800*/
 			dog.SetActive (false);
 		else
 			dog.SetActive (true);
@@ -40,5 +41,10 @@ public class button_active : MonoBehaviour {
 			bull.SetActive (false);
 		else
 			bull.SetActive (true);
+
+		if (globals.i.Money < 10 && GameObject.Find("Dog"))  /*Bone: 10*/
+			bone.SetActive (false);
+		else if (GameObject.Find("Dog"))
+			bone.SetActive (true);
 	}
 }
