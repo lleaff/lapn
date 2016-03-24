@@ -24,11 +24,14 @@ public class Recolter : MonoBehaviour
 			return;
 		}
 
-		GameObject carrots = CellUtils.FindObjectWithTag (cell, "Carrot");
+		GameObject carrots = CellUtils.FindObjectWithTag (cell, globals.carrotTag);
 		if (!carrots) {
 			carrots = CellUtils.FindObjectWithTag (cell, "unattainable");
 			if (!carrots) {
-				return;
+				carrots = CellUtils.FindObjectWithTag (cell, globals.decayedTag);
+				if (!carrots) {
+					return;
+				}
 			}
 		}
 
@@ -44,11 +47,11 @@ public class Recolter : MonoBehaviour
 		GameObject field = CellUtils.FindObjectWithNameBeginsWith (cell, globals.fieldName);
 		if (!field) {
 			return false;
-		}
-		if (field.CompareTag("eaten")) {
+		} else if (field.CompareTag ("eaten")) {
 			return false;
-		}
-		if (!carrots.GetComponent<ia_carrots>().RemoveCarrot ()) {
+		} else if (field.CompareTag (globals.decayedTag)) {
+			Destroy (field);
+		} else if (!carrots.GetComponent<ia_carrots>().RemoveCarrot ()) {
 			return false;
 		}
 		globals.i.add_carrots (1);
