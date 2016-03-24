@@ -100,14 +100,18 @@ public class ia : MonoBehaviour
 	{
 		aggressive = true;
 		anim.Play ("hop");
-		destination = get_nearest (unattainable);
-		agent.SetDestination (destination.transform.position);
+		if (unattainable.Length > 0) {
+			destination = get_nearest (unattainable);
+			agent.SetDestination (destination.transform.position);
+		}
 	}
 
 	void eat_nearest_carrot()
 	{
-		destination = get_nearest (carrots);
-		agent.SetDestination (destination.transform.position);
+		if (carrots.Length > 0) {
+			destination = get_nearest (carrots);
+			agent.SetDestination (destination.transform.position);
+		}
 		anim.Play ("hop");
 		retreat = false;
 	}
