@@ -39,6 +39,7 @@ public class Bones_placer : MonoBehaviour {
 
 		/*if left click + button selected + cursor on tile + not field tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 8 && raycast && hit.collider.name.Substring(0,9) != "FieldNode") {
+			// Place bone
 			globals.i.Money -= 10;
 			tmppos = tmp.transform.position;
 			Destroy (tmp.gameObject);
@@ -52,6 +53,7 @@ public class Bones_placer : MonoBehaviour {
 			tmp.GetComponent<ia_dog> ().enabled = true;*/
 			old = null;
 			globals.i.Button = 0;
+			BonesManager.i.Add (tmp);
 		}
 
 		/*if cursor on tile + button selected*/
@@ -75,4 +77,7 @@ public class Bones_placer : MonoBehaviour {
 			old = null;
 		}
 	}
+
+
+	public GameObject InstantiateBoneAt( 
 }
