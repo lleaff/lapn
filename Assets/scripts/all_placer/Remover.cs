@@ -33,7 +33,7 @@ public class Remover : MonoBehaviour {
 
 		/*if left click + button selected + cursor on tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 6 && raycast) {
-			if (hit.collider.name == "fence 0" || hit.collider.name == "fence 1" || hit.collider.name == "fence 2" || hit.collider.name == "fence 3" || hit.collider.name == "trap") {
+			if ((hit.collider.name == "fence 0" || hit.collider.name == "fence 1" || hit.collider.name == "fence 2" || hit.collider.name == "fence 3" || hit.collider.name == "trap") && !hit.collider.CompareTag("noedit_destroy")) {
 				Destroy (hit.collider.gameObject);
 				globals.i.Money -= 20;
 				globals.i.Button = 0;
