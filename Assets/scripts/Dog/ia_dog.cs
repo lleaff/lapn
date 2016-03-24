@@ -19,6 +19,7 @@ public class ia_dog : MonoBehaviour
 
 	public float ChasingSpeed = 5f;
 	public float ChasingAcceleration = 15f;
+	public float SpawnedSpeed = 3.5f;
 	public float IdlingSpeed = 0.8f;
 	public float IdlingAcceleration = 5f;
 
@@ -44,8 +45,8 @@ public class ia_dog : MonoBehaviour
 
 	//------------------------------------------------------------
 
-	public enum DState { Idle, Boning, Chasing };
-	public DState state = DState.Idle;
+	public enum DState { Idle, Spawned, Boning, Chasing };
+	public DState state = DState.Spawned;
 
 	//------------------------------------------------------------
 
@@ -69,6 +70,7 @@ public class ia_dog : MonoBehaviour
 		spottedRabbits = new List<GameObject>();
 
 		GotoNextBone ();
+		Spawned ();
 	}
 
 	int i = 0; /* DEBUG */
@@ -93,6 +95,9 @@ public class ia_dog : MonoBehaviour
 			break;
 		case DState.Chasing:
 			ChasingUpdate ();
+			break;
+		case DState.Spawned:
+			SpawnedUpdate ();
 			break;
 		}
 
@@ -165,6 +170,19 @@ public class ia_dog : MonoBehaviour
 			}
 		}
 		GotoNextBone ();
+	}
+
+	void Spawned() {
+		agent.speed = SpawnedSpeed;
+		if (Bones.Count >= 1) {
+			GoToBone (Bones [0]);
+		}
+	}
+	void SpawnedUpdate() {
+		if (agent.remainingDistance < BoneReachedDistance) {
+			VisitedBones.Add (TargetBone);
+			Idle ();
+		}
 	}
 
 	void Boning() {
