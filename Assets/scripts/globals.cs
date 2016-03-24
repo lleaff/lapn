@@ -16,13 +16,15 @@ public class globals : MonoBehaviour {
 	public const string fieldName = "field";
 
 	private int carrots = 10;
-	public int money = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
 	private bool canLoseLife = true;
 	private int[] family;
 	private int button_click;
 
+	public float RabbitSpeedRegular = 2f;
+
+	public int money = 0;
 	public int Money {
 		get {
 			return (money);
