@@ -8,7 +8,6 @@ public class score : MonoBehaviour {
 
 	public static bool Lost = false;
 	private GameObject score_board;
-	private List<int>hp	= new  List<int>();
 	private int carrots;
 	private int money;
 	private GameObject[] carrot;
@@ -17,7 +16,6 @@ public class score : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		hp = globals.i.List;
 		carrots = globals.i.Carrots;
 		money = globals.i.Money;
 		StartCoroutine (Slow_Update (1));
@@ -37,8 +35,8 @@ public class score : MonoBehaviour {
 	{
 		int i = 0;
 
-		foreach (int pv in hp) {
-			if (pv <= 0)
+		foreach (int hp in globals.i.Family) {
+			if (hp <= 0)
 				i++;
 		}
 		if (i == 4)
@@ -49,7 +47,6 @@ public class score : MonoBehaviour {
 	// Update is called once per frame
 	IEnumerator Slow_Update (int time) {
 		while (Lost == false) {
-			hp = globals.i.List;
 			carrots = globals.i.Carrots;
 			money = globals.i.Money;
 			yield return new WaitForSeconds (time);
