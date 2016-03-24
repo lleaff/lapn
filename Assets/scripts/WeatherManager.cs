@@ -16,6 +16,8 @@ public class WeatherManager : MonoBehaviour {
 
 	public bool Raining = false;
 	float RainingLightIntensityFactor = 1;
+	public float heatWarmColorChangeMin = 23f;
+	public float heatColdColorChangeMax = 10f;
 
 	private float heat = 20f;
 	public float Heat = 20f;
@@ -90,13 +92,35 @@ public class WeatherManager : MonoBehaviour {
 	void LightUpdate() {
 		lightIntensity = TimeManager.i.IsDay ?
 			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
-			0.5F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
+			0.3F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
 		if (Raining) {
 			lightIntensity *= RainingLightIntensityFactor;
 		}
 		dayint.intensity = lightIntensity;
 
-		dayint.color = TimeManager.i.IsDay ?
-			LightColorDay : LightColorNight;
+		Color color = TimeManager.i.IsDay ?	LightColorDay : LightColorNight;
+		color = ApplyHeatColoration (color);
+		dayint.color = color;
+	}
+
+	Color ApplyHeatColoration(Color color) {
+		if (Heat > heatWarmColorChangeMin) {
+			float heatAnomalyIntensity = ((Heat - heatWarmColorChangeMin) / HeatMax);
+			float colorRedScale = 1f + heatAnomalyIntensity;
+			float colorGreenScale = 1f + heatAnomalyIntensity * 0.7f;
+			float colorBlueScale = 1f - (heatAnomalyIntensity * 0.2f);
+			color.r *= colorRedScale;
+			color.g *= colorGreenScale;
+			color.b *= colorBlueScale;
+		} else if (Heat < heatColdColorChangeMax) {
+			float heatAnomalyIntensity = -((heatColdColorChangeMax - Heat) / HeatMin);
+			float colorRedScale = 1f - (heatAnomalyIntensity * 0.2f);
+			float colorGreenScale = 1f + heatAnomalyIntensity * 0.3f;
+			float colorBlueScale = 1f + heatAnomalyIntensity * 1.2f;
+			color.r *= colorRedScale;
+			color.g *= colorGreenScale;
+			color.b *= colorBlueScale;
+		}
+		return color;
 	}
 }
