@@ -41,7 +41,7 @@ public class generate_bunny : MonoBehaviour {
 	//------------------------------------------------------------
 
 	void Update () {
-		if (globals.i.List [0] > 0)  /*Father's bonus: if he is alive, bunny spawn 10s later*/
+		if (globals.i.Family[0] > 0)  /*Father's bonus: if he is alive, bunny spawn 10s later*/
 			spawn_delay = start_time + 10;
 		else
 			spawn_delay = 30;

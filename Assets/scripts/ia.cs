@@ -85,7 +85,7 @@ public class ia : MonoBehaviour
 			}
 		}
 		//Daughter's bonus: max_hidden_carrot += 1 if she is alive
-		if (globals.i.List [2] > 0)
+		if (globals.i.Family [2] > 0)
 			max_hidden_carrots = p_max_hidden_carrots + 1;
 		else
 			max_hidden_carrots = p_max_hidden_carrots;

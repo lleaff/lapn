@@ -14,7 +14,7 @@ public class ui_life : MonoBehaviour {
 
 	void eat()
 	{
-		if (globals.i.Carrots >= 5) {
+		if (globals.i.Carrots >= 5 && globals.i.Family[index] > 0) {
 			globals.i.remove_carrots (5);
 			globals.i.add_life (5, index);
 		}

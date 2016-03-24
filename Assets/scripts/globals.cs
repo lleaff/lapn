@@ -56,6 +56,12 @@ public class globals : MonoBehaviour {
 		}
 	}
 
+	public int[] Family{
+		get {
+			return (family);
+		}
+	}
+
 	public int get_life(int n)
 	{
 		return (family [n]);
