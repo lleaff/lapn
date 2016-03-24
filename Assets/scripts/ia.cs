@@ -9,6 +9,9 @@ public class ia : MonoBehaviour
 	bool retreat = true;
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
+	public bool Eating {
+		get { return eat; }
+	}
 	public GameObject gridnode;
 	//used for destroying fences
 	public bool aggressive = false;
@@ -22,7 +25,8 @@ public class ia : MonoBehaviour
 
 	private GameObject[] carrots;
 	private GameObject[] unattainable;
-	public int max_hidden_carrots;
+	public int p_max_hidden_carrots;
+	private int max_hidden_carrots;
 
 	void Start ()
 	{
@@ -80,6 +84,11 @@ public class ia : MonoBehaviour
 				}
 			}
 		}
+		//Daughter's bonus: max_hidden_carrot += 1 if she is alive
+		if (globals.i.Family [2] > 0)
+			max_hidden_carrots = p_max_hidden_carrots + 1;
+		else
+			max_hidden_carrots = p_max_hidden_carrots;
 	}
 
 	void focus_unattainable()

@@ -12,65 +12,87 @@ public class Carrots : MonoBehaviour {
 	public Material[] mat;
 	public GameObject field;
 
-	void Awake()
-	{
+
+	/**********
+	 * Bind the button with a listener
+	 * ********/
+	public void Awake() {
 		myButton = GetComponent<Button>();
 		myButton.onClick.AddListener (add);
 	}
 
-	void add()
-	{
+
+	/**********
+	 * Set current button
+	 * and check for the money
+	 * ********/
+	private void add() {
 		if (globals.i.Button != 1 && globals.i.Money >= 10)
 			globals.i.Button = 1;
-		else {
-			if (old) {
-				GameObject.Destroy (old.transform.FindChild ("field").gameObject);
-				old = null;
-			}
+		else
 			globals.i.Button = 0;
-		}
 	}
 
-	bool check_pos(Transform obj) {
-		foreach (Transform child in obj) {
-			if (child.name == "field")
-				return (false);
-		}
-		return (true);
-	}
-
-	void set_mat(GameObject obj) {
+	/**********
+	 * Set materials to end prev
+	 * ********/
+	private void set_mat(GameObject obj) {
 		foreach (Transform child in obj.transform) {
 			child.GetChild (0).gameObject.GetComponent<MeshRenderer> ().material = mat [0];
 			child.GetChild (1).gameObject.GetComponent<MeshRenderer> ().material = mat [1];
 		}
 	}
 
-	void PlantCarrots() {
+	/**********
+	 * Find the last field, play sound
+	 * and start the script
+	 * ********/
+	private void PlantCarrots() {
 		GameObject field = old.transform.FindChild ("field").gameObject;
-		set_mat (field);
-		field.tag = "Untagged";
-		field.GetComponent<AudioSource> ().Play ();
-		field.GetComponent<ia_carrots> ().enabled = true;
+		if (field) {
+			set_mat (field);
+			field.tag = "Untagged";
+			field.GetComponent<AudioSource> ().Play ();
+			field.GetComponent<ia_carrots> ().enabled = true;
+		}
 		old = null;
 	}
 		
-	void FixedUpdate() {
+	/**********
+	 * Check field tag for 
+	 * single placement
+	 * ********/
+	private bool check_tag(Transform obj) {
+		string[] tags = new string[5];
+		tags [0] = "Untagged";
+		tags [1] = "Carrot";
+		tags [2] = "eaten";
+		tags [3] = "unattainable";
+		tags [4] = "decayed";
+		for (int i = 0; i < 5; i++) {
+			if (obj.FindChild ("field").CompareTag (tags [i]))
+				return (false);
+		}
+		return (true);
+	}
+
+	public void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
+		bool raycast = Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid"));
 
-		/*You can place the carrots if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a field tile*/
-		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && hit.collider.name.Substring(0,9) == "FieldNode" && !hit.collider.gameObject.transform.FindChild ("field").CompareTag("Untagged")) {
+		/*if left click + button selected + cursor on tile + field tile + not tagged as placed*/
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 1 && raycast && hit.collider.name.Substring(0,9) == "FieldNode" && check_tag(hit.collider.transform)) {
 			globals.i.Money -= 10;
 			PlantCarrots ();
 			globals.i.Button = 0;
 		}
 
-		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid")) && globals.i.Button == 1) {
+		/*if cursor on tile + button selected*/
+		if (raycast && globals.i.Button == 1) {
 			cur = GameObject.Find (hit.collider.name);
-			if (check_pos (cur.transform) && hit.collider.name.Substring (0, 9) == "FieldNode") {
+			if (cur.transform.FindChild ("field") == null && hit.collider.name.Substring (0, 9) == "FieldNode") {
 				tmp = Instantiate (field);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.identity;

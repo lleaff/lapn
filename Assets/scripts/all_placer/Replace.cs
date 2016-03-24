@@ -9,65 +9,64 @@ public class Replace : MonoBehaviour {
 	private GameObject old = null;
 	private GameObject tmp;
 	private GameObject ttmp;
-	private string names;
-	private string[] words;
-	private int timenb;
-	private float lastUpdate = 16F;
+	private int time;
+	private int oldtime = -1;
 
-	public Text time;
 	public GameObject ground;
+	public int timer = 5;
 
-	void Awake()
-	{
+
+	public int Time {
+		get {
+			return (time - oldtime);
+		}
+	}
+
+	/**********
+	 * Bind the button with a listener
+	 * ********/
+	public void Awake() {
 		myButton = GetComponent<Button>();
 		myButton.onClick.AddListener (add);
 	}
 
-	void add()
-	{
-		if (globals.i.Button != 3)
+	/**********
+	 * Set current button
+	 * and check for the timer
+	 * ********/
+	public void add() {
+		if (globals.i.Button != 3 && (time - oldtime) >= timer)
 			globals.i.Button = 3;
-		else {
-			if (old) {
-				GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
-				old = null;
-			}
+		else 
 			globals.i.Button = 0;
-		}
 	}
 
-
-
-	public static int IntParseFast(string value)
-	{
-		int result = 0;
-		for (int i = 0; i < value.Length; i++)
-		{
-			char letter = value[i];
-			result = 10 * result + (letter - 48);
-		}
-		return result;
+	/**********
+	 * Update the time
+	 * with timemanager
+	 * ********/
+	public void Update() {
+		if (oldtime == -1)
+			oldtime = -timer;
+		time = TimeManager.i.Seconds;
+		if ((time - oldtime) >= timer)
+			time = timer + oldtime;
 	}
 
-	void FixedUpdate() {
-		/*Split the time*/
-		words = time.text.Split (' ');
-		timenb = IntParseFast(words[1]);
-
+	public void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
+		bool raycast = Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid"));
 
-		/*You can place the fieldtile if you leftclick + you have pressed the button + you are on a tile + time is at 0 */
-		if (Input.GetMouseButtonUp (0) && globals.i.Button == 3 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && old && timenb == 0) {
-			names = "FieldNode" + old.name.Substring (8);
-		/*	GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);*/
+		/*if left click + button selected + cursor on tile + old tile*/
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 3 && raycast && old) {
 			ttmp = Instantiate (ground);
 			ttmp.transform.parent = old.transform.parent;
 			ttmp.transform.localRotation = old.transform.localRotation;
 			ttmp.transform.localPosition = old.transform.localPosition;
 			ttmp.transform.localScale = old.transform.localScale;
-			ttmp.name = names;
+			ttmp.name = "FieldNode" + old.name.Substring (8);
 			ttmp.GetComponents<BoxCollider> ()[0].enabled = true;
 			int count = old.transform.childCount;
 			int off = 0;
@@ -79,13 +78,13 @@ public class Replace : MonoBehaviour {
 			}
 			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 			GameObject.Destroy (old);
-			time.text = "Ground: 5 s";
-			timenb = 5;
 			old = null;
 			globals.i.Button = 0;
+			oldtime = TimeManager.i.Seconds;
 		}
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 3 && timenb == 0) {
 
+		/*if cursor on tile + button selected*/
+		if (raycast && globals.i.Button == 3) {
 			cur = GameObject.Find (hit.collider.name);
 			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("fieldtile") == null && cur.transform.FindChild ("trap") == null) {
 				tmp = Instantiate (ground);
@@ -104,12 +103,5 @@ public class Replace : MonoBehaviour {
 			GameObject.Destroy (old.transform.FindChild ("fieldtile").gameObject);
 			old = null;
 		}
-		if (lastUpdate == 16F)
-			lastUpdate = Time.time;
-		if(Time.time - lastUpdate >= 1f && timenb != 0){
-			timenb -= 1;
-			lastUpdate = Time.time;
-		}
-		time.text = "Ground: " + timenb + " s";
 	}
 }
