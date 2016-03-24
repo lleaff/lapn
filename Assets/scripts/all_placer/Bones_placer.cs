@@ -80,5 +80,6 @@ public class Bones_placer : MonoBehaviour {
 
 
 	public GameObject InstantiateBoneAt(){
+		return null;
 	}
 }

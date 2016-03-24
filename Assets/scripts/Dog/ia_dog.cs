@@ -153,6 +153,7 @@ public class ia_dog : MonoBehaviour
 	//------------------------------------------------------------
 
 	void Idle() {
+		anim.Play ("idle_04");
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
 		state = DState.Idle;
@@ -167,7 +168,7 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void Boning() {
-		anim.Play ("walk");
+		anim.Play ("run");
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
 		state = DState.Boning;

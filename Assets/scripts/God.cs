@@ -45,7 +45,7 @@ public class God : MonoBehaviour {
 			return false;
 		dog.GetComponent<ia_dog> ().enabled = false;
 		dog.GetComponent<Collider> ().enabled = false;
-		dog.GetComponent<Animation> ().Play ("death");
+		dog.GetComponent<Animation> ().Play ("death_01");
 		dog.GetComponent<NavMeshAgent> ().ResetPath ();
 		StartCoroutine(WaitAndDestroyObj (dog, 1));
 		return true;
