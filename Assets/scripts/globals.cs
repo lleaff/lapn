@@ -16,7 +16,7 @@ public class globals : MonoBehaviour {
 	public const string fieldNodeName = "FieldNode";
 	public const string fieldName = "field";
 
-	private int carrots = 10;
+	private int carrots = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
 	private bool canLoseLife = true;
