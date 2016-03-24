@@ -2,34 +2,23 @@
 using System.Collections;
 
 public class Trap : MonoBehaviour {
-
-	private int time;
-	private int old;
+	
 	private int killed = 0;
 
-	public int cooldown = 10;
+	public float CooldownTimeSeconds = 10;
 	public int maxUses = 7;
+
 	public Material blood;
 	public Material clean;
 
-	void Awake () {
-		old = TimeManager.i.Seconds;
-	}
+	public bool OnCooldown = false;
 
-	void Update() {
-		time = TimeManager.i.Seconds;
-		if ((time - old) >= cooldown) {
-			time = cooldown + old;
-			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = clean;
+	void OnTriggerEnter(Collider other) {
+		if (!other.CompareTag (globals.rabbitTag) &&
+			!ia_dog.IsDogBody(other)) {
+			return; /* Kill only rabbits and dogs */
 		}
-	}
-
-	IEnumerator OnTriggerEnter(Collider other) {
-		if (!other.CompareTag (globals.rabbitTag) && !other.CompareTag(globals.dogTag)) {
-			return null; /* Kill only rabbits and dogs */
-		}
-		if ((time - old) >= cooldown) {
-			old = TimeManager.i.Seconds;
+		if (!OnCooldown) {
 			killed++;
 			gameObject.GetComponent<Animation> ().Play ("Up Down");
 			gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = blood;
@@ -38,7 +27,15 @@ public class Trap : MonoBehaviour {
 
 			if (killed == maxUses)
 				Destroy (gameObject);
+			BeginCooldown ();
 		}
-		return null;
+	}
+
+
+	IEnumerator BeginCooldown() {
+		OnCooldown = true;
+		yield return new WaitForSeconds (CooldownTimeSeconds);
+		gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = clean;
+		OnCooldown = false;
 	}
 }

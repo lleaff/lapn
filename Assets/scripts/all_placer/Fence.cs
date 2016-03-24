@@ -9,6 +9,7 @@ public class Fence : MonoBehaviour {
 	private GameObject old = null;
 	private GameObject tmp;
 	private int rota = 0;
+	private int delay = 15;
 
 	public Material mat;
 	public GameObject fence;
@@ -63,8 +64,8 @@ public class Fence : MonoBehaviour {
 		}
 		return (true);
 	}
-
-	void FixedUpdate() {
+		
+	public void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
@@ -81,8 +82,8 @@ public class Fence : MonoBehaviour {
 			globals.i.Button = 0;
 		}
 
-		/*if right click + button selected + cursor on tile*/
-		if (Input.GetMouseButtonUp (1) && globals.i.Button == 2 && raycast) {
+		/*if press r + button selected + cursor on tile*/
+		if (Input.GetKey(KeyCode.R) && delay == 0 && globals.i.Button == 2 && raycast) {
 			if (rota != 3)
 				rota += 1;
 			else
@@ -94,6 +95,7 @@ public class Fence : MonoBehaviour {
 						GameObject.Destroy (child.gameObject);
 				}
 			}
+			delay = 15;
 		}
 
 		/*if cursor on tile + button selected*/
@@ -119,5 +121,7 @@ public class Fence : MonoBehaviour {
 			GameObject.Destroy (old.transform.FindChild ("fence " + rota).gameObject);
 			old = null;
 		}
+		if (delay > 0)
+			delay--;
 	}
 }
