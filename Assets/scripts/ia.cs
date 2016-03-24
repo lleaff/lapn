@@ -28,12 +28,17 @@ public class ia : MonoBehaviour
 	public int p_max_hidden_carrots;
 	private int max_hidden_carrots;
 
-	void Start ()
+	void Awake ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
 		anim = GetComponent<Animation> ();
 		for (int i = 0; i < GameObject.Find ("Rabbit generator").transform.childCount; i++)
 			spawn_positions [i] = GameObject.Find ("Rabbit generator").transform.GetChild (i).gameObject;
+	}
+
+	void Start ()
+	{
+		agent.speed = globals.i.RabbitSpeedRegular;
 	}	
 
 	void Update ()
@@ -178,11 +183,11 @@ public class ia : MonoBehaviour
 			anim.Play ("idle1");
 			StartCoroutine(removeCarrots(col.collider.gameObject));
 			yield return new WaitForSeconds(6);
-			eat = false;
 			GameObject parent = col.collider.transform.parent.gameObject;
 			Destroy(col.collider.gameObject);
-			Destroy (this.gameObject);
 			removefield (parent);
+			Destroy (this.gameObject);
+			eat = false;
 		}
 		else if (aggressive && col.collider.gameObject.CompareTag ("noedit")) {
 			destroying = true;

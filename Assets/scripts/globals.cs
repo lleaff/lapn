@@ -11,18 +11,21 @@ public class globals : MonoBehaviour {
 	public const string rabbitTag = "Bunny";
 	public const string dogTag = "Dog";
 	public const string boneTag = "Bone";
+	public const string seedTag = "seedTag";
 	public const string decayedTag = "decayed";
 	public const string fieldNodeName = "FieldNode";
 	public const string fieldName = "field";
 
 	private int carrots = 10;
-	public int money = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
 	private bool canLoseLife = true;
 	private int[] family;
 	private int button_click;
 
+	public float RabbitSpeedRegular = 2f;
+
+	public int money = 0;
 	public int Money {
 		get {
 			return (money);

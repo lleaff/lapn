@@ -34,7 +34,9 @@ public class God : MonoBehaviour {
 		rabbit.GetComponent<Animation> ().Play ("death");
 		rabbit.GetComponent<NavMeshAgent> ().ResetPath ();
 		StartCoroutine(WaitAndDestroyObj (rabbit, 1));
-		StartCoroutine(WaitAndSpawnBlood (rabbit.transform.position, 1));
+		if (blood) {
+			StartCoroutine (WaitAndSpawnBlood (rabbit.transform.position, 1));
+		}
 		return true;
 	}
 

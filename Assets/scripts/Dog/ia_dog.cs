@@ -18,7 +18,7 @@ public class ia_dog : MonoBehaviour
 	public int RabbitSpotPersistenceTimeSeconds = 3;
 
 	public float ChasingSpeed = 5f;
-	public float ChasingAcceleration = 10f;
+	public float ChasingAcceleration = 15f;
 	public float IdlingSpeed = 0.8f;
 	public float IdlingAcceleration = 5f;
 
@@ -71,9 +71,14 @@ public class ia_dog : MonoBehaviour
 		GotoNextBone ();
 	}
 
+	int i = 0; //DEBUG
+
 	void Update ()
 	{
 		NavMeshPath path = new NavMeshPath();
+
+		if (state != DState.Boning)
+			print(string.Format("{0}) state: {1}", i++, state));
 
 		if (spottedRabbits.Count != 0) {
 			Chasing ();
@@ -180,18 +185,26 @@ public class ia_dog : MonoBehaviour
 	}
 	void ChasingUpdate() {
 		if (spottedRabbits.Count == 0) {
+			Debug.Log ("Chasing no more");
 			Idle ();
 		}
-		if (NoTargetRabbit()) {
+		Debug.Log (i.ToString() + "Target rabbit?" + (NoTargetRabbit () ? "No target" : "YES" ));
+		if (NoTargetRabbit ()) {
 			foreach (Rabbit rabbit in spottedRabbits) {
 				if (CanReach (rabbit)) {
-					ChaseRabbit (rabbit);
-					return;
+					TargetRabbit = rabbit;
+					break;
 				}
 			}
+		} else {
+			ChaseRabbit (TargetRabbit);
 		}
 	}
 	void ChasingLate() {
+	}
+
+	void StartChase() {
+
 	}
 
 
@@ -302,7 +315,7 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void CleanRabbits() {
-		spottedRabbits.RemoveAll (RabbitIsValidFood);
+		spottedRabbits.RemoveAll (r => !RabbitIsValidFood(r));
 	}
 
 	IEnumerator ForgetRabbit(Rabbit rabbit) {
