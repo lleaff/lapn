@@ -1,18 +1,35 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Recolter : MonoBehaviour
 {
 
 	public bool Selected = false;
+	private Button myButton;
 
 
 	void Awake ()
 	{
+		myButton = GetComponent<Button> ();
+		myButton.onClick.AddListener (click);
+	}
+
+	void click()
+	{
+		if (Selected) {
+			Selected = false;
+			globals.i.Button = 0;
+		} else {
+			globals.i.Button = 4;
+			Selected = true;
+		}
 	}
 
 	void Update ()
 	{
+		if (globals.i.Button != 4)
+			Selected = false;
 		if (!Selected) {
 			return;
 		}
