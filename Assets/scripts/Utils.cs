@@ -29,4 +29,8 @@ public static class Utils {
 			}
 		}
 	}
+
+	public static bool isDestroyed (GameObject obj) {
+		return (obj == null || obj.Equals (null));
+	}
 }

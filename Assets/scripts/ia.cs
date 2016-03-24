@@ -9,6 +9,9 @@ public class ia : MonoBehaviour
 	bool retreat = true;
 	GameObject[] spawn_positions = new GameObject[5];
 	bool eat = false;
+	public bool Eating {
+		get { return eat; }
+	}
 	public GameObject gridnode;
 	//used for destroying fences
 	public bool aggressive = false;

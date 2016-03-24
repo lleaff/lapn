@@ -71,21 +71,20 @@ public class ia_dog : MonoBehaviour
 		NavMeshPath path = new NavMeshPath();
 
 		if (spottedRabbits.Count != 0) {
-			state = DState.Chasing;
+			Chasing ();
 		}
 
 		switch (state) {
 		case DState.Boning:
-			Boning ();
+			BoningUpdate ();
 			break;
 		case DState.Idle:
-			Idle ();
+			IdleUpdate ();
 			break;
 		case DState.Chasing:
-			Chasing ();
+			ChasingUpdate ();
 			break;
 		}
-
 
 		/*
 		//stop anim if at destination
@@ -131,12 +130,24 @@ public class ia_dog : MonoBehaviour
 		}*/
 	}
 
+	void LateUpdate() {
+		CleanRabbits ();
+
+		switch (state) {
+		case DState.Chasing:
+			ChasingLate ();
+			break;
+		}
+	}
+
 	//------------------------------------------------------------
 
 	void Idle() {
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
-
+		state = DState.Idle;
+	}
+	void IdleUpdate() {
 		if (Bones.Count <= 1) {
 			if (IsOnBone ()) {
 				return;
@@ -148,7 +159,9 @@ public class ia_dog : MonoBehaviour
 	void Boning() {
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
-
+		state = DState.Boning;
+	}
+	void BoningUpdate() {
 		if (agent.remainingDistance < BoneReachedDistance) {
 			VisitedBones.Add (TargetBone);
 			GotoNextBone ();
@@ -158,22 +171,34 @@ public class ia_dog : MonoBehaviour
 	void Chasing() {
 		agent.speed = ChasingSpeed;
 		agent.acceleration = ChasingAcceleration;
-
-
+		state = DState.Chasing;
+	}
+	void ChasingUpdate() {
+		if (spottedRabbits.Count == 0) {
+			Idle ();
+		}
+		foreach (Rabbit rabbit in spottedRabbits) {
+			if (CanReach (rabbit)) {
+				agent.SetDestination(rabbit.transform.position);
+				return;
+			}
+		}
+	}
+	void ChasingLate() {
 	}
 
 	//------------------------------------------------------------
 
 	void GotoNextBone() {
 		if (Bones.Count == 0) {
-			state = DState.Idle;
+			Idle ();
 			return;
 		} else if (Bones.Count == 1 && IsOnBone ()) {
-			state = DState.Idle;
+			Idle ();
 			agent.ResetPath ();
 			return;
 		}
-		state = DState.Boning;
+		Boning ();
 		List<Bone> bones = GetSortedByDistance (Bones);
 		Bone bone = GetNextBone (bones);
 		TargetBone = bone;
@@ -209,20 +234,21 @@ public class ia_dog : MonoBehaviour
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag (globals.rabbitTag)) {
 			spottedRabbits.Add(other.gameObject);
+			Debug.Log("Spotted rabbit", other.gameObject);
 		}
 	}
 
 	void OnTriggerExit(Collider other) {
 		if (other.CompareTag (globals.rabbitTag)) {
-			StartCoroutine (UnspotRabbit(other.gameObject));
-			spottedRabbits.Add(other.gameObject);
+			StartCoroutine (ForgetRabbit(other.gameObject));
 		}
 	}
 
 	public void EatableRabbitEnter(Collider other) {
 		// Eat rabbit
+		Debug.Log("Can eat rabbit", other.gameObject);
+		God.i.KillRabbit (other.gameObject);
 	}
-
 
 	//------------------------------------------------------------
 
@@ -245,9 +271,19 @@ public class ia_dog : MonoBehaviour
 
 	//------------------------------------------------------------
 
+	bool RabbitIsValidFood(Rabbit rabbit) {
+		return (!Utils.isDestroyed (rabbit) && !rabbit.GetComponent<ia>().Eating);
+	}
 
-	IEnumerator UnspotRabbit(Rabbit rabbit) {
+	void CleanRabbits() {
+		spottedRabbits.RemoveAll (RabbitIsValidFood);
+	}
+
+	IEnumerator ForgetRabbit(Rabbit rabbit) {
 		yield return new WaitForSeconds (RabbitSpotPersistenceTimeSeconds);
+		UnspotRabbit (rabbit);
+	}
+	void UnspotRabbit(Rabbit rabbit) {
 		spottedRabbits.Remove (rabbit);
 	}
 
@@ -269,8 +305,11 @@ public class ia_dog : MonoBehaviour
 		return CanReachBone (TargetBone);
 	}
 	bool CanReachBone(Bone bone) {
+		return CanReach (bone);
+	}
+	bool CanReach(GameObject obj) {
 		NavMeshPath path = new NavMeshPath();
-		if (bone == null || !agent.CalculatePath (bone.transform.position, path))
+		if (obj == null || !agent.CalculatePath (obj.transform.position, path))
 			return false;
 		return path.status == NavMeshPathStatus.PathComplete;
 	}
