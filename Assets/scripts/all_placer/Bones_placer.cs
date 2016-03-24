@@ -44,7 +44,6 @@ public class Bones_placer : MonoBehaviour {
 			tmppos = tmp.transform.position;
 			Destroy (tmp.gameObject);
 			tmp = Instantiate (bones);
-/*			tmp.transform.localRotation = Quaternion.Euler (0, 90, 270);*/
 			tmp.transform.localPosition = tmppos;
 			tmp.name = "bones";
 /*			tmp.GetComponent<BoxCollider> ().enabled = true;
@@ -62,7 +61,6 @@ public class Bones_placer : MonoBehaviour {
 			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("bones") == null) {
 				tmp = Instantiate (bones);
 				tmp.transform.parent = cur.transform;
-/*				tmp.transform.localRotation = Quaternion.Euler (0, 90, 270);*/
 				tmp.transform.localPosition = Vector3.zero;
 				tmp.transform.localScale = new Vector3(10F,1F,10F);
 				tmp.name = "bones";
