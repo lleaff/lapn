@@ -8,7 +8,7 @@ public class Trap : MonoBehaviour {
 	private int killed = 0;
 
 	public int cooldown = 10;
-	public int maxUses = 5;
+	public int maxUses = 7;
 	public Material blood;
 	public Material clean;
 

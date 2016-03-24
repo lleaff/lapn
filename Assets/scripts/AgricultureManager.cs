@@ -17,7 +17,7 @@ public class AgricultureManager : MonoBehaviour {
 	public float CarrotGrowthDistance;
 	public int BiodegradationDelaySeconds;
 	public Material DecayMaterial;
-	private GameObject grid = null;
+	/*private GameObject grid = null;*/
 
 
 	//------------------------------------------------------------
@@ -110,8 +110,8 @@ public class AgricultureManager : MonoBehaviour {
 	void Start() {
 		/*
 		StartCoroutine (CarrotGrowth ());
-		*/
 
 		grid = GameObject.Find ("Grid");
+		*/
 	}
 }
