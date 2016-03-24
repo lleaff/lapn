@@ -11,6 +11,8 @@ public class UIManagerScript : MonoBehaviour {
 	public GameObject Board;
 
 	public void StartGame() {
+		Destroy (GameObject.Find ("GlobalValue"));
+		print ("start game");
 		SceneManager.LoadScene("mezon");
 	}
 
