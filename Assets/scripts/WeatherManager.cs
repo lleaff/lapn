@@ -135,7 +135,7 @@ public class WeatherManager : MonoBehaviour {
 		return color;
 	}
 
-	IEnumerator ApplyColorOverTime(Light light, Color color, float time, float timeStep = 0.5f) {
+	IEnumerator ApplyColorOverTime(Light light, Color color, float time, float timeStep = 0.3f) {
 		int steps = (int)(time / timeStep);
 		Color startColor = light.color;
 		for (int step = 1; step < steps; step++) {
