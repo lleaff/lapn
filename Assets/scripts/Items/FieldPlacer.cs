@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class FieldPlacer : MonoBehaviour {
-
+	/*
 	public GameObject ItemObj;
 
 	bool PlaceCondition (GameObject cell) {
@@ -28,5 +28,5 @@ public class FieldPlacer : MonoBehaviour {
 			outcomeValid: PlaceOutcome);
 		GameObject.Destroy (this);
 	}
-		
+	*/
 }

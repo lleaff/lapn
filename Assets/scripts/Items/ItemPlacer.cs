@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class ItemPlacer : MonoBehaviour {
-	
+	/*
 	// Config
 	//------------------------------------------------------------
 	public bool autoInstantiate = true;
@@ -129,4 +129,5 @@ public class ItemPlacer : MonoBehaviour {
 			ClearPreview ();
 		}
 	}
+	*/
 }
