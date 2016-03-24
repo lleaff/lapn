@@ -21,13 +21,15 @@ public class Recolter : MonoBehaviour
 			Selected = false;
 			globals.i.Button = 0;
 		} else {
-			Selected = true;
 			globals.i.Button = 4;
+			Selected = true;
 		}
 	}
 
 	void Update ()
 	{
+		if (globals.i.Button != 4)
+			Selected = false;
 		if (!Selected) {
 			return;
 		}
