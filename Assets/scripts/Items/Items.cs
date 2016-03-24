@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using System.Collections;
 
 
@@ -13,3 +14,4 @@ static public class Items  {
 		static public int Cost = 6;
 	}
 }
+*/

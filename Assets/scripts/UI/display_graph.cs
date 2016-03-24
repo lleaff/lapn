@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class show_ui_sell : MonoBehaviour {
+public class display_graph : MonoBehaviour {
 
 	private List<int>list_value = new List<int>();
 	public Texture line;
