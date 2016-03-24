@@ -2,8 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Dog_placer : MonoBehaviour
-{
+public class Bones_placer : MonoBehaviour {
 
 	private Button myButton;
 	private GameObject cur;
@@ -11,7 +10,7 @@ public class Dog_placer : MonoBehaviour
 	private GameObject tmp;
 	private Vector3 tmppos;
 
-	public GameObject Dog;
+	public GameObject bones;
 
 	/**********
 	 * Bind the button with a listener
@@ -26,8 +25,8 @@ public class Dog_placer : MonoBehaviour
 	 * and check for the money
 	 * ********/
 	public void add() {
-		if (globals.i.Button != 7 && globals.i.Money >= 800)
-			globals.i.Button = 7;
+		if (globals.i.Button != 8 && globals.i.Money >= 10)
+			globals.i.Button = 8;
 		else
 			globals.i.Button = 0;
 	}
@@ -39,39 +38,40 @@ public class Dog_placer : MonoBehaviour
 		bool raycast = Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid"));
 
 		/*if left click + button selected + cursor on tile + not field tile*/
-		if (Input.GetMouseButtonUp (0) && globals.i.Button == 7 && raycast && hit.collider.name.Substring(0,9) != "FieldNode") {
-			globals.i.Money -= 800;
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 8 && raycast && hit.collider.name.Substring(0,9) != "FieldNode") {
+			globals.i.Money -= 10;
 			tmppos = tmp.transform.position;
 			Destroy (tmp.gameObject);
-			tmp = Instantiate (Dog);
+			tmp = Instantiate (bones);
+/*			tmp.transform.localRotation = Quaternion.Euler (0, 90, 270);*/
 			tmp.transform.localPosition = tmppos;
-			tmp.name = "Dog";
-			tmp.GetComponent<BoxCollider> ().enabled = true;
+			tmp.name = "bones";
+/*			tmp.GetComponent<BoxCollider> ().enabled = true;
 			tmp.GetComponent<SphereCollider> ().enabled = true;
 			tmp.GetComponent<NavMeshAgent> ().enabled = true;
-			tmp.GetComponent<ia_dog> ().enabled = true;
+			tmp.GetComponent<ia_dog> ().enabled = true;*/
 			old = null;
 			globals.i.Button = 0;
 		}
 
 		/*if cursor on tile + button selected*/
-		if (raycast && globals.i.Button == 7) {
+		if (raycast && globals.i.Button == 8) {
 			cur = GameObject.Find (hit.collider.name);
-			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("Dog") == null) {
-				tmp = Instantiate (Dog);
+			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("bones") == null) {
+				tmp = Instantiate (bones);
 				tmp.transform.parent = cur.transform;
-				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);
+/*				tmp.transform.localRotation = Quaternion.Euler (0, 90, 270);*/
 				tmp.transform.localPosition = Vector3.zero;
-				tmp.transform.localScale = new Vector3(8F,0.8F,8F);
-				tmp.name = "Dog";
+				tmp.transform.localScale = new Vector3(10F,1F,10F);
+				tmp.name = "bones";
 				if (old != cur) {
 					if (old)
-						GameObject.Destroy (old.transform.FindChild ("Dog").gameObject);
+						GameObject.Destroy (old.transform.FindChild ("bones").gameObject);
 					old = cur;
 				}
 			}
 		} else if (old) {
-			GameObject.Destroy (old.transform.FindChild ("Dog").gameObject);
+			GameObject.Destroy (old.transform.FindChild ("bones").gameObject);
 			old = null;
 		}
 	}
