@@ -8,6 +8,7 @@ public class button_active : MonoBehaviour {
 	public GameObject trap;
 	public GameObject fence;
 	public GameObject Sell;
+	public GameObject bull;
 
 	void Update () {
 		if (globals.i.Money < 10)     /*Carrot: 10*/
@@ -34,5 +35,10 @@ public class button_active : MonoBehaviour {
 			Sell.SetActive (false);
 		else
 			Sell.SetActive (true);
+		
+		if (globals.i.Money < 15)	  /*bull: 15*/
+			bull.SetActive (false);
+		else
+			bull.SetActive (true);
 	}
 }
