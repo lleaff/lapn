@@ -22,13 +22,16 @@ public class ia_dog : MonoBehaviour
 	public float IdlingSpeed = 0.8f;
 	public float IdlingAcceleration = 5f;
 
+	public float DetectionRadius = 1.25f;
+
 	//------------------------------------------------------------
 
 	//needed for AtEndOfPath
 	public float pathEndThreshold = 0.1f;
 	private bool hasPath = false;
 
-	private List<GameObject> spottedRabbits;
+	private List<Rabbit> spottedRabbits;
+	private Rabbit TargetRabbit = null;
 
 	private Bone TargetBone = null;
 	private List<Bone> Bones {
@@ -54,6 +57,8 @@ public class ia_dog : MonoBehaviour
 
 	void Start ()
 	{
+		GetComponent<SphereCollider> ().radius = DetectionRadius;
+
 		agent = GetComponent<NavMeshAgent> ();
 		agent.autoBraking = false; /* Don't slow down when approaching destination */
 		agent.speed = IdlingSpeed;
@@ -177,15 +182,18 @@ public class ia_dog : MonoBehaviour
 		if (spottedRabbits.Count == 0) {
 			Idle ();
 		}
-		foreach (Rabbit rabbit in spottedRabbits) {
-			if (CanReach (rabbit)) {
-				agent.SetDestination(rabbit.transform.position);
-				return;
+		if (!(RabbitIsValidFood (TargetRabbit) && CanReach (TargetRabbit))) {
+			foreach (Rabbit rabbit in spottedRabbits) {
+				if (CanReach (rabbit)) {
+					ChaseRabbit (rabbit);
+					return;
+				}
 			}
 		}
 	}
 	void ChasingLate() {
 	}
+
 
 	//------------------------------------------------------------
 
@@ -200,9 +208,19 @@ public class ia_dog : MonoBehaviour
 		}
 		Boning ();
 		List<Bone> bones = GetSortedByDistance (Bones);
+		bones.RemoveAll (b => !CanReach(b));
+		if (bones.Count == 0) {
+			Idle ();
+			return;
+		}
 		Bone bone = GetNextBone (bones);
+		GoToBone (bone);
+	}
+
+	bool GoToBone(Bone bone) {
 		TargetBone = bone;
 		agent.SetDestination(bone.transform.position);
+		return true;
 	}
 	
 	Bone GetNextBone(List<Bone> bones) {
@@ -287,6 +305,12 @@ public class ia_dog : MonoBehaviour
 		spottedRabbits.Remove (rabbit);
 	}
 
+	bool ChaseRabbit(Rabbit rabbit) {
+		agent.SetDestination (rabbit.transform.position);
+		TargetRabbit = rabbit;
+		return true;
+	}
+		
 	//------------------------------------------------------------
 
 	bool IsOnBone() {

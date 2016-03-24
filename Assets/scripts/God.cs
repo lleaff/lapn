@@ -24,7 +24,7 @@ public class God : MonoBehaviour {
 	}
 
 	public bool KillRabbit(GameObject rabbit) {
-		if (rabbit != null)
+		if (rabbit == null)
 			return false;
 		rabbit.GetComponent<ia> ().enabled = false;
 		rabbit.GetComponent<Collider> ().enabled = false;
@@ -35,7 +35,7 @@ public class God : MonoBehaviour {
 	}
 
 	public bool KillDog(GameObject dog) {
-		if (dog != null)
+		if (dog == null)
 			return false;
 		dog.GetComponent<ia_dog> ().enabled = false;
 		dog.GetComponent<Collider> ().enabled = false;
@@ -47,6 +47,6 @@ public class God : MonoBehaviour {
 
 	public IEnumerator WaitAndDestroyObj (GameObject obj, int time = 1) {
 		yield return new WaitForSeconds (time);
-		MonoBehaviour.Destroy (obj);
+		Destroy (obj);
 	}
 }
