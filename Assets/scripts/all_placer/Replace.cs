@@ -15,6 +15,13 @@ public class Replace : MonoBehaviour {
 	public GameObject ground;
 	public int timer = 5;
 
+
+	public int Time {
+		get {
+			return (time - oldtime);
+		}
+	}
+
 	/**********
 	 * Bind the button with a listener
 	 * ********/
@@ -40,7 +47,7 @@ public class Replace : MonoBehaviour {
 	 * ********/
 	public void Update() {
 		if (oldtime == -1)
-			oldtime = TimeManager.i.Seconds;
+			oldtime = -timer;
 		time = TimeManager.i.Seconds;
 		if ((time - oldtime) >= timer)
 			time = timer + oldtime;
