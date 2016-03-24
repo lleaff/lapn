@@ -81,7 +81,7 @@ public class ia_carrots : MonoBehaviour {
 		if (childCount <= 0) {
 			return false;
 		}
-		GameObject carrot = transform.GetChild (0).gameObject;
+		GameObject carrot = transform.GetChild (Random.Range(0, childCount - 1)).gameObject;
 		if (!carrot || !CellUtils.IsCarrot(carrot)) {
 			return false;
 		}
