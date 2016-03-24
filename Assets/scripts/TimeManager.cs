@@ -5,6 +5,14 @@ public class TimeManager : MonoBehaviour {
 
 	public static TimeManager i = null; /* Time manager instance */
 
+
+	// Config
+	//------------------------------------------------------------
+
+	public int DaySeconds = 60;
+
+	//------------------------------------------------------------
+
 	private int seconds = 0;
 	public int Seconds {
 		get { return seconds; }
@@ -24,12 +32,11 @@ public class TimeManager : MonoBehaviour {
 		}
 	}
 
-
 	void Update () {
 		CalcSeconds ();
 
 		bool wasNight = !isDay;
-		isDay = (seconds / 60) % 24 < 12;
+		isDay = (seconds % DaySeconds) < (DaySeconds * 0.66);
 		if (isDay && wasNight) {
 			NewDay ();
 		}
