@@ -5,11 +5,47 @@ using System.Collections;
 public class pause : MonoBehaviour {
 
 	private Button myButton;
+
 	public int index;
 	public GameObject play;
 	public GameObject Pause;
 	public GameObject speed;
 	public GameObject normal;
+			
+	public void time_0() {   /*Pause*/
+		Time.timeScale = 0;
+		Pause.SetActive (false);
+		play.SetActive (true);
+		speed.SetActive (true);
+		normal.SetActive (false);
+	}
+
+	public void time_1() {   /*Play*/
+		Time.timeScale = 1;
+		Pause.SetActive (true);
+		play.SetActive (false);
+		speed.SetActive (true);
+		normal.SetActive (false);
+	}
+
+	public void time_2() {   /*Speed x2*/
+		Time.timeScale = 2;
+		speed.SetActive (false);
+		normal.SetActive (true);
+		Pause.SetActive (true);
+		play.SetActive (false);
+	}
+
+	public void time_3() {   /*Normal speed*/
+		Time.timeScale = 1;
+		speed.SetActive (true);
+		normal.SetActive (false);
+		Pause.SetActive (true);
+		play.SetActive (false);
+	}
+
+	// Monobehaviour
+	//------------------------------------------------------------
 
 	void Awake(){
 		myButton = GetComponent<Button> ();
@@ -21,33 +57,5 @@ public class pause : MonoBehaviour {
 			myButton.onClick.AddListener (time_2);
 		else if (index == 3)
 			myButton.onClick.AddListener (time_3);
-	}
-
-	public void time_0() {
-		Time.timeScale = 0;
-		Pause.SetActive (false);
-		play.SetActive (true);
-	}
-
-	public void time_1() {
-		Time.timeScale = 1;
-		Pause.SetActive (true);
-		play.SetActive (false);
-	}
-
-	public void time_2() {
-		speed.SetActive (false);
-		normal.SetActive (true);
-		Pause.SetActive (true);
-		play.SetActive (false);
-		Time.timeScale = 2;
-	}
-
-	public void time_3() {
-		speed.SetActive (true);
-		normal.SetActive (false);
-		Pause.SetActive (true);
-		play.SetActive (false);
-		Time.timeScale = 1;
 	}
 }

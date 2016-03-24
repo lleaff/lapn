@@ -6,23 +6,22 @@ public class cooldown : MonoBehaviour {
 
 	private string[] words = new string[3];
 	private int time;
+
 	public Text go_time;
 	public GameObject coolDown;
 
-	void Start () {
-		
-	}
-
-	private static int IntParseFast(string value)
+	private static int IntParseFast(string value) /*Convert string to int*/
 	{
 		int result = 0;
-		for (int i = 0; i < value.Length; i++)
-		{
+		for (int i = 0; i < value.Length; i++) {
 			char letter = value[i];
 			result = 10 * result + (letter - 48);
 		}
-		return result;
+		return (result);
 	}
+
+	// Monobehaviour
+	//------------------------------------------------------------
 
 	void Update () {
 		words = go_time.text.Split (' ');

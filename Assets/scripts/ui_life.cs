@@ -4,11 +4,24 @@ using System.Collections;
 
 public class ui_life : MonoBehaviour {
 
-	private Button myButton;
 	public int index;
-	
+	public int delay;
+
+	private Button myButton;
 	private Transform image;
 	private KeyCode[] keys;
+	private int time = 0;
+
+	void eat()
+	{
+		if (globals.i.Carrots >= 5) {
+			globals.i.remove_carrots (5);
+			globals.i.add_life (5, index);
+		}
+	}
+
+	// Monobehaviour
+	//------------------------------------------------------------
 
 	void Awake()
 	{
@@ -21,11 +34,13 @@ public class ui_life : MonoBehaviour {
 		keys [3] = KeyCode.Alpha4;
 	}
 
-	void Update () {
+	void FixedUpdate () {
 		image = this.transform.GetChild (1);
 		image.localScale = new Vector3 (globals.i.get_life (index) * 0.01F, 1, 1);
-		if (Input.GetKey(keys[index]))
-			eat();
+		if (Input.GetKey (keys [index]) && time == 0) {
+			eat ();
+			time = delay;
+		}
 		if (globals.i.get_life (index) >= 50) {
 			this.transform.GetChild (2).gameObject.SetActive (true);
 			this.transform.GetChild (3).gameObject.SetActive (false);
@@ -33,13 +48,7 @@ public class ui_life : MonoBehaviour {
 			this.transform.GetChild (2).gameObject.SetActive (false);
 			this.transform.GetChild (3).gameObject.SetActive (true);
 		}
-	}
-
-	void eat()
-	{
-		if (globals.i.Carrots >= 5) {
-			globals.i.remove_carrots (5);
-			globals.i.add_life (5, index);
-		}
+		if (time > 0)
+			time--;
 	}
 }
