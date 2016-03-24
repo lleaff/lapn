@@ -39,6 +39,7 @@ public class ia : MonoBehaviour
 	void Start ()
 	{
 		agent.speed = globals.i.RabbitSpeedRegular;
+		max_hidden_carrots = p_max_hidden_carrots;
 	}	
 
 	void Update ()
@@ -47,6 +48,15 @@ public class ia : MonoBehaviour
 		carrots = GameObject.FindGameObjectsWithTag ("Carrot");
 		unattainable = GameObject.FindGameObjectsWithTag ("unattainable");
 
+		/*************BONUS*************/
+		//Daughter's && son's bonus: max_hidden_carrot += 1 if she is alive
+		if (globals.i.Family [3] > 0 && globals.i.Family [2] > 0)
+			max_hidden_carrots = p_max_hidden_carrots + 3;
+		else if (globals.i.Family [2] > 0 || globals.i.Family [3] > 0)
+			max_hidden_carrots = p_max_hidden_carrots + 1;
+		else
+			max_hidden_carrots = p_max_hidden_carrots;
+		/*****************************/
 
 		//Check if unattainable carrots became attainable again (if other bunnys have destroyed fences around them without eating them)
 		foreach(GameObject crt in unattainable)
@@ -89,15 +99,12 @@ public class ia : MonoBehaviour
 				}
 			}
 		}
-		//Daughter's bonus: max_hidden_carrot += 1 if she is alive
-		if (globals.i.Family [2] > 0)
-			max_hidden_carrots = p_max_hidden_carrots + 1;
-		else
-			max_hidden_carrots = p_max_hidden_carrots;
 	}
 
 	void focus_unattainable()
 	{
+		print ("Bunny got aggressive");
+		print (max_hidden_carrots);
 		aggressive = true;
 		anim.Play ("hop");
 		if (unattainable.Length > 0) {

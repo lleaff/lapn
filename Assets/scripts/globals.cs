@@ -116,7 +116,7 @@ public class globals : MonoBehaviour {
 
 	private IEnumerator lose_life()
 	{
-		yield return new WaitForSeconds (6);
+		yield return new WaitForSeconds (4);
 		for (int i = 0; i < 4; i++)
 			remove_life (1, i);
 		canLoseLife = true;
