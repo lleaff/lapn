@@ -17,10 +17,13 @@ public class Recolter : MonoBehaviour
 
 	void click()
 	{
-		if (Selected)
+		if (Selected) {
 			Selected = false;
-		else
+			globals.i.Button = 0;
+		} else {
 			Selected = true;
+			globals.i.Button = 4;
+		}
 	}
 
 	void Update ()
