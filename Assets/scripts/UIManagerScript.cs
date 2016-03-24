@@ -7,6 +7,8 @@ public class UIManagerScript : MonoBehaviour {
 	public Animator startButton;
 	public Animator optionsButton;
 	public Animator dialog;
+	public Animator scoreboard;
+	public GameObject Board;
 
 	public void StartGame() {
 		SceneManager.LoadScene("mezon");
@@ -21,5 +23,10 @@ public class UIManagerScript : MonoBehaviour {
 		startButton.SetBool("isHidden", true);
 		optionsButton.SetBool("isHidden", false);
 		dialog.SetBool("isHidden", true);
+	}
+	public void CloseScoreBoard() {
+		startButton.SetBool("isHidden", true);
+		optionsButton.SetBool("isHidden", false);
+		scoreboard.SetBool("show_score", false);
 	}
 }
