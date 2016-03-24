@@ -77,10 +77,10 @@ public class ia_dog : MonoBehaviour
 
 	void Update ()
 	{
-		NavMeshPath path = new NavMeshPath();
+		/*NavMeshPath path = new NavMeshPath();*/
 
 		if (state != DState.Boning && state != DState.Idle) /* DEBUG */
-			print(string.Format("{0}) state: {1}", i++, state)); /* DEBUG */
+			Debug.Log(string.Format("{0}) state: {1}", i++, state)); /* DEBUG */
 
 		if (spottedRabbits.Count != 0) {
 			Chasing ();
