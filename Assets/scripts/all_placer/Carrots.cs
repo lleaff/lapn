@@ -51,7 +51,7 @@ public class Carrots : MonoBehaviour {
 		GameObject field = old.transform.FindChild ("field").gameObject;
 		if (field) {
 			set_mat (field);
-			field.tag = "Untagged";
+			field.tag = "seed";
 			field.GetComponent<AudioSource> ().Play ();
 			field.GetComponent<ia_carrots> ().enabled = true;
 		}
@@ -64,7 +64,7 @@ public class Carrots : MonoBehaviour {
 	 * ********/
 	private bool check_tag(Transform obj) {
 		string[] tags = new string[5];
-		tags [0] = "Untagged";
+		tags [0] = "seed";
 		tags [1] = "Carrot";
 		tags [2] = "eaten";
 		tags [3] = "unattainable";
