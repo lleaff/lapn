@@ -46,10 +46,6 @@ public class Bones_placer : MonoBehaviour {
 			tmp = Instantiate (bones);
 			tmp.transform.localPosition = tmppos;
 			tmp.name = "bones";
-/*			tmp.GetComponent<BoxCollider> ().enabled = true;
-			tmp.GetComponent<SphereCollider> ().enabled = true;
-			tmp.GetComponent<NavMeshAgent> ().enabled = true;
-			tmp.GetComponent<ia_dog> ().enabled = true;*/
 			old = null;
 			globals.i.Button = 0;
 			BonesManager.i.Add (tmp);
@@ -77,7 +73,20 @@ public class Bones_placer : MonoBehaviour {
 	}
 
 
-	public GameObject InstantiateBoneAt(){
-		return null;
+	public static GameObject InstantiateBoneIn(GameObject field, GameObject bonePrefab) {
+		GameObject tmp;
+		tmp = Instantiate (bonePrefab);
+		tmp.transform.parent = field.transform;
+		tmp.transform.localPosition = Vector3.zero;
+		tmp.transform.localScale = new Vector3(10F,1F,10F);
+		tmp.name = "bones";
+		Vector3 tmppos = tmp.transform.position;
+		Destroy (tmp.gameObject);
+		tmp = Instantiate (bonePrefab);
+		tmp.transform.localPosition = tmppos;
+		tmp.name = "bones";
+		globals.i.Button = 0;
+		BonesManager.i.Add (tmp);
+		return tmp;
 	}
 }

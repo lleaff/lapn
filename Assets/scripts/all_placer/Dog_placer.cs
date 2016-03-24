@@ -11,14 +11,21 @@ public class Dog_placer : MonoBehaviour
 	private GameObject tmp;
 	private Vector3 tmppos;
 
+	private Vector3 DogSpawnPosition;
+
 	public GameObject Dog;
+	public GameObject Bone;
 
 	/**********
 	 * Bind the button with a listener
 	 * ********/
-	public void Awake() {
+	void Awake() {
 		myButton = GetComponent<Button>();
 		myButton.onClick.AddListener (add);
+	}
+
+	void Start() {
+		DogSpawnPosition = GameObject.Find ("DogSpawnPoint").transform.position;
 	}
 
 	/**********
@@ -44,7 +51,9 @@ public class Dog_placer : MonoBehaviour
 			tmppos = tmp.transform.position;
 			Destroy (tmp.gameObject);
 			tmp = Instantiate (Dog);
-			tmp.transform.localPosition = tmppos;
+			/*tmp.transform.localPosition = tmppos;*/
+			tmp.transform.localPosition = DogSpawnPosition;
+			Bones_placer.InstantiateBoneIn (cur, Bone);
 			tmp.name = "Dog";
 			tmp.GetComponent<BoxCollider> ().enabled = true;
 			tmp.GetComponent<SphereCollider> ().enabled = true;

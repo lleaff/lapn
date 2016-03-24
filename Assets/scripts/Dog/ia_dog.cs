@@ -77,7 +77,7 @@ public class ia_dog : MonoBehaviour
 	{
 		NavMeshPath path = new NavMeshPath();
 
-		if (state != DState.Boning) /* DEBUG */
+		if (state != DState.Boning && state != DState.Idle) /* DEBUG */
 			print(string.Format("{0}) state: {1}", i++, state)); /* DEBUG */
 
 		if (spottedRabbits.Count != 0) {
@@ -240,6 +240,9 @@ public class ia_dog : MonoBehaviour
 	}
 	
 	Bone GetNextBone(List<Bone> bones) {
+		if (bones.Count == 1) {
+			return bones[0];
+		}
 		Bone bone = NearestNotVisitedBone (bones);
 		if (bone == null) {
 			Bone PreviousBone = VisitedBones.Last ();
