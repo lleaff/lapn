@@ -4,15 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class show_ui_sell : MonoBehaviour {
+public class display_graph : MonoBehaviour {
 
 	private List<int>list_value = new List<int>();
 	public Texture line;
-
-	void Update()
-	{
-		list_value = globals.i.List;
-	}
 
 	private int get_max()
 	{
@@ -30,5 +25,13 @@ public class show_ui_sell : MonoBehaviour {
 			GUI.DrawTexture (new Rect (25F + ((100F / list_value.Count) * i) , 575F - (600 - Screen.height) - price * (100 / get_max()), 100F / list_value.Count, price * (100 / get_max())), line);
 			i++;
 		}
+	}
+
+	// Monobehaviour
+	//------------------------------------------------------------
+
+	void Update()
+	{
+		list_value = globals.i.List;
 	}
 }

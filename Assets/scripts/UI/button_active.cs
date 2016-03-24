@@ -7,6 +7,7 @@ public class button_active : MonoBehaviour {
 	public GameObject dog;
 	public GameObject trap;
 	public GameObject fence;
+	public GameObject Sell;
 
 	void Update () {
 		if (globals.i.Money < 10)
@@ -23,5 +24,9 @@ public class button_active : MonoBehaviour {
 			dog.SetActive (true);
 		if (globals.i.Money < 110)
 			dog.SetActive (false);
+		if (globals.i.Carrots < 1)
+			Sell.SetActive (false);
+		else
+			Sell.SetActive (true);
 	}
 }
