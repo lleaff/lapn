@@ -12,40 +12,33 @@ public class Death_trap : MonoBehaviour {
 	public Material mat;
 	public GameObject trap;
 
-	void Awake()
-	{
+	/**********
+	 * Bind the button with a listener
+	 * ********/
+	public void Awake() {
 		myButton = GetComponent<Button>();
 		myButton.onClick.AddListener (add);
 	}
 
-	void add()
-	{
+	/**********
+	 * Set current button
+	 * and check for the money
+	 * ********/
+	public void add() {
 		if (globals.i.Button != 5 && globals.i.Money >= 100)
 			globals.i.Button = 5;
-		else {
-			if (old) {
-				GameObject.Destroy (old.transform.FindChild ("trap").gameObject);
-				old = null;
-			}
+		else
 			globals.i.Button = 0;
-		}
 	}
 
-	bool check_pos(Transform obj) {
-		foreach (Transform child in obj) {
-			if (child.name == "trap")
-				return (false);
-		}
-		return (true);
-	}
-
-	void FixedUpdate() {
+	public void FixedUpdate() {
 		/*Raycast for the cusor position*/
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		RaycastHit hit;
+		bool raycast = Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer ("PlacementGrid"));
 
-		/*You can place the trap if you leftclick + you have pressed the button + you are on a tile + you have the money + it's a trap tile*/
-		if (Input.GetMouseButtonUp (0) && globals.i.Button == 5 && Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid"))) {
+		/*if left click + button selected + cursor on tile + not field tile*/
+		if (Input.GetMouseButtonUp (0) && globals.i.Button == 5 && raycast && hit.collider.name.Substring(0,9) != "FieldNode") {
 			globals.i.Money -= 100;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material = mat;
@@ -53,10 +46,10 @@ public class Death_trap : MonoBehaviour {
 			globals.i.Button = 0;
 		}
 
-		/*Moving object*/
-		if (Physics.Raycast (ray, out hit, 100, 1 << LayerMask.NameToLayer("PlacementGrid")) && globals.i.Button == 5) {
+		/*if cursor on tile + button selected*/
+		if (raycast && globals.i.Button == 5) {
 			cur = GameObject.Find (hit.collider.name);
-			if (hit.collider.name.Substring(0,9) != "FieldNode" && check_pos(cur.transform)) {
+			if (hit.collider.name.Substring(0,9) != "FieldNode" && cur.transform.FindChild ("trap") == null) {
 				tmp = Instantiate (trap);
 				tmp.transform.parent = cur.transform;
 				tmp.transform.localRotation = Quaternion.Euler (270, 0, 0);
