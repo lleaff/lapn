@@ -167,6 +167,7 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void Boning() {
+		anim.Play ("walk");
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
 		state = DState.Boning;
@@ -286,9 +287,13 @@ public class ia_dog : MonoBehaviour
 	}
 
 	bool EatRabbit(Rabbit rabbit) {
-		anim.Play ("attack_05");	
-		God.i.KillRabbit (rabbit, true);
+		StartCoroutine (_EatRabbit (rabbit));
 		return true;
+	}
+	IEnumerator _EatRabbit(Rabbit rabbit) {
+		anim.Play ("attack_05");
+		yield return new WaitForSeconds (1.11f);
+		God.i.KillRabbit (rabbit, true);
 	}
 
 	//------------------------------------------------------------
