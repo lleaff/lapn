@@ -179,6 +179,7 @@ public class ia_dog : MonoBehaviour
 	}
 
 	void Chasing() {
+		anim.Play ("run_fast");
 		agent.speed = ChasingSpeed;
 		agent.acceleration = ChasingAcceleration;
 		state = DState.Chasing;
@@ -285,6 +286,7 @@ public class ia_dog : MonoBehaviour
 	}
 
 	bool EatRabbit(Rabbit rabbit) {
+		anim.Play ("attack_05");	
 		God.i.KillRabbit (rabbit, true);
 		return true;
 	}
