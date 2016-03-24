@@ -401,4 +401,15 @@ public class ia_dog : MonoBehaviour
 		}
 		return (nearest);
 	}
+
+
+
+
+	public static bool IsDogBody(Collider col) {
+		if (!col.CompareTag (globals.dogTag))
+			return false;
+		if (col.isTrigger)
+			return false;
+		return true;
+	}
 }
