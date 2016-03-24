@@ -53,13 +53,13 @@ public class ia_dog : MonoBehaviour
 	{
 		distComparer = new Utils.DistanceComparer (gameObject);
 		VisitedBones = new List<GameObject> ();
+		agent = GetComponent<NavMeshAgent> ();
 	}
 
 	void Start ()
 	{
 		GetComponent<SphereCollider> ().radius = DetectionRadius;
 
-		agent = GetComponent<NavMeshAgent> ();
 		agent.autoBraking = false; /* Don't slow down when approaching destination */
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;

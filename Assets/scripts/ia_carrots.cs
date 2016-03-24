@@ -99,5 +99,16 @@ public class ia_carrots : MonoBehaviour {
 		}
 	}
 
+	public void Eaten()
+	{
+		gameObject.tag = "eaten";
+		StartCoroutine (check_eaten());
+	}
 
+	IEnumerator check_eaten()
+	{
+		yield return new WaitForSeconds (5);
+		if (gameObject.CompareTag("eaten"))
+			gameObject.tag = "Carrot";
+	}
 }

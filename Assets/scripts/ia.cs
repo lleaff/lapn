@@ -184,13 +184,13 @@ public class ia : MonoBehaviour
 		if (col.collider.gameObject.name == "field" && col.collider.gameObject.CompareTag("Carrot"))
 		{
 			aggressive = false;
-			col.collider.gameObject.tag = "eaten";
+			col.collider.gameObject.GetComponent <ia_carrots> ().Eaten ();
 			agent.ResetPath();	
 			eat = true;
 			anim.Play ("idle1");
 			StartCoroutine(removeCarrots(col.collider.gameObject));
-			yield return new WaitForSeconds(6);
 			GameObject parent = col.collider.transform.parent.gameObject;
+			yield return new WaitForSeconds(6);
 			Destroy(col.collider.gameObject);
 			removefield (parent);
 			Destroy (this.gameObject);
