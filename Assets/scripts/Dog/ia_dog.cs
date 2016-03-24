@@ -132,6 +132,7 @@ public class ia_dog : MonoBehaviour
 
 	void LateUpdate() {
 		CleanRabbits ();
+
 		switch (state) {
 		case DState.Chasing:
 			ChasingLate ();
@@ -176,13 +177,14 @@ public class ia_dog : MonoBehaviour
 		if (spottedRabbits.Count == 0) {
 			Idle ();
 		}
-	}
-	void ChasingLate() {
 		foreach (Rabbit rabbit in spottedRabbits) {
 			if (CanReach (rabbit)) {
 				agent.SetDestination(rabbit.transform.position);
+				return;
 			}
 		}
+	}
+	void ChasingLate() {
 	}
 
 	//------------------------------------------------------------
@@ -238,16 +240,15 @@ public class ia_dog : MonoBehaviour
 
 	void OnTriggerExit(Collider other) {
 		if (other.CompareTag (globals.rabbitTag)) {
-			StartCoroutine (UnspotRabbit(other.gameObject));
-			spottedRabbits.Add(other.gameObject);
+			StartCoroutine (ForgetRabbit(other.gameObject));
 		}
 	}
 
 	public void EatableRabbitEnter(Collider other) {
 		// Eat rabbit
 		Debug.Log("Can eat rabbit", other.gameObject);
+		God.i.KillRabbit (other.gameObject);
 	}
-
 
 	//------------------------------------------------------------
 
@@ -270,12 +271,19 @@ public class ia_dog : MonoBehaviour
 
 	//------------------------------------------------------------
 
-	void CleanRabbits() {
-		spottedRabbits.RemoveAll (Utils.isDestroyed);
+	bool RabbitIsValidFood(Rabbit rabbit) {
+		return (!Utils.isDestroyed (rabbit) && !rabbit.GetComponent<ia>().Eating);
 	}
 
-	IEnumerator UnspotRabbit(Rabbit rabbit) {
+	void CleanRabbits() {
+		spottedRabbits.RemoveAll (RabbitIsValidFood);
+	}
+
+	IEnumerator ForgetRabbit(Rabbit rabbit) {
 		yield return new WaitForSeconds (RabbitSpotPersistenceTimeSeconds);
+		UnspotRabbit (rabbit);
+	}
+	void UnspotRabbit(Rabbit rabbit) {
 		spottedRabbits.Remove (rabbit);
 	}
 

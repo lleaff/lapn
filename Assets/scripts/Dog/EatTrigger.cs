@@ -11,7 +11,10 @@ public class EatTrigger : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == globals.rabbitTag) {
-			DogIA.EatableRabbitEnter (other);
+			ia rabbit = other.GetComponent<ia>();
+			if (!rabbit.Eating) {
+				DogIA.EatableRabbitEnter (other);
+			}
 		}
 	}
 }
