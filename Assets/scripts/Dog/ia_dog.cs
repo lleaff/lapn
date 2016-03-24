@@ -22,7 +22,7 @@ public class ia_dog : MonoBehaviour
 	public float IdlingSpeed = 0.8f;
 	public float IdlingAcceleration = 5f;
 
-	public float DetectionRadius = 1.25f;
+	public float DetectionRadius = 3.15f;
 
 	//------------------------------------------------------------
 
