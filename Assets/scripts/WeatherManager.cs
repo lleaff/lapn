@@ -8,10 +8,12 @@ public class WeatherManager : MonoBehaviour {
 	int days = 0;
 
 	public int WeatherUpdateSeconds = 3;
+	public float LightTransitionTime = 2f;
 
 	public Light dayint;
 	public Color LightColorDay;
 	public Color LightColorNight;
+	private Color LightColor;
 	private float lightIntensity;
 
 	public bool Raining = false;
@@ -53,9 +55,12 @@ public class WeatherManager : MonoBehaviour {
 
 		LightColorDay   = new Color (255f / 255f, 203f / 255f, 176f / 255f);
 		LightColorNight = new Color (176f / 255f, 203f / 255f, 255f / 255f);
+		LightColor = LightColorDay;
 	}
 
 	void Start() {
+		LightTransitionTime = Mathf.Min(LightTransitionTime, TimeManager.i.DaySeconds / 3);
+
 		StartCoroutine (WeatherUpdate());
 	}
 
@@ -90,9 +95,11 @@ public class WeatherManager : MonoBehaviour {
 	}
 
 	void LightUpdate() {
+		Color startColor = LightColor;
+
 		lightIntensity = TimeManager.i.IsDay ?
 			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
-			0.3F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
+			0.8F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
 		if (Raining) {
 			lightIntensity *= RainingLightIntensityFactor;
 		}
@@ -100,7 +107,11 @@ public class WeatherManager : MonoBehaviour {
 
 		Color color = TimeManager.i.IsDay ?	LightColorDay : LightColorNight;
 		color = ApplyHeatColoration (color);
-		dayint.color = color;
+
+		if (color != startColor) {
+			LightColor = color;
+			StartCoroutine (ApplyColorOverTime (dayint, color, LightTransitionTime));
+		}
 	}
 
 	Color ApplyHeatColoration(Color color) {
@@ -122,5 +133,16 @@ public class WeatherManager : MonoBehaviour {
 			color.b *= colorBlueScale;
 		}
 		return color;
+	}
+
+	IEnumerator ApplyColorOverTime(Light light, Color color, float time, float timeStep = 0.5f) {
+		int steps = (int)(time / timeStep);
+		Color startColor = light.color;
+		for (int step = 1; step < steps; step++) {
+			float scale = (float)step / (float)steps;
+			light.color = Color.Lerp (startColor, color, scale);
+			yield return new WaitForSeconds (timeStep);
+		}
+		light.color = color;
 	}
 }
