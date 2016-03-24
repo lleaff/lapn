@@ -55,6 +55,7 @@ public class score : MonoBehaviour {
 			yield return new WaitForSeconds (time);
 			if ((money < 10 && carrots <= 0 && !carrots_planted ()) || !family_alive ()) {
 				Lost = true;
+				SceneManager.UnloadScene ("mezon");
 				SceneManager.LoadScene("Menu");
 			}
 		}
