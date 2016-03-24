@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class pause : MonoBehaviour {
+public class time_speed : MonoBehaviour {
 
 	private Button myButton;
 
