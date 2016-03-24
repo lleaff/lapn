@@ -182,7 +182,7 @@ public class ia_dog : MonoBehaviour
 		if (spottedRabbits.Count == 0) {
 			Idle ();
 		}
-		if (!(RabbitIsValidFood (TargetRabbit) && CanReach (TargetRabbit))) {
+		if (NoTargetRabbit()) {
 			foreach (Rabbit rabbit in spottedRabbits) {
 				if (CanReach (rabbit)) {
 					ChaseRabbit (rabbit);
@@ -252,6 +252,9 @@ public class ia_dog : MonoBehaviour
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag (globals.rabbitTag)) {
 			spottedRabbits.Add(other.gameObject);
+			if (spottedRabbits.Count == 1) {
+				Chasing ();
+			}
 			Debug.Log("Spotted rabbit", other.gameObject);
 		}
 	}
@@ -265,7 +268,12 @@ public class ia_dog : MonoBehaviour
 	public void EatableRabbitEnter(Collider other) {
 		// Eat rabbit
 		Debug.Log("Can eat rabbit", other.gameObject);
-		God.i.KillRabbit (other.gameObject);
+		EatRabbit (other.gameObject);
+	}
+
+	bool EatRabbit(Rabbit rabbit) {
+		God.i.KillRabbit (rabbit, true);
+		return true;
 	}
 
 	//------------------------------------------------------------
@@ -309,6 +317,10 @@ public class ia_dog : MonoBehaviour
 		agent.SetDestination (rabbit.transform.position);
 		TargetRabbit = rabbit;
 		return true;
+	}
+
+	bool NoTargetRabbit() {
+		return !(RabbitIsValidFood (TargetRabbit) && CanReach (TargetRabbit));
 	}
 		
 	//------------------------------------------------------------
