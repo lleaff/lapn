@@ -33,11 +33,27 @@ public class Remover : MonoBehaviour {
 
 		/*if left click + button selected + cursor on tile*/
 		if (Input.GetMouseButtonUp (0) && globals.i.Button == 6 && raycast) {
-			if ((hit.collider.name == "fence 0" || hit.collider.name == "fence 1" || hit.collider.name == "fence 2" || hit.collider.name == "fence 3" || hit.collider.name == "trap") && !hit.collider.CompareTag("noedit_destroy")) {
+			if (IsRemovableObject(hit.collider.gameObject) && !hit.collider.CompareTag("noedit_destroy")) {
 				Destroy (hit.collider.gameObject);
 				globals.i.Money -= 20;
 				globals.i.Button = 0;
 			}
 		}
+	}
+
+	bool IsRemovableObject(GameObject obj) {
+		Debug.Log (obj);
+		if (obj.name == "fence 0" ||
+		    obj.name == "fence 1" ||
+		    obj.name == "fence 2" ||
+		    obj.name == "fence 3" ||
+		    obj.name == "trap" ||
+			obj.CompareTag("Bone")
+		) {
+			Debug.Log ("TRUE");
+			return true;
+		}
+		Debug.Log ("FALSE");
+		return false;
 	}
 }

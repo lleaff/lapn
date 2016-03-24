@@ -44,13 +44,20 @@ public class AgricultureManager : MonoBehaviour {
 		Carrots = GetCarrots ();
 	}
 
+	bool DestroyCarrotPredicate(GameObject carrot) {
+		if (carrot.transform.childCount == 0) {
+			toDestroy.Add (carrot);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	List<GameObject> toDestroy;
 	void CleanCarrots() {
 		UpdateCarrots ();
-		foreach (GameObject carrot in Carrots) {
-			if (carrot.transform.childCount == 0) {
-				Destroy (carrot);
-			}
-		}
+		toDestroy = new List<GameObject>();
+		Carrots.RemoveAll (DestroyCarrotPredicate);
 	}
 
 	IEnumerator CarrotCleaning() {
