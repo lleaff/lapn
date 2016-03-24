@@ -16,7 +16,7 @@ public class globals : MonoBehaviour {
 	public const string fieldNodeName = "FieldNode";
 	public const string fieldName = "field";
 
-	private int carrots = 10;
+	private int carrots = 0;
 	private List<int>list_value	= new  List<int>();
 	private bool canAdd = true;
 	private bool canLoseLife = true;
@@ -116,7 +116,7 @@ public class globals : MonoBehaviour {
 
 	private IEnumerator lose_life()
 	{
-		yield return new WaitForSeconds (6);
+		yield return new WaitForSeconds (4);
 		for (int i = 0; i < 4; i++)
 			remove_life (1, i);
 		canLoseLife = true;
