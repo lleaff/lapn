@@ -106,9 +106,11 @@ public class globals : MonoBehaviour {
 
 	private IEnumerator add_value()
 	{
-		yield return new WaitForSeconds (120);
-		if (list_value[list_value.Count - 1] - 10 > 0)
+		yield return new WaitForSeconds (1);//120
+		if (globals.i.Family[1] > 0 && list_value[list_value.Count - 1] - 10 > 0)
 			list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+		else if (list_value[list_value.Count - 1] - 15 > 0)
+			list_value.Add (Random.Range (list_value[list_value.Count - 1] - 15, list_value[list_value.Count - 1] + 10));
 		else
 			list_value.Add (Random.Range (5, 20));
 		canAdd = true;
@@ -137,7 +139,7 @@ public class globals : MonoBehaviour {
 		list_value.Add (Random.Range (10, 60));
 		for (int j = 0; j < 20; j++) {
 			if (list_value[list_value.Count - 1] - 10 > 0)
-				list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 10));
+				list_value.Add (Random.Range (list_value[list_value.Count - 1] - 10, list_value[list_value.Count - 1] + 5));
 			else
 				list_value.Add (Random.Range (5, 20));	
 		}
