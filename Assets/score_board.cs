@@ -19,9 +19,9 @@ public class score_board : MonoBehaviour
 			board_anim = gameObject.GetComponent<Animator> ();
 			Text[] texts = gameObject.GetComponentsInChildren <Text> ();
 			texts [1].text = "You survived for " + time_score + "!";
-			startButton.SetBool("isHidden", false);
 			optionsButton.SetBool("isHidden", true);
 			board_anim.SetBool ("show_score", true);
+			startButton.SetBool("isHidden", false);
 		}
 	}
 	
