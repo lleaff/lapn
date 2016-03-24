@@ -1,14 +1,26 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Recolter : MonoBehaviour
 {
 
 	public bool Selected = false;
+	private Button myButton;
 
 
 	void Awake ()
 	{
+		myButton = GetComponent<Button> ();
+		myButton.onClick.AddListener (click);
+	}
+
+	void click()
+	{
+		if (Selected)
+			Selected = false;
+		else
+			Selected = true;
 	}
 
 	void Update ()
