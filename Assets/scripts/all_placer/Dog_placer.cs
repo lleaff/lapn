@@ -47,11 +47,10 @@ public class Dog_placer : MonoBehaviour
 			tmp = Instantiate (Dog);
 			tmp.transform.localPosition = tmppos;
 			tmp.name = "Dog";
-			tmp.GetComponent<ia_dog> ().enabled = true;
 			tmp.GetComponent<BoxCollider> ().enabled = true;
 			tmp.GetComponent<SphereCollider> ().enabled = true;
 			tmp.GetComponent<NavMeshAgent> ().enabled = true;
-
+			tmp.GetComponent<ia_dog> ().enabled = true;
 			old = null;
 			globals.i.Button = 0;
 		}
