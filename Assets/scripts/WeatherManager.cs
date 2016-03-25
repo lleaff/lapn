@@ -129,6 +129,7 @@ public class WeatherManager : MonoBehaviour {
 		if (wasDay && !isDay) {
 			StartCoroutine (SwitchNightLights (NightLights));
 		}
+		wasDay = isDay;
 	}
 
 	IEnumerator SwitchNightLights(GameObject obj) {
