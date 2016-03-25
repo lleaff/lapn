@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour {
 	// Config
 	//------------------------------------------------------------
 
-	public int DaySeconds = 60;
+	public int DaySeconds = 90; /* real seconds to 24 h in game */
 
 	//------------------------------------------------------------
 
@@ -23,6 +23,8 @@ public class TimeManager : MonoBehaviour {
 	}
 	private float m_time = 0;
 
+	public float DayDuration;
+	public float NightDuration;
 
 	void Awake () {
 		if (i == null) {
@@ -30,13 +32,16 @@ public class TimeManager : MonoBehaviour {
 		} else if (i != this) {
 			Destroy(gameObject);
 		}
+
+		DayDuration = DaySeconds * 0.66f;
+		NightDuration = DaySeconds - DayDuration;
 	}
 
 	void Update () {
 		CalcSeconds ();
 
 		bool wasNight = !isDay;
-		isDay = (seconds % DaySeconds) < (DaySeconds * 0.66);
+		isDay = (seconds % DaySeconds) < DayDuration;
 		if (isDay && wasNight) {
 			NewDay ();
 		}
