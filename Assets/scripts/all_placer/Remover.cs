@@ -47,13 +47,10 @@ public class Remover : MonoBehaviour {
 		    obj.name == "fence 1" ||
 		    obj.name == "fence 2" ||
 		    obj.name == "fence 3" ||
-		    obj.name == "trap" ||
-			obj.CompareTag("Bone")
+		    obj.name == "trap"
 		) {
-			Debug.Log ("TRUE");
 			return true;
 		}
-		Debug.Log ("FALSE");
 		return false;
 	}
 }
