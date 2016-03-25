@@ -107,7 +107,7 @@ public class ia_carrots : MonoBehaviour {
 
 	IEnumerator check_eaten()
 	{
-		yield return new WaitForSeconds (5);
+		yield return new WaitForSeconds (6);
 		if (gameObject.CompareTag("eaten"))
 			gameObject.tag = "Carrot";
 	}

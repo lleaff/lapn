@@ -32,7 +32,7 @@ public class button_active : MonoBehaviour {
 		else
 			dog.SetActive (true);
 		
-		if (globals.i.Carrots < 1)    /*sell: 1 carrot*/
+		if (globals.i.Carrots < 1 || TimeManager.i.IsDay == false)    /*sell: 1 carrot*/
 			Sell.SetActive (false);
 		else
 			Sell.SetActive (true);

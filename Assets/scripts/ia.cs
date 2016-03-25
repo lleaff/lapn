@@ -27,6 +27,7 @@ public class ia : MonoBehaviour
 	private GameObject[] unattainable;
 	public int p_max_hidden_carrots;
 	private int max_hidden_carrots;
+	Behaviour halo;
 
 	void Awake ()
 	{
@@ -38,6 +39,7 @@ public class ia : MonoBehaviour
 
 	void Start ()
 	{
+		halo = (Behaviour)GetComponent("Halo");
 		agent.speed = globals.i.RabbitSpeedRegular;
 		max_hidden_carrots = p_max_hidden_carrots;
 	}	
@@ -57,6 +59,13 @@ public class ia : MonoBehaviour
 		else
 			max_hidden_carrots = p_max_hidden_carrots;
 		/*****************************/
+
+		//activate halo if aggressive
+		if (aggressive == true)
+			halo.enabled = true;
+		else
+			halo.enabled = false;
+
 
 		//Check if unattainable carrots became attainable again (if other bunnys have destroyed fences around them without eating them)
 		foreach(GameObject crt in unattainable)
