@@ -37,7 +37,7 @@ public class button_active : MonoBehaviour {
 		else
 			Sell.SetActive (true);
 		
-		if (globals.i.Money < 15)	  /*bull: 15*/
+		if (globals.i.Money < 20)	  /*bull: 20*/
 			bull.SetActive (false);
 		else
 			bull.SetActive (true);
