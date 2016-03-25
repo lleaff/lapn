@@ -29,7 +29,7 @@ public class time_speed : MonoBehaviour {
 	}
 
 	public void time_2() {   /*Speed x2*/
-		Time.timeScale = 2;
+		Time.timeScale = 5;
 		speed.SetActive (false);
 		normal.SetActive (true);
 		Pause.SetActive (true);
