@@ -58,4 +58,13 @@ public static class ExtensionMethods {
 		}
 		return list [list.Count - 1];
 	}
+
+	public static bool AddUnique<T>(this List<T> list, T el) {
+		if (list.Contains (el)) {
+			return false;
+		} else {
+			list.Add (el);
+			return true;
+		}
+	}
 }
