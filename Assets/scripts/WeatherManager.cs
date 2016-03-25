@@ -133,7 +133,7 @@ public class WeatherManager : MonoBehaviour {
 	}
 
 	IEnumerator SwitchNightLights(GameObject obj) {
-		float switchOnDelay = LightTransitionTime + LightTransitionTime * 0.5f;
+		float switchOnDelay = LightTransitionTime + LightTransitionTime * 0.6f;
 		yield return new WaitForSeconds (switchOnDelay);
 		obj.SetActive (true);
 		yield return new WaitForSeconds ((TimeManager.i.NightDuration - switchOnDelay) * 0.5f);

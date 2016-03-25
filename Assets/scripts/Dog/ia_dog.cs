@@ -25,6 +25,8 @@ public class ia_dog : MonoBehaviour
 
 	public float DetectionRadius = 3.15f;
 
+	public float RestingTime = 6f;
+
 	//------------------------------------------------------------
 
 	//needed for AtEndOfPath
@@ -45,7 +47,7 @@ public class ia_dog : MonoBehaviour
 
 	//------------------------------------------------------------
 
-	public enum DState { Idle, Spawned, Boning, Chasing };
+	public enum DState { Idle, Spawned, Boning, Chasing, Resting };
 	public DState state = DState.Spawned;
 
 	//------------------------------------------------------------
@@ -61,7 +63,7 @@ public class ia_dog : MonoBehaviour
 	{
 		GetComponent<SphereCollider> ().radius = DetectionRadius;
 
-		agent.autoBraking = false; /* Don't slow down when approaching destination */
+		agent.autoBraking = true; /* Don't slow down when approaching destination */
 		agent.speed = IdlingSpeed;
 		agent.acceleration = IdlingAcceleration;
 
@@ -73,15 +75,8 @@ public class ia_dog : MonoBehaviour
 		Spawned ();
 	}
 
-	int i = 0; /* DEBUG */
-
 	void Update ()
 	{
-		/*NavMeshPath path = new NavMeshPath();*/
-
-		if (state != DState.Boning && state != DState.Idle) /* DEBUG */
-			Debug.Log(string.Format("{0}) state: {1}", i++, state)); /* DEBUG */
-
 		if (spottedRabbits.Count != 0) {
 			Chasing ();
 		}
@@ -93,6 +88,9 @@ public class ia_dog : MonoBehaviour
 		case DState.Idle:
 			IdleUpdate ();
 			break;
+		case DState.Resting:
+			RestingUpdate ();
+			break;
 		case DState.Chasing:
 			ChasingUpdate ();
 			break;
@@ -100,49 +98,6 @@ public class ia_dog : MonoBehaviour
 			SpawnedUpdate ();
 			break;
 		}
-
-		/*
-		//stop anim if at destination
-		if (AtEndOfPath () && !eat) {
-			agent.ResetPath ();
-			anim.Play ("Take 001");
-		}
-
-		//retreat if there's nothing to eat for rabbits
-		if (carrots.Length == 0 && unattainable.Length <= 3 && !eat) {
-			bunny_retreat ();
-		}
-
-		//if there are carrots and bunny isnt eating or destroying a fence look for a carrot to eat
-		if (carrots.Length != 0 && !eat) {
-			if (!agent.hasPath) {
-				destination = get_nearest (carrots);
-				agent.SetDestination (destination.transform.position);
-				anim.Play ("hop");
-				retreat = false;
-			}
-		} //else if there's no carrots but there's a hidden carrot, get aggressive to destroy fences
-		else if (unattainable.Length >= 3 && carrots.Length == 0) {
-			destination = get_nearest (unattainable);
-			anim.Play ("hop");
-			agent.SetDestination (destination.transform.position);
-			aggressive = true;
-		}
-
-		if ((destination == null || destination.transform.CompareTag ("eaten")) && retreat == false && !eat && !aggressive) {
-			bunny_retreat ();
-		} 
-		else if (destination != null && !destination.transform.CompareTag ("eaten") && !aggressive){
-			agent.CalculatePath (destination.transform.position, path);
-			if (path.status == NavMeshPathStatus.PathPartial || path.status == NavMeshPathStatus.PathInvalid) {
-				agent.ResetPath ();
-				destination.transform.tag = "unattainable";
-				if (unattainable.Length < 2)
-					anim.Play ("idle2");
-				else
-					bunny_retreat ();
-			}
-		}*/
 	}
 
 	void LateUpdate() {
@@ -180,7 +135,7 @@ public class ia_dog : MonoBehaviour
 	}
 	void SpawnedUpdate() {
 		if (agent.remainingDistance < BoneReachedDistance) {
-			VisitedBones.Add (TargetBone);
+			VisitedBones.AddUnique (TargetBone);
 			Idle ();
 		}
 	}
@@ -193,7 +148,7 @@ public class ia_dog : MonoBehaviour
 	}
 	void BoningUpdate() {
 		if (agent.remainingDistance < BoneReachedDistance) {
-			VisitedBones.Add (TargetBone);
+			VisitedBones.AddUnique (TargetBone);
 			GotoNextBone ();
 		}
 	}
@@ -206,10 +161,8 @@ public class ia_dog : MonoBehaviour
 	}
 	void ChasingUpdate() {
 		if (spottedRabbits.Count == 0) {
-			Debug.Log ("Chasing no more");
 			Idle ();
 		}
-		Debug.Log (i.ToString() + "Target rabbit?" + (NoTargetRabbit () ? "No target" : "YES" ));
 		if (NoTargetRabbit ()) {
 			foreach (Rabbit rabbit in spottedRabbits) {
 				if (CanReach (rabbit)) {
@@ -224,10 +177,19 @@ public class ia_dog : MonoBehaviour
 	void ChasingLate() {
 	}
 
-	void StartChase() {
-
+	void Resting() {
+		state = DState.Resting;
+		if (!IsOnBone ()) {
+			GoToBone ();
+		}
+		StartCoroutine (SetToIdleAfter(RestingTime));
 	}
 
+	void RestingUpdate() {
+		if (IsOnBone ()) {
+			anim.Play ("idle_05");
+		}
+	}
 
 	//------------------------------------------------------------
 
@@ -251,6 +213,9 @@ public class ia_dog : MonoBehaviour
 		GoToBone (bone);
 	}
 
+	bool GoToBone() {
+		return GoToBone (GetNextBone (GetSortedByDistance (Bones)));
+	}
 	bool GoToBone(Bone bone) {
 		TargetBone = bone;
 		agent.SetDestination(bone.transform.position);
@@ -265,7 +230,7 @@ public class ia_dog : MonoBehaviour
 		if (bone == null) {
 			Bone PreviousBone = VisitedBones.Last ();
 			VisitedBones = new List<Bone>();
-			VisitedBones.Add (PreviousBone);
+			VisitedBones.AddUnique (PreviousBone);
 			bone = NearestNotVisitedBone(bones);
 		}
 		return bone;
@@ -288,11 +253,10 @@ public class ia_dog : MonoBehaviour
 
 	void OnTriggerEnter(Collider other) {
 		if (other.CompareTag (globals.rabbitTag)) {
-			spottedRabbits.Add(other.gameObject);
+			spottedRabbits.AddUnique(other.gameObject);
 			if (spottedRabbits.Count == 1) {
 				Chasing ();
 			}
-			Debug.Log("Spotted rabbit", other.gameObject);
 		}
 	}
 
@@ -304,18 +268,19 @@ public class ia_dog : MonoBehaviour
 
 	public void EatableRabbitEnter(Collider other) {
 		// Eat rabbit
-		Debug.Log("Can eat rabbit", other.gameObject);
 		EatRabbit (other.gameObject);
 	}
 
 	bool EatRabbit(Rabbit rabbit) {
 		StartCoroutine (_EatRabbit (rabbit));
+		Resting ();
 		return true;
 	}
 	IEnumerator _EatRabbit(Rabbit rabbit) {
 		anim.Play ("attack_05");
 		yield return new WaitForSeconds (1.11f);
 		God.i.KillRabbit (rabbit, true);
+		spottedRabbits.Remove (rabbit);
 	}
 
 	//------------------------------------------------------------
@@ -323,7 +288,7 @@ public class ia_dog : MonoBehaviour
 	void OnCollisionEnter(Collision col) {
 		switch (col.collider.tag) {
 		case globals.rabbitTag:
-			spottedRabbits.Add(col.gameObject);
+			spottedRabbits.AddUnique(col.gameObject);
 			break;
 		case globals.boneTag:
 			
@@ -401,6 +366,12 @@ public class ia_dog : MonoBehaviour
 	}
 
 	//------------------------------------------------------------
+
+	IEnumerator SetToIdleAfter(float time) {
+		yield return new WaitForSeconds (time);
+		Idle ();
+	}
+
 
 	bool AtEndOfPath()
 	{
