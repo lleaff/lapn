@@ -23,7 +23,7 @@ public class WeatherManager : MonoBehaviour {
 
 	private float heat = 20f;
 	public float Heat = 20f;
-	public float DayHeatVariationScale = 1f;
+	public float DayHeatVariationScale = 10f;
 	public float HeatMin = -10f;
 	public float HeatMax = 35f;
 	float HeatGoal;
@@ -38,6 +38,8 @@ public class WeatherManager : MonoBehaviour {
 	float HumidityGoal;
 	public int HumidityGoalDayscale = 10;
 	float HumidityDailyGoalIncrease;
+
+	public GameObject NightLights;
 
 	void Awake()
 	{
@@ -89,15 +91,16 @@ public class WeatherManager : MonoBehaviour {
 
 	IEnumerator WeatherUpdate() {
 		while (true) {
-			LightUpdate ();
+			LightUpdate ();	
 			yield return new WaitForSeconds (WeatherUpdateSeconds);
 		}
 	}
 
-	void LightUpdate() {
-		Color startColor = LightColor;
-		float startIntensity = lightIntensity;
+	private bool wasDay = true;
 
+	void LightUpdate() {
+
+		float startIntensity = lightIntensity;
 		lightIntensity = TimeManager.i.IsDay ?
 			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
 			0.8F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
@@ -109,7 +112,9 @@ public class WeatherManager : MonoBehaviour {
 			StartCoroutine (ApplyIntensityOverTime(LightSource, lightIntensity, LightTransitionTime));
 		}
 
+		//------------------------------
 
+		Color startColor = LightColor;
 		Color color = TimeManager.i.IsDay ?	LightColorDay : LightColorNight;
 		color = ApplyHeatColoration (color);
 
@@ -117,6 +122,21 @@ public class WeatherManager : MonoBehaviour {
 			LightColor = color;
 			StartCoroutine (ApplyColorOverTime (LightSource, color, LightTransitionTime));
 		}
+			
+		//------------------------------
+
+		bool isDay = TimeManager.i.IsDay;
+		if (wasDay && !isDay) {
+			StartCoroutine (SwitchNightLights (NightLights));
+		}
+	}
+
+	IEnumerator SwitchNightLights(GameObject obj) {
+		float switchOnDelay = LightTransitionTime + LightTransitionTime * 0.5f;
+		yield return new WaitForSeconds (switchOnDelay);
+		obj.SetActive (true);
+		yield return new WaitForSeconds ((TimeManager.i.NightDuration - switchOnDelay) * 0.5f);
+		obj.SetActive (false);
 	}
 
 	Color ApplyHeatColoration(Color color) {
