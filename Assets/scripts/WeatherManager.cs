@@ -10,7 +10,7 @@ public class WeatherManager : MonoBehaviour {
 	public int WeatherUpdateSeconds = 3;
 	public float LightTransitionTime = 2f;
 
-	public Light dayint;
+	public Light LightSource;
 	public Color LightColorDay;
 	public Color LightColorNight;
 	private Color LightColor;
@@ -96,6 +96,7 @@ public class WeatherManager : MonoBehaviour {
 
 	void LightUpdate() {
 		Color startColor = LightColor;
+		float startIntensity = lightIntensity;
 
 		lightIntensity = TimeManager.i.IsDay ?
 			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
@@ -103,14 +104,18 @@ public class WeatherManager : MonoBehaviour {
 		if (Raining) {
 			lightIntensity *= RainingLightIntensityFactor;
 		}
-		dayint.intensity = lightIntensity;
+
+		if (lightIntensity != startIntensity) {
+			StartCoroutine (ApplyIntensityOverTime(LightSource, lightIntensity, LightTransitionTime));
+		}
+
 
 		Color color = TimeManager.i.IsDay ?	LightColorDay : LightColorNight;
 		color = ApplyHeatColoration (color);
 
 		if (color != startColor) {
 			LightColor = color;
-			StartCoroutine (ApplyColorOverTime (dayint, color, LightTransitionTime));
+			StartCoroutine (ApplyColorOverTime (LightSource, color, LightTransitionTime));
 		}
 	}
 
@@ -135,7 +140,9 @@ public class WeatherManager : MonoBehaviour {
 		return color;
 	}
 
-	IEnumerator ApplyColorOverTime(Light light, Color color, float time, float timeStep = 0.3f) {
+	private float timeStep = 0.15f;
+
+	IEnumerator ApplyColorOverTime(Light light, Color color, float time) {
 		int steps = (int)(time / timeStep);
 		Color startColor = light.color;
 		for (int step = 1; step < steps; step++) {
@@ -144,5 +151,16 @@ public class WeatherManager : MonoBehaviour {
 			yield return new WaitForSeconds (timeStep);
 		}
 		light.color = color;
+	}
+
+	IEnumerator ApplyIntensityOverTime(Light light, float intensity, float time) {
+		int steps = (int)(time / timeStep);
+		float startIntensity = light.intensity;
+		for (int step = 1; step < steps; step++) {
+			float scale = (float)step / (float)steps;
+			light.intensity = Mathf.Lerp (startIntensity, intensity, scale);
+			yield return new WaitForSeconds (timeStep);
+		}
+		light.intensity = intensity;
 	}
 }
