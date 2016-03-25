@@ -5,11 +5,12 @@ public class generate_bunny : MonoBehaviour {
 
 	private bool canGen = true;
 
-	private int start_time = 20;
+	private int start_time = 15;
 	private int spawn_delay = 0; 
 	private int nb_rabbit = 0;
 	private int nb_trap = 0;
 	private float time = 0;
+	private int dog = 0;
 
 	public GameObject rabbits;
 	public GameObject[] pos;
@@ -28,10 +29,10 @@ public class generate_bunny : MonoBehaviour {
 
 	IEnumerator GenerateBunny()
 	{
-		if (spawn_delay - (nb_rabbit * 0.3F + nb_trap * 0.4F + time * 0.006F) < 5)/*If time is smaller than 5s*/
+		if (spawn_delay - (nb_rabbit * 0.5F + nb_trap * 0.5F + time * 0.01F + dog * 5F) < 5)/*If time is smaller than 5s*/
 			yield return new WaitForSeconds(5);
 		else
-			yield return new WaitForSeconds(spawn_delay - (nb_rabbit * 0.3F + nb_trap * 0.4F + time * 0.006F));
+			yield return new WaitForSeconds(spawn_delay - (nb_rabbit * 0.5F + nb_trap * 0.5F + time * 0.01F + dog * 5F));
 		int selectPos = Random.Range (0, pos.Length);
 		Instantiate (rabbits, pos[selectPos].transform.position, rabbits.transform.localRotation);
 		canGen = true;
@@ -45,6 +46,11 @@ public class generate_bunny : MonoBehaviour {
 			spawn_delay = start_time + 10;
 		else
 			spawn_delay = start_time;
+
+		if (GameObject.Find ("Dog"))
+			dog = 1;
+		else
+			dog = 0;
 		
 		nb_rabbit = GameObject.FindGameObjectsWithTag ("Bunny").Length;
 		nb_trap = get_nbr_trap ();

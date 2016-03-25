@@ -42,6 +42,7 @@ public class Death_trap : MonoBehaviour {
 			globals.i.Money -= 100;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().material = mat;
 			old.transform.FindChild ("trap").gameObject.transform.GetChild(2).gameObject.GetComponent<MeshRenderer>().material = mat;
+			old.transform.FindChild ("trap").GetComponent<BoxCollider> ().enabled = true;
 			old = null;
 			globals.i.Button = 0;
 		}
