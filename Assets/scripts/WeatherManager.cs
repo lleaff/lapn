@@ -10,7 +10,7 @@ public class WeatherManager : MonoBehaviour {
 	public int WeatherUpdateSeconds = 3;
 	public float LightTransitionTime = 2f;
 
-	public Light dayint;
+	public Light LightSource;
 	public Color LightColorDay;
 	public Color LightColorNight;
 	private Color LightColor;
@@ -23,7 +23,7 @@ public class WeatherManager : MonoBehaviour {
 
 	private float heat = 20f;
 	public float Heat = 20f;
-	public float DayHeatVariationScale = 1f;
+	public float DayHeatVariationScale = 10f;
 	public float HeatMin = -10f;
 	public float HeatMax = 35f;
 	float HeatGoal;
@@ -38,6 +38,8 @@ public class WeatherManager : MonoBehaviour {
 	float HumidityGoal;
 	public int HumidityGoalDayscale = 10;
 	float HumidityDailyGoalIncrease;
+
+	public GameObject NightLights;
 
 	void Awake()
 	{
@@ -89,29 +91,53 @@ public class WeatherManager : MonoBehaviour {
 
 	IEnumerator WeatherUpdate() {
 		while (true) {
-			LightUpdate ();
+			LightUpdate ();	
 			yield return new WaitForSeconds (WeatherUpdateSeconds);
 		}
 	}
 
-	void LightUpdate() {
-		Color startColor = LightColor;
+	private bool wasDay = true;
 
+	void LightUpdate() {
+
+		float startIntensity = lightIntensity;
 		lightIntensity = TimeManager.i.IsDay ?
 			1.5F - (((TimeManager.i.Seconds / 60) % 12) / 10F) :
 			0.8F + (((TimeManager.i.Seconds / 60) % 12) / 10F);
 		if (Raining) {
 			lightIntensity *= RainingLightIntensityFactor;
 		}
-		dayint.intensity = lightIntensity;
 
+		if (lightIntensity != startIntensity) {
+			StartCoroutine (ApplyIntensityOverTime(LightSource, lightIntensity, LightTransitionTime));
+		}
+
+		//------------------------------
+
+		Color startColor = LightColor;
 		Color color = TimeManager.i.IsDay ?	LightColorDay : LightColorNight;
 		color = ApplyHeatColoration (color);
 
 		if (color != startColor) {
 			LightColor = color;
-			StartCoroutine (ApplyColorOverTime (dayint, color, LightTransitionTime));
+			StartCoroutine (ApplyColorOverTime (LightSource, color, LightTransitionTime));
 		}
+			
+		//------------------------------
+
+		bool isDay = TimeManager.i.IsDay;
+		if (wasDay && !isDay) {
+			StartCoroutine (SwitchNightLights (NightLights));
+		}
+		wasDay = isDay;
+	}
+
+	IEnumerator SwitchNightLights(GameObject obj) {
+		float switchOnDelay = LightTransitionTime + LightTransitionTime * 0.5f;
+		yield return new WaitForSeconds (switchOnDelay);
+		obj.SetActive (true);
+		yield return new WaitForSeconds ((TimeManager.i.NightDuration - switchOnDelay) * 0.5f);
+		obj.SetActive (false);
 	}
 
 	Color ApplyHeatColoration(Color color) {
@@ -135,7 +161,9 @@ public class WeatherManager : MonoBehaviour {
 		return color;
 	}
 
-	IEnumerator ApplyColorOverTime(Light light, Color color, float time, float timeStep = 0.3f) {
+	private float timeStep = 0.15f;
+
+	IEnumerator ApplyColorOverTime(Light light, Color color, float time) {
 		int steps = (int)(time / timeStep);
 		Color startColor = light.color;
 		for (int step = 1; step < steps; step++) {
@@ -144,5 +172,16 @@ public class WeatherManager : MonoBehaviour {
 			yield return new WaitForSeconds (timeStep);
 		}
 		light.color = color;
+	}
+
+	IEnumerator ApplyIntensityOverTime(Light light, float intensity, float time) {
+		int steps = (int)(time / timeStep);
+		float startIntensity = light.intensity;
+		for (int step = 1; step < steps; step++) {
+			float scale = (float)step / (float)steps;
+			light.intensity = Mathf.Lerp (startIntensity, intensity, scale);
+			yield return new WaitForSeconds (timeStep);
+		}
+		light.intensity = intensity;
 	}
 }
