@@ -11,7 +11,7 @@ public class sell_carrot : MonoBehaviour {
 
 	public void Sell()
 	{
-		if (globals.i.Carrots > 0) {
+		if (globals.i.Carrots > 0 && TimeManager.i.IsDay) {
 			globals.i.remove_carrots (1);
 			globals.i.add_money (list_value [list_value.Count - 1]);
 			this.GetComponent<AudioSource> ().Play ();
