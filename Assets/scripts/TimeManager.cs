@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour {
 	// Config
 	//------------------------------------------------------------
 
-	public int DaySeconds = 60;
+	public int DaySeconds = 90; /* real seconds to 24 h in game */
 
 	//------------------------------------------------------------
 
