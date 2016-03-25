@@ -8,7 +8,7 @@ public class customcursor : MonoBehaviour
 	public Texture2D cursorcarrot;
 	public Texture2D cursorrake;
 	public Texture2D cursorpelle;
-	public Texture2D cursorremove;
+	public Texture2D cursordest;
 	public CursorMode cursorMode = CursorMode.Auto;
 	public Vector2 hotSpot = Vector2.zero;
 
@@ -33,7 +33,7 @@ public class customcursor : MonoBehaviour
 			Cursor.SetCursor(cursorpelle, hotSpot, cursorMode);
 			break;
 		case 6:
-			Cursor.SetCursor(cursorremove, hotSpot, cursorMode);
+			Cursor.SetCursor(cursordest, hotSpot, cursorMode);
 			break;
 		default:
 			Cursor.SetCursor (null, hotSpot, cursorMode);
@@ -55,9 +55,6 @@ public class customcursor : MonoBehaviour
 			break;
 		case 4:
 			Cursor.SetCursor(cursorpelle, hotSpot, cursorMode);
-			break;
-		case 6:
-			Cursor.SetCursor(cursorremove, hotSpot, cursorMode);
 			break;
 		default:
 			Cursor.SetCursor (null, hotSpot, cursorMode);
