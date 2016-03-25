@@ -86,7 +86,7 @@ public class ia_carrots : MonoBehaviour {
 			return false;
 		}
 		Destroy (carrot);
-		if (childCount >= 1) {
+		if (childCount <= 1) {
 			Destroy (gameObject);
 		}
 		return true;

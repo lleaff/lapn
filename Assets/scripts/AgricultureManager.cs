@@ -45,6 +45,8 @@ public class AgricultureManager : MonoBehaviour {
 	}
 
 	bool DestroyCarrotPredicate(GameObject carrot) {
+		if (carrot == null)
+			return false;
 		if (carrot.transform.childCount == 0) {
 			toDestroy.Add (carrot);
 			return true;
