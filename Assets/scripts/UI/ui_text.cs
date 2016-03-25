@@ -15,6 +15,6 @@ public class ui_text : MonoBehaviour {
 		time.text = TimeManager.i.FormattedTime;
 		money.text = globals.i.Money.ToString();
 		temp.text = WeatherManager.i.Heat.ToString("0.0") + "˚C";
-		humidity.text = WeatherManager.i.Humidity.ToString ("0.0000");
+		humidity.text = (WeatherManager.i.Humidity * 100).ToString ("0");
 	}
 }
